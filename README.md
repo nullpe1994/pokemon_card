@@ -1,6 +1,7 @@
 # pokemon_card
 ## menu
 * [各ディレクトリ](#各ディレクトリ)
+* [プルリク](#プルリク)
 * [react](#react)
 * [postgres](#postgres)
 * [ポケカルール](#ポケカルール)
@@ -11,6 +12,12 @@
 apiのソースディレクトリ
 ### sql
 db用のソースディレクトリ  
+[return to menu](#menu)
+## プルリク
+プルリク作成時に気を付けてほしいこと
+* コメントに対応issueのurl
+* reviewersにnullpeつける
+* 
 [return to menu](#menu)
 ## react
 reactリファレンス  
