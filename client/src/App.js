@@ -6,8 +6,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src="pokemonTitle.png" className="App-logo" alt="logo" />
-        <LoginForm />
       </header>
+      <main className="App-main">
+        <LoginForm />
+      </main>
     </div>
   );
 }
