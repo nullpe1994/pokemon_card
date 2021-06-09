@@ -15,7 +15,7 @@ db用のソースディレクトリ
 [return to menu](#menu)
 ## プルリク
 プルリク作成時に気を付けてほしいこと
-* コメントに対応issueのurl
+* linked issueに対応するissueを選択
 * reviewersにnullpeつける
 * 
 [return to menu](#menu)
