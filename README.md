@@ -7,15 +7,18 @@
 * [ポケカルール](#ポケカルール)
 ## 各ディレクトリ
 ### client
-クライアント側のソースディレクトリ
+クライアント側のソースディレクトリ  
+[react](#react)で開発
 ### api
 apiのソースディレクトリ
+node.js + expressで開発
 ### sql
 db用のソースディレクトリ  
+使用dbは[postgres](#postgres)
 [return to menu](#menu)
 ## プルリク
 プルリク作成時に気を付けてほしいこと
-* linked issueに対応するissueを選択
+* linked issueに対応するissueを選択(プルリク作成後にしか選択できないっぽい？)
 * reviewersにnullpeつける
 * 
 [return to menu](#menu)
