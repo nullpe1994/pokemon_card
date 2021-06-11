@@ -20,7 +20,10 @@ const Login = () => {
     const isCorrect = () => {
         Axios.get('http://localhost:3001/login',{ params: {user:userId}})
         .then((results) => {
-            history.push('/main')
+            history.push({
+                pathname: '/main',
+                state: { userId: userId }
+            });
             console.log(results);
         });
     }
