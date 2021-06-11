@@ -1,5 +1,7 @@
-import './App.css';
-import LoginForm from './LoginForm';
+import './css/App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import Main from './components/Main';
 
 function App() {
   return (
@@ -8,7 +10,10 @@ function App() {
         <img src="pokemonTitle.png" className="App-logo" alt="logo" />
       </header>
       <main className="App-main">
-        <LoginForm />
+        <Router>
+          <Route exact path='/' component={LoginForm}/>
+          <Route path='/Main' component={Main}/>
+        </Router>
       </main>
     </div>
   );
