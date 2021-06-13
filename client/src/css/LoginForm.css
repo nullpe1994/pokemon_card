@@ -1,0 +1,29 @@
+.login-form {
+    margin-top: 400px;
+}
+.login-form input{
+    border-radius: 3px;
+    display: block;
+}
+.login-form input[type=text] {
+    height: 30px;
+    width: 10%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 200px;
+}
+
+.login-form button {
+    color: #fff;
+    width: 15%;
+    height: 48px;
+    font-size: 20px;
+    background-color: #ea5415;
+    border: none;
+    margin: auto;
+    position: relative;
+}
+
+.login-form button:hover {
+    cursor: pointer;
+}
