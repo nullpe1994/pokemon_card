@@ -2,34 +2,25 @@
 ## menu
 * [各ディレクトリ](#各ディレクトリ)
 * [プルリク](#プルリク)
-* [react](#react)
-* [postgres](#postgres)
 * [ポケカルール](#ポケカルール)
 ## 各ディレクトリ
-### client
+### [client](https://github.com/nullpe1994/pokemon_card/tree/main/client)
 クライアント側のソースディレクトリ  
-[react](#react)で開発
-### api
+reactで開発  
+reactリファレンス:https://ja.reactjs.org/docs/getting-started.html  
+### [api](https://github.com/nullpe1994/pokemon_card/tree/main/api)
 apiのソースディレクトリ
 node.js + expressで開発
-### sql
+### [sql](https://github.com/nullpe1994/pokemon_card/tree/main/sql)
 db用のソースディレクトリ  
-使用dbは[postgres](#postgres)  
+使用dbはpostgres  
+公式url:https://www.dbonline.jp/postgresql/
   
 [return to menu](#menu)
 ## プルリク
 プルリク作成時に気を付けてほしいこと
 * linked issueに対応するissueを選択(プルリク作成後にしか選択できないっぽい？)
 * reviewersにnullpeつける
-  
-[return to menu](#menu)
-## react
-reactリファレンス  
-https://ja.reactjs.org/docs/getting-started.html  
-  
-[return to menu](#menu)
-## postgres
-https://www.dbonline.jp/postgresql/  
   
 [return to menu](#menu)
 ## ポケカルール
