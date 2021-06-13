@@ -4,16 +4,12 @@ import './../css/LoginForm.css';
 import {Button, TextField, Box, makeStyles, createMuiTheme, ThemeProvider} from '@material-ui/core';
 import {
     BrowserRouter as Router,
-    Route,
-    Switch,
-    useParams,
     useHistory,
-    useLocation,
   } from 'react-router-dom';
 
 const useStyles = makeStyles({
     loginButton: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        background: 'linear-gradient(45deg, #ee7701 30%, #ffdf00 90%)',
         border: 0,
         borderRadius: 3,
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
@@ -28,9 +24,18 @@ const theme = createMuiTheme({
     overrides: {
         MuiInputLabel: { // Name of the component ⚛️ / style sheet
             root: { // Name of the rule
-                color: "white",
-                "&$focused": { // increase the specificity for the pseudo class
-                color: "white"
+                color: 'white',
+                '&$focused': { // increase the specificity for the pseudo class
+                color: 'white'
+                },
+            }
+        },
+
+        MuiOutlinedInput: {
+            input: {
+                '&:-webkit-autofill': {
+                '-webkit-box-shadow': '0 0 0 100px #282c34 inset',
+                '-webkit-text-fill-color': 'white'
                 }
             }
         }
@@ -56,15 +61,15 @@ const Login = () => {
     const classes = useStyles();
     return (
         <>
-            <header className="login-header">
-                <img src="pokemonTitle.png" className="App-logo" alt="logo" />
+            <header className='login-header'>
+                <img src='pokemonTitle.png' className='App-logo' alt='logo' />
             </header>
             <div className='login-form'>
                 <ThemeProvider theme={theme}>
-                    <TextField className={classes.label} label="ユーザー" variant='outlined' value={userId} id="user" onChange={onChangeUserId} />
+                    <TextField label='ユーザー' variant='outlined' value={userId} id='user' onChange={onChangeUserId} />
                 </ThemeProvider>
                 <Box>
-                    <Button className={classes.loginButton} variant="outlined" color="primary" onClick={isCorrect}>
+                    <Button className={classes.loginButton} variant='outlined' color='primary' onClick={isCorrect}>
                         ログイン
                     </Button>
                 </Box>
