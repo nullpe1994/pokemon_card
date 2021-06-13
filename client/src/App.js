@@ -6,9 +6,6 @@ import Main from './components/Main';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src="pokemonTitle.png" className="App-logo" alt="logo" />
-      </header>
       <main className="App-main">
         <Router>
           <Route exact path='/' component={LoginForm}/>
