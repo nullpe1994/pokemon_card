@@ -73,7 +73,7 @@ const images = {
     },
 }));
 
-const CreateDecks = () => {
+const CreateDecks = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.root}> {
@@ -85,6 +85,7 @@ const CreateDecks = () => {
             style={{
                 width: images.width,
             }}
+            onClick={props.handleClick}
             >
             <span className={classes.imageBackdrop} />
             <span className={classes.imageButton}>

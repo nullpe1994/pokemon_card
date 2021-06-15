@@ -57,7 +57,6 @@ const Login = () => {
                 pathname: '/main',
                 state: { userId: userId }
             });
-            console.log(results);
         });
     }
     const classes = useStyles();
