@@ -1,8 +1,9 @@
 import React from 'react';
+import CreateDecks from './CreateDecks';
 
 const Deck = () => {
     return (
-        <h1>デッキ画面です</h1>
+        <CreateDecks/>
     );
 }
 
