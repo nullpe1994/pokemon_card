@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import './../css/LoginForm.css';
-import {Button, TextField, Box, makeStyles, createMuiTheme, ThemeProvider} from '@material-ui/core';
+import './../css/style.css';
+import {Button, TextField, Box, makeStyles, createStyles, createMuiTheme, ThemeProvider} from '@material-ui/core';
 import {
     BrowserRouter as Router,
     useHistory,
   } from 'react-router-dom';
 
-const useStyles = makeStyles({
-    loginButton: {
-        background: 'linear-gradient(45deg, #ee7701 30%, #ffdf00 90%)',
-        border: 0,
-        borderRadius: 3,
-        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-        color: 'white',
-        height: 48,
-        padding: '20px 48px',
-        margin: '40px 0px',
-    },
-});
+const useStyles = makeStyles( () => (
+    createStyles ({
+        'loginButton': {
+            background: 'linear-gradient(45deg, #ee7701 30%, #ffdf00 90%)',
+            border: 0,
+            borderRadius: 3,
+            boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+            color: 'white',
+            height: 48,
+            padding: '20px 48px',
+            margin: '40px 0px',
+        }
+    })
+));
 
 const theme = createMuiTheme({
     overrides: {
