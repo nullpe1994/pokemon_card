@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CreateDecks from './CreateDecks';
 import DeckList from './DeckList';
 
-const Deck = () => {
-    const [cIndex, setCindex] = React.useState(0);
-    const handleClick = (event, cIndex) => {
-        setCindex(1);
-    };
-    return (
-        <>
-            {cIndex === 0 && (
-                <CreateDecks handleClick={handleClick} cIndex={cIndex}/>
-            )}
-            {cIndex === 1 && (
-                <DeckList/>
-            )}
-        </>
+function Deck () {  
+    const [bool, setBool] = React.useState(false);
+    const isCorrect = () => {
+        setBool(!bool);
+    }
+        return (
+        <div>
+            {bool && (<CreateDecks/>)}
+            {!bool && (<DeckList isCorrect={isCorrect}/>)}
+        </div>
     );
 }
 

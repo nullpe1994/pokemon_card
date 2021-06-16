@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import './../css/style.css';
-import {Button, TextField, Box, makeStyles, createStyles, createMuiTheme, ThemeProvider} from '@material-ui/core';
+import {TextField, Box, createMuiTheme, ThemeProvider} from '@material-ui/core';
 import {
     BrowserRouter as Router,
     useHistory,
-  } from 'react-router-dom';
-
-const useStyles = makeStyles( () => (
-    createStyles ({
-        'loginButton': {
-            background: 'linear-gradient(45deg, #ee7701 30%, #ffdf00 90%)',
-            border: 0,
-            borderRadius: 3,
-            boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-            color: 'white',
-            height: 48,
-            padding: '20px 48px',
-            margin: '40px 0px',
-        }
-    })
-));
+} from 'react-router-dom';
+import AcceptButton from './AcceptButton';
 
 const theme = createMuiTheme({
     overrides: {
@@ -56,10 +42,10 @@ const Login = () => {
             history.push({
                 pathname: '/main',
                 state: { userId: userId }
-            });
+            })
         });
-    }
-    const classes = useStyles();
+    };
+    
     return (
         <>
             <header className='login-header'>
@@ -70,9 +56,7 @@ const Login = () => {
                     <TextField label='ユーザー' variant='outlined' value={userId} id='user' onChange={onChangeUserId} />
                 </ThemeProvider>
                 <Box>
-                    <Button className={classes.loginButton} variant='outlined' color='primary' onClick={isCorrect}>
-                        ログイン
-                    </Button>
+                    <AcceptButton isCorrect={isCorrect} name={'ログイン'}/>
                 </Box>
             </div>
         </>
