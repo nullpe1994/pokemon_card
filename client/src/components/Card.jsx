@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
             height: 400,
         },
     },
-    focusVisible: {},
     imageButton: {
         position: 'absolute',
         left: 0,
@@ -40,21 +39,19 @@ const Card = (props) => {
     const classes = useStyles();
     
     const image = {
-        url: props.imgUrl,
+        url: props.pokeca.img_url,
         width: '97%',
     };
 
-    console.log(props.imgUrl);
-
     return (
-            <ButtonBase
+        <ButtonBase
             focusRipple
             className={classes.image}
-            focusVisibleClassName={classes.focusVisible}
             style={{
                 width: image.width,
                 height: image.height,
             }}
+            onClick={() => props.isCorrect(props.pokeca)}
             >
             <span
             className={classes.imageSrc}
@@ -62,7 +59,6 @@ const Card = (props) => {
                 backgroundImage: `url(${image.url})`,
             }}
             />
-            <span className={classes.imageBackdrop} />
             <span className={classes.imageButton}>
             </span>
         </ButtonBase>

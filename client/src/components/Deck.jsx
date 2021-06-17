@@ -2,14 +2,16 @@ import React from 'react';
 import CreateDecks from './CreateDecks';
 import DeckList from './DeckList';
 
-function Deck () {  
+const Deck = () => {  
+
     const [bool, setBool] = React.useState(false);
+    
     const isCorrect = () => {
-        setBool(!bool);
+        setBool(prevState => !prevState);
     }
         return (
         <div>
-            {bool && (<CreateDecks/>)}
+            {bool && (<CreateDecks setBool={setBool}/>)}
             {!bool && (<DeckList isCorrect={isCorrect}/>)}
         </div>
     );

@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import AcceptButton from './AcceptButton';
 import Card from './Card';
 import CreatePlace from './CreatePlace';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import {makeStyles, createStyles,} from '@material-ui/core';
-import {
-    BrowserRouter as Router,
-    useHistory,
-} from 'react-router-dom';
 
 const useStyles = makeStyles(() => (
     createStyles ({
@@ -33,7 +28,8 @@ const useStyles = makeStyles(() => (
 
 const CreateDecks = (props) => { 
     const [cardlist, setCardlist] = useState([]);
-    const history = useHistory();
+    const [cardDetails, setCardDetails] = useState([]);
+    const [count, setCount] = useState(0);
     const classes = useStyles();
     
     useEffect(async () => {
@@ -41,24 +37,44 @@ const CreateDecks = (props) => {
         const json = await res.data[0];
         setCardlist(json.cardlist);
     },[props, setCardlist]);
-    console.log(cardlist);
+    
+    const isCorrect = (e) => {
+        let ok = true;
+        cardDetails.some((detail) => {
+            if (detail.array.pokemon_card_id === e.pokemon_card_id) {
+                if (detail.array.count < 4) {
+                    // console.log(detail.array.pokemon_card_id);
+                    detail.array.count += 1;
+                    setCount(prevState => prevState + 1);
+                }
+                ok = false;
+                return true;
+            }
+            console.log(detail.array);
+        });
+        if (ok) {
+            const array = e;
+            array['count'] = 1;
+            setCardDetails([...cardDetails, {array}]);
+            setCount(prevState => prevState + 1);
+        }
+    }
 
     return (
         <>
-        <div className={classes.allStyles}>
-            <GridList　cellHeight={'100%'} className={classes.cardStyles} cols={7}>
-                {/* 今後改善の余地ありけり。
-                    受け取った値が再描画されてundefinedになってmapとして描画できない。
-                */}
-                {cardlist!=undefined && cardlist.map((pokeca) => (
-                    <GridListTile>
-                        <Card  imgUrl={pokeca.img_url}/>
-                    </GridListTile>
-                ))}
-            </GridList>
-            <CreatePlace className={classes.createPlaceStyles}/>
-        </div>
-            <AcceptButton name={'完了'}/>
+            <div className={classes.allStyles}>
+                <GridList　cellHeight={'100%'} className={classes.cardStyles} cols={7}>
+                    {/* 今後改善の余地ありけり。
+                        受け取った値が再描画されてundefinedになってmapとして描画できない。
+                    */}
+                    {cardlist!=undefined && cardlist.map((pokeca) => (
+                        <GridListTile>
+                            <Card pokeca={pokeca} isCorrect={isCorrect}/>
+                        </GridListTile>
+                    ))}
+                </GridList>
+                <CreatePlace className={classes.createPlaceStyles} count={count} cardDetails={cardDetails} setBool={props.setBool}/>
+            </div>
         </>
     );
 }

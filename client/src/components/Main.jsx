@@ -16,7 +16,6 @@ const Main = (props) => {
     return (
         <div className='main-page'>
             <SectionTab name={sectionTab} handleChange={handleChange} value={value}/>
-            <p>ようこそ、{props.location.state.userId}！</p>
             {value === 0 && (
                 <Home/>
             )} 
