@@ -10,7 +10,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE deck (
-    deck_id integer(8) NOT NULL,
+    user_id varchar(16) NOT NULL,
+    deck_id integer NOT NULL,
     card_id_1 varchar(8), card_id_2 varchar(8), card_id_3 varchar(8), card_id_4 varchar(8),
     card_id_5 varchar(8), card_id_6 varchar(8), card_id_7 varchar(8), card_id_8 varchar(8),
     card_id_9 varchar(8), card_id_10 varchar(8), card_id_11 varchar(8), card_id_12 varchar(8),
@@ -26,7 +27,7 @@ CREATE TABLE deck (
     card_id_49 varchar(8), card_id_50 varchar(8), card_id_51 varchar(8), card_id_52 varchar(8),
     card_id_53 varchar(8), card_id_54 varchar(8), card_id_55 varchar(8), card_id_56 varchar(8),
     card_id_57 varchar(8), card_id_58 varchar(8), card_id_59 varchar(8), card_id_60 varchar(8),
-    update date NOT NULL,
+    update date default CURRENT_TIMESTAMP NOT NULL,
     isDelete varchar(1) default '0' NOT NULL,
     PRIMARY KEY (deck_id)
 );
@@ -39,12 +40,12 @@ CREATE TABLE pokemon_card (
     PRIMARY KEY (pokemon_card_id)
 );
 
-CREATE SEQUENCE DECK_ID_SEQ (
-    increment BY 1,
-    maxvalue 99999999,
-    START WITH 1,
+CREATE SEQUENCE DECK_ID_SEQ
+    increment BY 1
+    maxvalue 99999999
+    START WITH 1
     NO CYCLE
-)
+;
 
 INSERT INTO users VALUES ('master','114514','0');
 

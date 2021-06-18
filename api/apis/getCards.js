@@ -14,11 +14,6 @@ exports.getCards = function(req, res, pool) {
                   url: '/decklist', // デッキリスト返還
                   cardlist: result.rows,
               }]);
-            } else {
-              res.json([{
-                  url: '/', // ログイン失敗後ページ返還
-                  errormsg: 'ログイン失敗しました'
-              }]);
             }
       });
     }

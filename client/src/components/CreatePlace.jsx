@@ -6,6 +6,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/Inbox';
 import AcceptButton from './AcceptButton';
+import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,8 +33,12 @@ const CreatePlace = (props) => {
     const classes = useStyles();
     const isCorrect = () => {
         //length後々変更します
-        if (props.cardDetails.length <= 1) {
-            props.setBool(prevState => !prevState);
+        if (props.count >= 1) {
+          Axios.post('http://localhost:3001/createdeck',{  
+          userId:props.userId,
+          decks:props.cardDetails,
+          });
+          props.setBool(prevState => !prevState);
         } else alert('デッキ枚数が60枚に達していません!');
     }
 

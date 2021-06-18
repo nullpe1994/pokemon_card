@@ -20,7 +20,7 @@ const Main = (props) => {
                 <Home/>
             )} 
             {value === 1 && (
-                <Deck/>
+                <Deck userId={props.location.state.userId}/>
             )}
             {value === 2 && (
                 <Battle/>

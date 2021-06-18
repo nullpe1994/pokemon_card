@@ -2,7 +2,7 @@ import React from 'react';
 import CreateDecks from './CreateDecks';
 import DeckList from './DeckList';
 
-const Deck = () => {  
+const Deck = (props) => {  
 
     const [bool, setBool] = React.useState(false);
     
@@ -11,7 +11,7 @@ const Deck = () => {
     }
         return (
         <div>
-            {bool && (<CreateDecks setBool={setBool}/>)}
+            {bool && (<CreateDecks userId={props.userId} setBool={setBool}/>)}
             {!bool && (<DeckList isCorrect={isCorrect}/>)}
         </div>
     );

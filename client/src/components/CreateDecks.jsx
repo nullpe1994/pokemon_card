@@ -50,32 +50,36 @@ const CreateDecks = (props) => {
                 ok = false;
                 return true;
             }
-            console.log(detail.array);
         });
         if (ok) {
             const array = e;
             array['count'] = 1;
             setCardDetails([...cardDetails, {array}]);
             setCount(prevState => prevState + 1);
+            console.log(cardDetails);
         }
     }
 
     return (
-        <>
-            <div className={classes.allStyles}>
-                <GridList　cellHeight={'100%'} className={classes.cardStyles} cols={7}>
-                    {/* 今後改善の余地ありけり。
-                        受け取った値が再描画されてundefinedになってmapとして描画できない。
-                    */}
-                    {cardlist!=undefined && cardlist.map((pokeca) => (
-                        <GridListTile>
-                            <Card pokeca={pokeca} isCorrect={isCorrect}/>
-                        </GridListTile>
-                    ))}
-                </GridList>
-                <CreatePlace className={classes.createPlaceStyles} count={count} cardDetails={cardDetails} setBool={props.setBool}/>
-            </div>
-        </>
+        <div className={classes.allStyles}>
+            <GridList　cellHeight={'100%'} className={classes.cardStyles} cols={7}>
+                {/* 今後改善の余地ありけり。
+                    受け取った値が再描画されてundefinedになってmapとして描画できない。
+                */}
+                {cardlist!=undefined && cardlist.map((pokeca) => (
+                    <GridListTile>
+                        <Card pokeca={pokeca} isCorrect={isCorrect}/>
+                    </GridListTile>
+                ))}
+            </GridList>
+            <CreatePlace
+                className={classes.createPlaceStyles}
+                count={count}
+                cardDetails={cardDetails}
+                userId={props.userId}
+                setBool={props.setBool}
+            />
+        </div>
     );
 }
 export default CreateDecks;
