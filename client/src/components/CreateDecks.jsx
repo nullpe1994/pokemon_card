@@ -4,7 +4,7 @@ import Card from './Card';
 import CreatePlace from './CreatePlace';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import {makeStyles, createStyles,} from '@material-ui/core';
+import {makeStyles, createStyles} from '@material-ui/core';
 
 const useStyles = makeStyles(() => (
     createStyles ({
@@ -43,7 +43,6 @@ const CreateDecks = (props) => {
         cardDetails.some((detail) => {
             if (detail.array.pokemon_card_id === e.pokemon_card_id) {
                 if (detail.array.count < 4) {
-                    // console.log(detail.array.pokemon_card_id);
                     detail.array.count += 1;
                     setCount(prevState => prevState + 1);
                 }
@@ -56,7 +55,6 @@ const CreateDecks = (props) => {
             array['count'] = 1;
             setCardDetails([...cardDetails, {array}]);
             setCount(prevState => prevState + 1);
-            console.log(cardDetails);
         }
     }
 

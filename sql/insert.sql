@@ -12,6 +12,7 @@ CREATE TABLE users (
 CREATE TABLE deck (
     user_id varchar(16) NOT NULL,
     deck_id integer NOT NULL,
+    deck_name text,
     card_id_1 varchar(8), card_id_2 varchar(8), card_id_3 varchar(8), card_id_4 varchar(8),
     card_id_5 varchar(8), card_id_6 varchar(8), card_id_7 varchar(8), card_id_8 varchar(8),
     card_id_9 varchar(8), card_id_10 varchar(8), card_id_11 varchar(8), card_id_12 varchar(8),
