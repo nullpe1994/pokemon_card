@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/Inbox';
-import AcceptButton from './AcceptButton';
+import AcceptButton from './common/AcceptButton';
 import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,7 @@ const CreatePlace = (props) => {
                 <ListItem button>
                   {/* 属性アイコン予定 */}
                     <ListItemIcon>
-                        <InboxIcon />
+                      <InboxIcon />
                     </ListItemIcon>
                     <ListItemText primary={cardDetail.array.pokemon_card_name}/>
                 </ListItem>

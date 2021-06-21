@@ -1,40 +1,36 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core';
+import CardListSideBar from './CardListSideBar';
+import ImageButton from './common/ImageButton';
 
-const images = {
-        title: 'デッキ作成',
-        width: '20%',
-    };
-  
-  const useStyles = makeStyles((theme) => ({
-    root: {
+const useStyles = makeStyles((theme) => ({
+    root : {
         display: 'flex',
-        flexWrap: 'wrap',
-        minWidth: 300,
-        width: '100%',
     },
     image: {
         position: 'relative',
         height: 200,
         marginLeft: '20px',
+        width: '20%',
         [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
             height: 100,
         },
-            '&:hover, &$focusVisible': {
+        '&:hover, &$focusVisible': {
             zIndex: 1,
             '& $imageBackdrop': {
-            opacity: 0.15,
+                opacity: 0.15,
             },
             '& $imageMarked': {
-            opacity: 0,
+                opacity: 0,
             },
             '& $imageTitle': {
-            border: '4px solid currentColor',
+                border: '4px solid currentColor',
             },
         },
+        display: 'flex',
+        flexWrap: 'wrap',
+        minWidth: 300,
     },
     focusVisible: {},
     imageButton: {
@@ -73,35 +69,22 @@ const images = {
     },
 }));
 
-const CreateDecks = (props) => {
+
+const SelectDecks = (props) => {
+
     const classes = useStyles();
+
     return (
-        <div className={classes.root}> {
-            <ButtonBase
-            focusRipple
-            key={images.title}
-            className={classes.image}
-            focusVisibleClassName={classes.focusVisible}
-            style={{
-                width: images.width,
-            }}
-            onClick={props.isCorrect}
-            >
-            <span className={classes.imageBackdrop} />
-            <span className={classes.imageButton}>
-                <Typography
-                component="span"
-                variant="subtitle1"
-                color="inherit"
-                className={classes.imageTitle}
-                >
-                {images.title}
-                <span className={classes.imageMarked} />
-                </Typography>
-            </span>
-            </ButtonBase>
-        } </div>
+        <>
+            <h1>デッキ選択画面です。</h1>
+            <div className={classes.root}>
+                {props.userDecks.map((userDeck) => 
+                    <ImageButton Title={userDeck.deck_name} classes={classes}/>
+                )}
+            </div>
+            <CardListSideBar/>
+        </>
     );
 }
 
-export default CreateDecks;
+export default SelectDecks;

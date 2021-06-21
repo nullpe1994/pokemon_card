@@ -23,7 +23,7 @@ const Main = (props) => {
                 <Deck userId={props.location.state.userId}/>
             )}
             {value === 2 && (
-                <Battle/>
+                <Battle userId={props.location.state.userId}/>
             )}
         </div>
     );

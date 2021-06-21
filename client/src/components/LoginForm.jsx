@@ -6,7 +6,7 @@ import {
     BrowserRouter as Router,
     useHistory,
 } from 'react-router-dom';
-import AcceptButton from './AcceptButton';
+import AcceptButton from './common/AcceptButton';
 
 const theme = createMuiTheme({
     overrides: {
