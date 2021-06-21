@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { TextField } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -37,14 +38,23 @@ const CreatePlace = (props) => {
           Axios.post('http://localhost:3001/createdeck',{  
           userId:props.userId,
           decks:props.cardDetails,
+          deckName:deckName,
           });
           props.setBool(prevState => !prevState);
         } else alert('デッキ枚数が60枚に達していません!');
     }
+    const [deckName, setDeckName] = useState('新しいデッキ');
+    const onChangeDeckName = (event) => {
+      setDeckName(event.target.value);
+    }
+    // const remove = () => {
+    //   console.log(props.cardDetails);
+    // }
 
     return (
     <div className={classes.root}>
         <List component="nav" aria-label="main mailbox folders">
+          <TextField label='デッキ名' id='deckname' value={deckName} onChange={(event) => onChangeDeckName(event)}/>
             {props.cardDetails.map((cardDetail)=>
             <div className={classes.allStyles}>
               {/* 追加ボタン */}

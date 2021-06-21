@@ -2,8 +2,6 @@ const express = require('express');
 const router = express();
 
 exports.createDeck = function(req, res, pool) {
-  console.log('hello');
-  console.log(req.body);
     pool.connect( (err, client) => {
       if (err) {
         console.log(err);
@@ -12,6 +10,7 @@ exports.createDeck = function(req, res, pool) {
         let query = `INSERT INTO deck(
           user_id,
           deck_id,
+          deck_name,
           card_id_1, card_id_2, card_id_3, card_id_4,
           card_id_5, card_id_6, card_id_7, card_id_8,
           card_id_9, card_id_10, card_id_11, card_id_12,
@@ -27,14 +26,13 @@ exports.createDeck = function(req, res, pool) {
           card_id_49, card_id_50, card_id_51, card_id_52,
           card_id_53, card_id_54, card_id_55, card_id_56,
           card_id_57, card_id_58, card_id_59, card_id_60
-          ) VALUES ('${req.body.userId}',nextval('DECK_ID_SEQ')`;
+          ) VALUES ('${req.body.userId}',nextval('DECK_ID_SEQ'),'${req.body.deckName}'`;
           cardDetails.map((detail) => {
             for (let i=0; i<detail.array.count; i++) {
               query += `,'${detail.array.pokemon_card_id}'`;
             }
           });
         query += ')';
-        console.log(query);
         client.query(query, (err, result) => {
           if (err) {
             console.log(err);
