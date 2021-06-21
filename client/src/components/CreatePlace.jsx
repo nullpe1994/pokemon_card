@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField } from '@material-ui/core';
+import { TextField, InputLabel } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -54,7 +54,7 @@ const CreatePlace = (props) => {
     return (
     <div className={classes.root}>
         <List component="nav" aria-label="main mailbox folders">
-          <TextField label='デッキ名' id='deckname' value={deckName} onChange={(event) => onChangeDeckName(event)}/>
+          <TextField color='secondary' textcolor='secondary' label='デッキ名' id='deckname' value={deckName} onChange={(event) => onChangeDeckName(event)}/>
             {props.cardDetails.map((cardDetail)=>
             <div className={classes.allStyles}>
               {/* 追加ボタン */}
