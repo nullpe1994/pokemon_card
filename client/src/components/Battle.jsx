@@ -91,13 +91,17 @@ const Battle = (props) => {
         handleClose();
     };
 
-    useEffect(async () => {
-        const res = await Axios.post('http://localhost:3001/getDeck',{
-            userId: props.userId,
-        });
-        const json = await res.data[0];
-        setUserDecks(json.userDeck);
-    },[setUserDecks]);
+    useEffect(() => {
+        // async を 関数としないと謎のエラーが出たので関数にしました。
+        async function fetchData() {
+            const res = await Axios.post('http://localhost:3001/getDeck',{
+                userId: props.userId,
+            });
+            const json = await res.data[0];
+            setUserDecks(json.userDeck);
+        }
+        fetchData();
+    },[props.userId,setUserDecks]);
     const classes = useStyles();
 
     return (
