@@ -13,7 +13,7 @@ CREATE TABLE deck (
     user_id varchar(16) NOT NULL,
     deck_id integer NOT NULL,
     deck_name text,
-    card_id varchar(8)[60],
+    card_id varchar(8)[][],
     update date default CURRENT_TIMESTAMP NOT NULL,
     isDelete varchar(1) default '0' NOT NULL,
     PRIMARY KEY (deck_id)
@@ -434,7 +434,6 @@ INSERT INTO pokemon_card VALUES ('S6K083', 'ズミ', 'https://www.pokemon-card.com
 -- S6H 83 拡張パック「白銀のランス
 
 -- deck
-INSERT INTO deck VALUES ('master', nextval('DECK_ID_SEQ'), 'ハイクラスデッキ インテレオンVMAX', '{"SGI006", "SGI006", "SGI005", "SGI005", "SGI007", "SGI003", "SGI003", "SGI002", "SGI002", "SGI002"
-, "SGI004", "SGI001", "SGI009", "SGI008", "SGI008", "SGI010", "SGI0012", "SGI0012", "SGI0012", "SGI0012", "SGI0013", "SGI0013", "SGI0013", "SGI0014", "SGI0014", "SGI0014", "SGI0014", "SGI0011"
-, "SGI0015", "SGI0015", "SGI0017", "SGI0017", "SGI0017", "SGI0017", "SGI020", "SGI020", "SGI020", "SGI020", "SGI016", "SGI016", "SGI018", "SGI019", "SGI019", "SGI021", "SGI021", "SGI022", "SGI022"
-, "SGI022", "SGI022", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT", "SGIWAT"}');
+INSERT INTO deck VALUES ('master', nextval('DECK_ID_SEQ'), 'ハイクラスデッキ インテレオンVMAX', '{{"SGI006", "2"}, {"SGI005", "2"}, {"SGI007", "1"}, {"SGI003", "2"}, {"SGI002", "3"}
+, {"SGI004","1"}, {"SGI001","1"}, {"SGI009","1"}, {"SGI008", "2"}, {"SGI010", "1"}, {"SGI012", "4"}, {"SGI013", "3"}, {"SGI014", "4"}, {"SGI011","1"}
+, {"SGI015", "2"}, {"SGI017", "4"}, {"SGI020", "4"}, {"SGI016", "2"}, {"SGI018", "1"}, {"SGI019", "2"}, {"SGI021", "2"}, {"SGI022", "4"},{"SGIWAT", "11"}}');
