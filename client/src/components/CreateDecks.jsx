@@ -4,27 +4,21 @@ import Card from './Card';
 import CreatePlace from './CreatePlace';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import {makeStyles, createStyles} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core';
 
-const useStyles = makeStyles(() => (
-    createStyles ({
-        'allStyles': {
-            display: 'flex',
-            height: '100%',
-        },
-        'cardStyles' : {
-            display: 'flex', 
-            flexDirection:'row',
-            flexWrap: 'wrap',
-            // width: '100%',
-            width: '80%',
-            height: '100%',
-        },
-        'createPlaceStyles' : {
-            
-        }
-    })
-));
+const useStyles = makeStyles(() => ({
+    root: {
+        display: 'flex',
+        height: '100%',
+    },
+    cardStyles : {
+        // display: 'flex', 
+        // flexDirection:'row',
+        // flexWrap: 'wrap',
+        width: '80%',
+        height: '100%',
+    },
+}));
 
 const CreateDecks = (props) => { 
     const [cardlist, setCardlist] = useState([]);
@@ -32,10 +26,14 @@ const CreateDecks = (props) => {
     const [count, setCount] = useState(0);
     const classes = useStyles();
     
-    useEffect(async () => {
-        const res = await Axios.post('http://localhost:3001/getcards')
-        const json = await res.data[0];
-        setCardlist(json.cardlist);
+    useEffect(() => {
+        // async を 関数としないと謎のエラーが出たので関数にしました。
+        async function fetchData() {
+            const res = await Axios.post('http://localhost:3001/getcards')
+            const json = await res.data[0];
+            setCardlist(json.cardlist);
+        }
+        fetchData();
     },[props, setCardlist]);
     
     const isCorrect = (e) => {
@@ -59,16 +57,16 @@ const CreateDecks = (props) => {
     }
 
     return (
-        <div className={classes.allStyles}>
-            <GridList　cellHeight={'100%'} className={classes.cardStyles} cols={7}>
+        <div className={classes.root}>
+            <GridList　className={classes.cardStyles} cols={7}>
                 {/* 今後改善の余地ありけり。
                     受け取った値が再描画されてundefinedになってmapとして描画できない。
                 */}
-                {cardlist!=undefined && cardlist.map((pokeca) => (
-                    <GridListTile>
+                {cardlist.map((pokeca) =>
+                    <GridListTile style={{height: 'none',}}>
                         <Card pokeca={pokeca} isCorrect={isCorrect}/>
                     </GridListTile>
-                ))}
+                )}
             </GridList>
             <CreatePlace
                 className={classes.createPlaceStyles}
