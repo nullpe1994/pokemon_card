@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import CardListSideBar from './CardListSideBar';
 import ImageButton from './common/ImageButton';
@@ -77,6 +77,7 @@ const SelectDecks = (props) => {
     return (
         <>
             <h1>デッキ選択画面です。</h1>
+            {console.log(props.userDeck)}
             <div className={classes.root}>
                 {props.userDecks.map((userDeck) => 
                     <ImageButton Title={userDeck.deck_name} classes={classes}/>
