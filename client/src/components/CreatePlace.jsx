@@ -43,6 +43,7 @@ const CreatePlace = (props) => {
           props.setBool(prevState => !prevState);
         } else alert('デッキ枚数が60枚に達していません!');
     }
+
     const [deckName, setDeckName] = useState('新しいデッキ');
     const onChangeDeckName = (event) => {
       setDeckName(event.target.value);
@@ -56,7 +57,7 @@ const CreatePlace = (props) => {
         <List component="nav" aria-label="main mailbox folders">
           <TextField color='secondary' textcolor='secondary' label='デッキ名' id='deckname' value={deckName} onChange={(event) => onChangeDeckName(event)}/>
             {props.cardDetails.map((cardDetail)=>
-            <div className={classes.allStyles}>
+            <div className={classes.allStyles} key={cardDetail.array.pokemon_card_id}>
               {/* 追加ボタン */}
                 <button className={classes.buttonStyles}/>
                 {/* 削除ボタン */}

@@ -7,14 +7,16 @@ exports.getDeck = function(req, res, pool) {
       console.log(err);
     } else {
         const userId = req.body.userId;
-        client.query(`SELECT deck_name FROM deck WHERE user_id = '${userId}'`, (err, result) => {
+        client.query(`select deck.user_id, deck.deck_id, deck.deck_name, deck.card_id
+                      from deck 
+                      where user_id = '${userId}'`, (err, result) => {
             if (true) {
                 res.header('Access-Control-Allow-Origin', '*');
                 res.json([{
                     userDeck: result.rows
                 }]);
             }
-        });
+      });
     }
   });
 };

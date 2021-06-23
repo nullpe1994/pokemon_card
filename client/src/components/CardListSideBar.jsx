@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -7,52 +8,62 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AcceptButton from './common/AcceptButton'
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    marginTop: '2%',
-    width: drawerWidth,
-  },
-  drawerContainer: {
-    overflow: 'auto',
-  },
+	root: {
+		display: 'flex',
+	},
+	drawer: {
+		width: drawerWidth,
+		flexShrink: 0,
+	},
+	drawerPaper: {
+		marginTop: '2%',
+		width: drawerWidth,
+	},
+	drawerContainer: {
+		overflow: 'auto',
+	},
 }));
 
-const CardListSideBar = () => {
-  const classes = useStyles();
+const CardListSideBar = (props) => {
 
-  return (
-    <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-            paper: classes.drawerPaper,
-        }}
-        anchor="right"
-    >
-        <div className={classes.drawerContainer}>
-            <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-            </List>
-            <Divider/>
-            <List>
-                <AcceptButton name={'プレイ'}/>
-            </List>
-        </div>
-    </Drawer>
-  );
-}
+	const classes = useStyles();
+
+	const history = useHistory();
+
+	const isCorrect = () => {
+		history.push({
+			pathname: '/competitive'
+		})
+	};
+
+	return (
+		<Drawer
+			className={classes.drawer}
+			variant="permanent"
+			classes={{
+				paper: classes.drawerPaper,
+			}}
+			anchor="right"
+		>
+			<div className={classes.drawerContainer}>
+					<List>
+					{props.cards.map((text) => (
+						<ListItem button key={text[0]}>
+						<ListItemText primary={text[1]}/>
+						<p>{text[2]}</p>
+						</ListItem>
+					))}
+					</List>
+					<Divider/>
+					<List>
+						<AcceptButton isCorrect={isCorrect} name={'プレイ'}/>
+					</List>
+			</div>
+		</Drawer>
+	);
+};
 
 export default CardListSideBar;

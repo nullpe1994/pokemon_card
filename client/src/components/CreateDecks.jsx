@@ -63,7 +63,7 @@ const CreateDecks = (props) => {
                     受け取った値が再描画されてundefinedになってmapとして描画できない。
                 */}
                 {cardlist.map((pokeca) =>
-                    <GridListTile style={{height: 'none',}}>
+                    <GridListTile key={pokeca.pokemon_card_id} style={{height: 'none',}}>
                         <Card pokeca={pokeca} isCorrect={isCorrect}/>
                     </GridListTile>
                 )}

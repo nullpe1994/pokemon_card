@@ -13,7 +13,7 @@ CREATE TABLE deck (
     user_id varchar(16) NOT NULL,
     deck_id integer NOT NULL,
     deck_name text,
-    card_id varchar(8)[][],
+    card_id text[][],
     update date default CURRENT_TIMESTAMP NOT NULL,
     isDelete varchar(1) default '0' NOT NULL,
     PRIMARY KEY (deck_id)
@@ -434,6 +434,7 @@ INSERT INTO pokemon_card VALUES ('S6K083', 'ズミ', 'https://www.pokemon-card.com
 -- S6H 83 拡張パック「白銀のランス
 
 -- deck
-INSERT INTO deck VALUES ('master', nextval('DECK_ID_SEQ'), 'ハイクラスデッキ インテレオンVMAX', '{{"SGI006", "2"}, {"SGI005", "2"}, {"SGI007", "1"}, {"SGI003", "2"}, {"SGI002", "3"}
-, {"SGI004","1"}, {"SGI001","1"}, {"SGI009","1"}, {"SGI008", "2"}, {"SGI010", "1"}, {"SGI012", "4"}, {"SGI013", "3"}, {"SGI014", "4"}, {"SGI011","1"}
-, {"SGI015", "2"}, {"SGI017", "4"}, {"SGI020", "4"}, {"SGI016", "2"}, {"SGI018", "1"}, {"SGI019", "2"}, {"SGI021", "2"}, {"SGI022", "4"},{"SGIWAT", "11"}}');
+INSERT INTO deck VALUES ('master', nextval('DECK_ID_SEQ'), 'ハイクラスデッキ インテレオンVMAX', '{{"SGI006", "インテレオンVMAX", "2"}, {"SGI005", "インテレオンV", "2"}, {"SGI007", "クロバットV", "1"}
+, {"SGI003", "オクタン", "2"}, {"SGI002", "テッポウオ", "3"}, {"SGI004", "バスラオ", "1"}, {"SGI001", "ラプラス", "1"}, {"SGI009", "ミミロップ", "1"}, {"SGI008", "ミミロル", "2"}, {"SGI010", "ルチャブル", "1"}
+, {"SGI012", "クイックボール", "4"}, {"SGI013", "しんかのおこう", "3"}, {"SGI014", "ポケギア3.0", "4"}, {"SGI011", "エネルギー回収", "1"}, {"SGI015", "ポケモンいれかえ", "2"}, {"SGI017", "博士の研究（アララギ博士）", "4"}
+, {"SGI020", "マリィ", "4"}, {"SGI016", "コルニの気合い", "2"}, {"SGI018", "冒険家の発見", "1"}, {"SGI019", "ボスの指令（フラダリ）", "2"}, {"SGI021", "みずの塔", "2"}, {"SGI022", "れんげきエネルギー", "4"},{"SGIWAT", "基本水エネルギー", "11"}}');

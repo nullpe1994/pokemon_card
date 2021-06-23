@@ -14,9 +14,9 @@ exports.createDeck = function(req, res, pool) {
           card_id
           ) VALUES ('${req.body.userId}',nextval('DECK_ID_SEQ'),'${req.body.deckName}','{`;
           cardDetails.map((detail) => {
-            for (let i=0; i<detail.array.count; i++) {
-              query += `"${detail.array.pokemon_card_id}",`;
-            }
+            query += `{"${detail.array.pokemon_card_id}",`
+            query += `"${detail.array.pokemon_card_name}",`
+            query += `"${detail.array.count}"},`;
           });
         let s = query.slice(0, -1);
         s += `}')`;
