@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ImageButton from './common/ImageButton';
 import SelectDecks from './SelectDecks';
+import UserNameContext from './UserNameContext';
 
 const Titles = {battle: '対戦', friendBattle: 'フレンドと対戦'}
 
@@ -73,7 +74,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Battle = (props) => {
+const Battle = () => {
+    const userName = useContext(UserNameContext);
     const [open, setOpen] = useState(false);
     const [bool, setBool] = useState(false);
     const [userDecks, setUserDecks] = useState([]);
@@ -95,13 +97,13 @@ const Battle = (props) => {
         // async を 関数としないと謎のエラーが出たので関数にしました。
         async function fetchData() {
             const res = await Axios.post('http://localhost:3001/getDeck',{
-                userId: props.userId,
+                userId: userName,
             });
             const json = await res.data[0];
             setUserDecks(json.userDeck);
         }
         fetchData();
-    },[props.userId,setUserDecks]);
+    },[userName,setUserDecks]);
     const classes = useStyles();
 
     return (
@@ -113,8 +115,8 @@ const Battle = (props) => {
                 <DialogTitle id="form-dialog-title">フレンドと対戦</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        対戦相手のユーザーIDを入力してください。
-                        <p>あなたのユーザーID:{props.userId}</p>
+                        対戦相手のユーザーIDを入力してください。<br/>
+                        あなたのユーザーID:{userName}
                     </DialogContentText>
                     <TextField
                         autoFocus

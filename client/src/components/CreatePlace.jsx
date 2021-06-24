@@ -58,7 +58,7 @@ const CreatePlace = (props) => {
     <div className={classes.root}>
         <List component="nav" aria-label="main mailbox folders">
           <TextField color='secondary' textcolor='secondary' label='デッキ名' id='deckname' value={deckName} onChange={(event) => onChangeDeckName(event)}/>
-            {props.cardDetails.map((cardDetail)=>
+            {props.cardDetails.map((cardDetail) =>
             <div className={classes.allStyles} key={cardDetail.array.pokemon_card_id}>
               {/* 追加ボタン */}
                 <button className={classes.buttonStyles}/>

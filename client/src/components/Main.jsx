@@ -29,7 +29,9 @@ const Main = (props) => {
                 </UserNameContext.Provider>
             )}
             {value === 2 && (
-                <Battle userId={props.location.state.userId}/>
+                <UserNameContext.Provider value={userName}>
+                    <Battle />
+                </UserNameContext.Provider>
             )}
         </div>
     );

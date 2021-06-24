@@ -45,7 +45,6 @@ const CreateDecks = (props) => {
                     setCount(prevState => prevState + 1);
                 }
                 ok = false;
-                return true;
             }
         });
         if (ok) {
@@ -72,7 +71,6 @@ const CreateDecks = (props) => {
                 className={classes.createPlaceStyles}
                 count={count}
                 cardDetails={cardDetails}
-                userId={props.userId}
                 setBool={props.setBool}
             />
         </div>
