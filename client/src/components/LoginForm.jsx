@@ -30,9 +30,11 @@ const theme = createMuiTheme({
 const Login = () => {
     const [userId,setUserId] = useState('');
     const history = useHistory();
+
     const onChangeUserId = (event) => {
         setUserId(event.target.value);
     }
+    
     const isCorrect = () => {
         Axios.get('http://localhost:3001/login',{ params: {user:userId}})
         .then((results) => {
