@@ -11,7 +11,7 @@ const Deck = (props) => {
     }
         return (
         <div>
-            {bool && (<CreateDecks userId={props.userId} setBool={setBool}/>)}
+            {bool && (<CreateDecks setBool={setBool}/>)}
             {!bool && (<DeckList onClick={onClick}/>)}
         </div>
     );

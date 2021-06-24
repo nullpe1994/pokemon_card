@@ -4,11 +4,15 @@ import Home from './Home';
 import Deck from './Deck';
 import Battle from './Battle';
 import './../css/style.css';
+import UserNameContext from './UserNameContext';
 
 const sectionTab = {home: 'ホーム', deck: 'デッキ', battle: '対戦'}
 
 const Main = (props) => {
+    const userName = props.location.state.userId;
+
     const [value, setValue] = React.useState(0);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -20,7 +24,9 @@ const Main = (props) => {
                 <Home/>
             )} 
             {value === 1 && (
-                <Deck userId={props.location.state.userId}/>
+                <UserNameContext.Provider value={userName}>
+                    <Deck/>
+                </UserNameContext.Provider>
             )}
             {value === 2 && (
                 <Battle userId={props.location.state.userId}/>

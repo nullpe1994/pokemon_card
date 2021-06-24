@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 import List from '@material-ui/core/List';
@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/Inbox';
 import AcceptButton from './common/AcceptButton';
 import Axios from 'axios';
+import UserNameContext from './UserNameContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,11 +33,14 @@ const useStyles = makeStyles((theme) => ({
 
 const CreatePlace = (props) => {
     const classes = useStyles();
+
+	const userName = useContext(UserNameContext);
+
     const isCorrect = () => {
         //length後々変更します
         if (props.count >= 1) {
           Axios.post('http://localhost:3001/createdeck',{  
-          userId:props.userId,
+          userId:userName,
           decks:props.cardDetails,
           deckName:deckName,
           });
@@ -45,12 +49,10 @@ const CreatePlace = (props) => {
     }
 
     const [deckName, setDeckName] = useState('新しいデッキ');
+
     const onChangeDeckName = (event) => {
       setDeckName(event.target.value);
     }
-    // const remove = () => {
-    //   console.log(props.cardDetails);
-    // }
 
     return (
     <div className={classes.root}>
