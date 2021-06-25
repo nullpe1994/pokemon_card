@@ -47,9 +47,9 @@ db用のソースディレクトリ
 
 ### ポケカルール
 https://www.pokemon-card.com/rules/  
-https://www.pokemon-card.com/card-search/
+https://www.pokemon-card.com/card-search/  
 
 ### ポケカ
-https://www.pokemon-card.com/info/2020/20200706_002491.html
-https://dev.pokemontcg.io/dashboard
+https://www.pokemon-card.com/info/2020/20200706_002491.html  
+https://dev.pokemontcg.io/dashboard  
 [return to menu](#menu)
