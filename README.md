@@ -50,6 +50,6 @@ https://www.pokemon-card.com/rules/
 https://www.pokemon-card.com/card-search/  
 
 ### ポケカ
-https://www.pokemon-card.com/info/2020/20200706_002491.html  
+https://pokekameshi.com/strongestdeck-tire/  
 https://dev.pokemontcg.io/dashboard  
 [return to menu](#menu)
