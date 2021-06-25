@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CreateDecks from './CreateDecks';
 import DeckList from './DeckList';
 
 const Deck = (props) => {  
 
-    const [bool, setBool] = React.useState(false);
+    const [bool, setBool] = useState(false);
     
-    const isCorrect = () => {
+    const onClick = () => {
         setBool(prevState => !prevState);
     }
         return (
         <div>
-            {bool && (<CreateDecks userId={props.userId} setBool={setBool}/>)}
-            {!bool && (<DeckList isCorrect={isCorrect}/>)}
+            {bool && (<CreateDecks setBool={setBool}/>)}
+            {!bool && (<DeckList onClick={onClick}/>)}
         </div>
     );
 }

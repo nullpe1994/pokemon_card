@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import './../css/style.css';
 import {TextField, Box, createMuiTheme, ThemeProvider} from '@material-ui/core';
-import {
-    BrowserRouter as Router,
-    useHistory,
-} from 'react-router-dom';
-import AcceptButton from './AcceptButton';
+import { useHistory } from 'react-router-dom';
+import AcceptButton from './common/AcceptButton';
 
 const theme = createMuiTheme({
     overrides: {
@@ -31,11 +28,13 @@ const theme = createMuiTheme({
 });
 
 const Login = () => {
-    const [userId,setUserId] = useState();
+    const [userId,setUserId] = useState('');
     const history = useHistory();
-    const onChangeUserId = (props) => {
-        setUserId(props.target.value);
+
+    const onChangeUserId = (event) => {
+        setUserId(event.target.value);
     }
+    
     const isCorrect = () => {
         Axios.get('http://localhost:3001/login',{ params: {user:userId}})
         .then((results) => {
@@ -61,6 +60,6 @@ const Login = () => {
             </div>
         </>
     );
-}
+};
 
 export default Login;

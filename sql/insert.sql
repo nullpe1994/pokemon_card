@@ -13,21 +13,7 @@ CREATE TABLE deck (
     user_id varchar(16) NOT NULL,
     deck_id integer NOT NULL,
     deck_name text,
-    card_id_1 varchar(8), card_id_2 varchar(8), card_id_3 varchar(8), card_id_4 varchar(8),
-    card_id_5 varchar(8), card_id_6 varchar(8), card_id_7 varchar(8), card_id_8 varchar(8),
-    card_id_9 varchar(8), card_id_10 varchar(8), card_id_11 varchar(8), card_id_12 varchar(8),
-    card_id_13 varchar(8), card_id_14 varchar(8), card_id_15 varchar(8), card_id_16 varchar(8),
-    card_id_17 varchar(8), card_id_18 varchar(8), card_id_19 varchar(8), card_id_20 varchar(8),
-    card_id_21 varchar(8), card_id_22 varchar(8), card_id_23 varchar(8), card_id_24 varchar(8),
-    card_id_25 varchar(8), card_id_26 varchar(8), card_id_27 varchar(8), card_id_28 varchar(8),
-    card_id_29 varchar(8), card_id_30 varchar(8), card_id_31 varchar(8), card_id_32 varchar(8),
-    card_id_33 varchar(8), card_id_34 varchar(8), card_id_35 varchar(8), card_id_36 varchar(8),
-    card_id_37 varchar(8), card_id_38 varchar(8), card_id_39 varchar(8), card_id_40 varchar(8),
-    card_id_41 varchar(8), card_id_42 varchar(8), card_id_43 varchar(8), card_id_44 varchar(8),
-    card_id_45 varchar(8), card_id_46 varchar(8), card_id_47 varchar(8), card_id_48 varchar(8),
-    card_id_49 varchar(8), card_id_50 varchar(8), card_id_51 varchar(8), card_id_52 varchar(8),
-    card_id_53 varchar(8), card_id_54 varchar(8), card_id_55 varchar(8), card_id_56 varchar(8),
-    card_id_57 varchar(8), card_id_58 varchar(8), card_id_59 varchar(8), card_id_60 varchar(8),
+    card_id text[][],
     update date default CURRENT_TIMESTAMP NOT NULL,
     isDelete varchar(1) default '0' NOT NULL,
     PRIMARY KEY (deck_id)
@@ -445,4 +431,10 @@ INSERT INTO pokemon_card VALUES ('S6K081', 'キクコ', 'https://www.pokemon-card.c
 INSERT INTO pokemon_card VALUES ('S6K082', 'シャクヤ', 'https://www.pokemon-card.com/assets/images/card_images/large/S6K/039523_T_SHAKUYA.jpg', '0');
 INSERT INTO pokemon_card VALUES ('S6K083', 'ズミ', 'https://www.pokemon-card.com/assets/images/card_images/large/S6K/039524_T_ZUMI.jpg', '0');
 
--- S6H 83 拡張パック「白銀のランス」
+-- S6H 83 拡張パック「白銀のランス
+
+-- deck
+INSERT INTO deck VALUES ('master', nextval('DECK_ID_SEQ'), 'ハイクラスデッキ インテレオンVMAX', '{{"SGI006", "インテレオンVMAX", "2"}, {"SGI005", "インテレオンV", "2"}, {"SGI007", "クロバットV", "1"}
+, {"SGI003", "オクタン", "2"}, {"SGI002", "テッポウオ", "3"}, {"SGI004", "バスラオ", "1"}, {"SGI001", "ラプラス", "1"}, {"SGI009", "ミミロップ", "1"}, {"SGI008", "ミミロル", "2"}, {"SGI010", "ルチャブル", "1"}
+, {"SGI012", "クイックボール", "4"}, {"SGI013", "しんかのおこう", "3"}, {"SGI014", "ポケギア3.0", "4"}, {"SGI011", "エネルギー回収", "1"}, {"SGI015", "ポケモンいれかえ", "2"}, {"SGI017", "博士の研究（アララギ博士）", "4"}
+, {"SGI020", "マリィ", "4"}, {"SGI016", "コルニの気合い", "2"}, {"SGI018", "冒険家の発見", "1"}, {"SGI019", "ボスの指令（フラダリ）", "2"}, {"SGI021", "みずの塔", "2"}, {"SGI022", "れんげきエネルギー", "4"},{"SGIWAT", "基本水エネルギー", "11"}}');

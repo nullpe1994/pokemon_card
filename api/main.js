@@ -5,6 +5,7 @@ const conection = require('./common/postgres.js');
 const login = require('./apis/login.js');
 const getCards = require('./apis/getCards.js');
 const createDeck = require('./apis/createDeck.js');
+const getDeck = require('./apis/getDeck.js');
 
 router.use(express.json())
 router.use(function(req, res, next) {
@@ -41,6 +42,16 @@ router.get('/createdeck', (req, res) => {
 router.post('/createdeck', (req, res) => {
     const pool = conection.conection();
     createDeck.createDeck(req,res,pool);
+});
+
+router.get('/getdeck', (req, res) => {
+    const pool = conection.conection();
+    getdeck.getdeck(req,res,pool);
+});
+
+router.post('/getdeck', (req, res) => {
+    const pool = conection.conection();
+    getDeck.getDeck(req,res,pool);
 });
 
 
