@@ -28,7 +28,7 @@ INSERT INTO pokemon_card (
     first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, resistances, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S6K037', 'こくばバドレックスVMAX', '1', '{22}', '320', '9', '{S6K036}',
+    'S6K037', 'こくばバドレックスVMAX', '1', '{22}', '320', '9', 'こくばバドレックスV',
     '3', '10',
     '1', '1', '4', '2', 'https://www.pokemon-card.com/assets/images/card_images/large/S6K/039468_P_KOKUBABADOREKKUSUVMAX.jpg', '0'
 );

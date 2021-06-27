@@ -17,7 +17,7 @@ INSERT INTO pokemon_card (
     second_skill_type, second_skill_type_cost, second_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'SGG002', 'ƒQƒ“ƒK[VMAX', '1', '{22, 24}', '320', '1', '{SGG001}', 
+    'SGG002', 'ƒQƒ“ƒK[VMAX', '1', '{22, 24}', '320', '1', 'ƒQƒ“ƒK[V', 
     '1', '2', '60',
     '1', '3', '250',
     '0', '4', '3', 'https://www.pokemon-card.com/assets/images/card_images/large/SGG/039539_P_GENGAVMAX.jpg', '0'
@@ -38,7 +38,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'SGG005', 'ƒwƒ‹ƒK[', '1', '{16, 24}', '130', '1', '{SGG004}', 
+    'SGG005', 'ƒwƒ‹ƒK[', '1', '{16, 24}', '130', '1', 'ƒfƒ‹ƒrƒ‹', 
     '1', '1', '1', '50',
     '1', '6', '2', 'https://www.pokemon-card.com/assets/images/card_images/large/SGG/039542_P_HERUGA.jpg', '0'
 );

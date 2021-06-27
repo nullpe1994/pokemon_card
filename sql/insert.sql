@@ -26,7 +26,7 @@ CREATE TABLE pokemon_card (
     subtypes integer[] NOT NULL,
     hp integer,
     types integer,
-    evolvesFrom text[],
+    evolvesFrom text,
     first_skill_type integer,
     first_skill_type_cost integer,
     first_skill_colorless_cost integer,

@@ -16,7 +16,7 @@ INSERT INTO pokemon_card (
     first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S5a018', 'インテレオン', '1', '{17,23}', '150', '10', '{S4a040}', 
+    'S5a018', 'インテレオン', '1', '{17,23}', '150', '10', 'ジメレオン', 
     '2', '70', 
     '1', '7', '1', 'https://www.pokemon-card.com/assets/images/card_images/large/S5a/039285_P_INTEREON.jpg', '0'
 );

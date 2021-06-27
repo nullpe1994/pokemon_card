@@ -4,7 +4,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S4a040', 'ジメレオン', '1', '{16}', '90', '10', '{S5a016}',
+    'S4a040', 'ジメレオン', '1', '{16}', '90', '10', 'メッソン',
     '10', '1', '1', '30', 
     '1', '7', '1', 'https://www.pokemon-card.com/assets/images/card_images/large/S4a/038685_P_JIMEREON.jpg', '0'
 );
@@ -14,7 +14,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S4a041', 'インテレオン', '1', '{17}', '160', '10', '{S4a040}',
+    'S4a041', 'インテレオン', '1', '{17}', '160', '10', 'ジメレオン',
     '10', '1', '1', '120',
     '1', '7', '1', 'https://www.pokemon-card.com/assets/images/card_images/large/S4a/038686_P_INTEREON.jpg', '0'
 );
@@ -46,7 +46,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage, 
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S4a125', 'ムゲンダイナVMAX', '1', '{22}', '340', '1', '{S4a124}',
+    'S4a125', 'ムゲンダイナVMAX', '1', '{22}', '340', '1', 'ムゲンダイナV',
     '1', '1', '1', '30',
     '1', '4', '3', 'https://www.pokemon-card.com/assets/images/card_images/large/S4a/038770_P_MUGENDAINAVMAX.jpg', '0'
 );

@@ -17,7 +17,7 @@ INSERT INTO pokemon_card (
     second_skill_type, second_skill_type_cost, second_skill_colorless_cost, 
     isAbilities, weaknesses, convertedRetreatCost, img_url,isDelete
 ) VALUES (
-    'S5R051', 'れんげきウーラオスVMAX', '1', '{22,23}', '330', '4', '{S5R050}',
+    'S5R051', 'れんげきウーラオスVMAX', '1', '{22,23}', '330', '4', 'れんげきウーラオスV',
     '4', '1', '30',
     '4', '2', '1', 
     '0', '9', '2', 'https://www.pokemon-card.com/assets/images/card_images/large/S5R/039181_P_RENGEKIURAOSUVMAX.jpg', '0'

@@ -16,7 +16,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S6a048', 'ブラッキーVMAX', '1', '{22,24}', '310', '1', '{S6a047}', 
+    'S6a048', 'ブラッキーVMAX', '1', '{22,24}', '310', '1', 'ブラッキーV', 
     '1', '1', '2', '160', 
     '1', '6', '2', 'https://www.pokemon-card.com/assets/images/card_images/large/S6a/039632_P_BURAKKIVMAX.jpg', '0'
 );
