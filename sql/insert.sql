@@ -13,10 +13,15 @@ CREATE TABLE deck (
     user_id varchar(16) NOT NULL,
     deck_id integer NOT NULL,
     deck_name text,
-    card_id text[][],
-    update date default CURRENT_TIMESTAMP NOT NULL,
+    update timestamp default CURRENT_TIMESTAMP NOT NULL,
     isDelete varchar(1) default '0' NOT NULL,
     PRIMARY KEY (deck_id)
+);
+
+CREATE TABLE deck_cards (
+    deck_id integer NOT NULL,
+    card_id varchar (8) NOT NULL,
+    number_of_cards integer NOT NULL
 );
 
 CREATE TABLE pokemon_card (

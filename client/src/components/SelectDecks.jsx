@@ -2,6 +2,7 @@ import React, { useState }from 'react';
 import { makeStyles } from '@material-ui/core';
 import CardListSideBar from './CardListSideBar';
 import ImageButton from './common/ImageButton';
+import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     root : {
@@ -76,7 +77,9 @@ const SelectDecks = (props) => {
 
     const onClick = (e) => {
         setCards(e);
-    }
+    };
+
+    console.log(props);
 
     const classes = useStyles();
 
@@ -86,9 +89,9 @@ const SelectDecks = (props) => {
             <div className={classes.root}>
                 {props.userDecks.map((userDeck) =>
                     <ImageButton Title={userDeck.deck_name}
-                     key={userDeck.deck_id}
+                     key={userDeck.pokemon_card_id}
                      classes={classes}
-                     onClick={() => onClick(userDeck.card_id)}
+                     onClick={() => onClick(userDeck.pokemon_card_id)}
                     />
                 )}
             </div>

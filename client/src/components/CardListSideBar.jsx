@@ -34,6 +34,7 @@ const CardListSideBar = (props) => {
 	const history = useHistory();
 
 	const isCorrect = () => {
+		// Axios.post('')
 		history.push({
 			pathname: '/competitive'
 		})

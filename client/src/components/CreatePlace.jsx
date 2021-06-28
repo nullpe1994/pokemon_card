@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreatePlace = (props) => {
-    const classes = useStyles();
+  const classes = useStyles();
 
 	const userName = useContext(UserNameContext);
 

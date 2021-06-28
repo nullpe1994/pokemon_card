@@ -58,11 +58,8 @@ const CreateDecks = (props) => {
     return (
         <div className={classes.root}>
             <GridList　className={classes.cardStyles} cols={7}>
-                {/* 今後改善の余地ありけり。
-                    受け取った値が再描画されてundefinedになってmapとして描画できない。
-                */}
                 {cardlist.map((pokeca) =>
-                    <GridListTile key={pokeca.pokemon_card_id} style={{height: 'none',}}>
+                    <GridListTile key={pokeca.pokemon_card_id} style={{height: 'none'}}>
                         <Card pokeca={pokeca} isCorrect={isCorrect}/>
                     </GridListTile>
                 )}
