@@ -46,6 +46,7 @@ const CreateDecks = (props) => {
                 }
                 ok = false;
             }
+            return false;
         });
         if (ok) {
             const array = e;

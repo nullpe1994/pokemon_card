@@ -43,7 +43,7 @@ const Login = () => {
                 state: { userId: userId }
             })
         });
-    };
+    }
     
     return (
         <>
@@ -60,6 +60,6 @@ const Login = () => {
             </div>
         </>
     );
-};
+}
 
 export default Login;

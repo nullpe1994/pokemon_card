@@ -54,7 +54,6 @@ router.post('/getdeck', (req, res) => {
     getDeck.getDeck(req,res,pool);
 });
 
-
 router.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });

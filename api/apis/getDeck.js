@@ -9,7 +9,7 @@ exports.getDeck = function(req, res, pool) {
 			const userId = req.body.userId;
 			client.query(`
 				SELECT deck.user_id, deck.deck_id, deck.deck_name, 
-				deck_cards.number_of_cards, pokemon_card.pokemon_card_id, 
+				deck_cards.number_of_cards, deck_cards.card_id, 
 				pokemon_card_name, supertype, subtypes, hp, types, evolvesFrom, 
 				first_skill_type, first_skill_type_cost, first_skill_colorless_cost, 
 				first_skill_attack_damage, second_skill_type, second_skill_type_cost, 
@@ -20,21 +20,39 @@ exports.getDeck = function(req, res, pool) {
 				LEFT JOIN deck ON deck.deck_id = deck_cards.deck_id 
 				WHERE deck.user_id = '${userId}'`, 
 				(err, result) => {
-					const size = result.rows.length;
-					let x = result.rows[0].deck_id;
-					var deck = [];
-					
-					for (let i=0; i<size; i++) {
-						if (x != result.rows[i].deck_id) {
-							x = result.rows[i].deck_id;
-							deck[i] = result.rows[i];
+					let deck = [];
+					result.rows.map((row) => {
+						if (deck.length === 0 || row.deck_id != deck[deck.length - 1].deck_id) {
+							deck.push({
+								deck_id: row.deck_id,
+								deck_name: row.deck_name,
+								cards: [{
+									number_of_cards: row.number_of_cards, card_id: row.card_id, card_name: row.pokemon_card_name,
+									supertype: row.supertype, subtypes: row.subtypes, hp: row.hp, types: row.types, evolvesFrom: row.evolvesfrom,
+									first_skill_type: row.first_skill_type, first_skill_type_cost: row.first_skill_type_cost, first_skill_colorless_cost: row.first_skill_colorless_cost,
+									first_skill_attack_damage: row.first_skill_attack_damage, second_skill_type: row.second_skill_type, second_skill_type_cost: row.second_skill_type_cost,
+									second_skill_colorless_cost: row.second_skill_colorless_cost, second_skill_attack_damage: row.second_skill_attack_damage, isAbilities: row.isabilities,
+									weaknesses: row.weaknesses, resistances: row.resistances, convertedRetreatCost: row.convertedretreatcost, img_url: row.img_url
+								}]
+							});
 						} else {
-							res.header('Access-Control-Allow-Origin', '*');
-							res.json([{
-							userDeck: deck
-							}]);
-							deck = [];
+							deck[deck.length - 1]['cards'].push({
+									number_of_cards: row.number_of_cards, card_id: row.card_id, card_name: row.pokemon_card_name,
+									supertype: row.supertype, subtypes: row.subtypes, hp: row.hp, types: row.types, evolvesFrom: row.evolvesfrom,
+									first_skill_type: row.first_skill_type, first_skill_type_cost: row.first_skill_type_cost, first_skill_colorless_cost: row.first_skill_colorless_cost,
+									first_skill_attack_damage: row.first_skill_attack_damage, second_skill_type: row.second_skill_type, second_skill_type_cost: row.second_skill_type_cost,
+									second_skill_colorless_cost: row.second_skill_colorless_cost, second_skill_attack_damage: row.second_skill_attack_damage, isAbilities: row.isabilities,
+									weaknesses: row.weaknesses, resistances: row.resistances, convertedRetreatCost: row.convertedretreatcost, img_url: row.img_url
+								}
+							);
 						}
+					});
+
+					if (true) {
+						res.header('Access-Control-Allow-Origin', '*');
+						res.json([{
+							userDeck: deck
+						}]);
 					}
 				}
 			);

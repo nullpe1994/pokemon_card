@@ -90,7 +90,7 @@ INSERT INTO deck_cards VALUES ('4', 'S6a047', '2');
 INSERT INTO deck_cards VALUES ('4', 'S6a048', '2');
 INSERT INTO deck_cards VALUES ('4', 'SGG004', '4');
 INSERT INTO deck_cards VALUES ('4', 'SGG005', '4');
-INSERT INTO deck_cards VALUES ('4', 'SGI007"', '1');
+INSERT INTO deck_cards VALUES ('4', 'SGI007', '1');
 INSERT INTO deck_cards VALUES ('4', 'S5I035', '1');
 INSERT INTO deck_cards VALUES ('4', 'SM12a055', '1');
 INSERT INTO deck_cards VALUES ('4', 'SF008', '4');
