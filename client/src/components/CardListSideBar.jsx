@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AcceptButton from './common/AcceptButton'
-import ShuffleTheDeck from './ShuffleTheDeck';
+import ShuffleTheDeck from './function/ShuffleTheDeck';
 
 const drawerWidth = 300;
 

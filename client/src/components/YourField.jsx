@@ -4,6 +4,8 @@ import SideCard from './SideCard';
 import BenchCard from './BenchCard';
 import HandCard from './HandCard';
 import PlacementOfCards from './PlacementOfCards';
+import AcceptButton from './common/AcceptButton';
+import DeckImage from './DeckImage';
 
 const placeNames = {
     Side: 'Side', 
@@ -13,7 +15,7 @@ const placeNames = {
     Trash:'Trash'
 }
 
-const YourField = () => {
+const YourField = (props) => {
     return(
         <Grid container spacing={1}>
             <SideCard xs={1}/>
@@ -30,17 +32,23 @@ const YourField = () => {
             <BenchCard xs={1}/>
             <BenchCard xs={2}/>
             <Grid item xs={3}>
-                <PlacementOfCards value={placeNames.Deck}/>
+                <DeckImage deck={props.deck}/>
             </Grid>
             <SideCard xs={1}/>
             <SideCard xs={2}/>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={2}/>
+            {props.yourHand.map((handCard) =>
+                <div>
+                    <HandCard xs={1} handCard={handCard.img_url}/>
+                </div>
+            )}
             <Grid item xs={1}>
                 <PlacementOfCards value={placeNames.Trash}/>
+            </Grid>
+            <Grid item xs={1}>
+                <AcceptButton name={props.declineName} isCorrect={props.isCorrect}/>
+            </Grid>
+            <Grid item xs={1}>
+                <AcceptButton name={props.acceptName} isCorrect={props.isCorrect}/>
             </Grid>
         </Grid>
     );

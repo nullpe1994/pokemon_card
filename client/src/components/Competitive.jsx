@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import jirachi from '../image/jirachiWallPaper.jpg'
-import { makeStyles, Box, Grid, Divider } from '@material-ui/core';
-import SideCard from './SideCard';
-import BenchCard from './BenchCard';
-import HandCard from './HandCard';
-import PlacementOfCards from './PlacementOfCards';
+import { makeStyles, Box, Divider } from '@material-ui/core';
+import OpponentField from './OpponentField';
+import YourField from './YourField';
+import DrawACard from './function/DrawACard';
+import AcceptButton from './common/AcceptButton';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -19,15 +19,25 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Competitive = () => {
-    const classes = useStyles();
 
-    const placeNames = {
-        Side: 'Side', 
-        BattleField: 'BattleField',
-        Deck: 'Deck', 
-        Bench: 'Bench', 
-        Trash:'Trash'
+const Competitive = (props) => {
+    const classes = useStyles();  
+    const deck = props.location.state.deck;
+    const [yourHand, setYourHand] = useState([]);
+    const [acceptButtonName, setAcceptButtonName] = useState('先攻');
+    const [declineButtonName, setDeclineButtonName] = useState('後攻');
+    const [phase, setPhase] = useState('0');
+
+    const Draw = () => {
+        const newCard = DrawACard(deck.cards);
+        setYourHand((prevArray)=>[...prevArray, newCard]);
+        deck.cards.pop();
+    }
+
+    const isCorrect = () => {
+        for (let i=0; i<7; i++) {
+            Draw();
+        }
     }
 
     return (
@@ -35,65 +45,17 @@ const Competitive = () => {
             backgroundImage: `url(${jirachi})`,
             backgroundSize: 'cover',
             }}
-            p={{md: 12.8}}
+            p={{md: 5}}
         >
-            <Grid className={classes.opponent} container spacing={1}>
-                <Grid item xs={4}>
-                    <PlacementOfCards value={placeNames.Trash}/>
-                </Grid>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={2}/>
-                <SideCard xs={1}/>
-                <SideCard xs={1}/>
-                <Grid item xs={4}>
-                    <PlacementOfCards value={placeNames.Deck}/>
-                </Grid>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={2}/>
-                <SideCard xs={1}/>
-                <SideCard xs={1}/>
-                <Grid item xs={6}/>
-                <Grid item xs={4}>
-                    <PlacementOfCards value={placeNames.BattleField}/>
-                </Grid>
-                <SideCard xs={1}/>
-                <SideCard xs={1}/>
-            </Grid>
+            <OpponentField/>
             <Divider/>
-            <Grid className={classes.you} container spacing={1}>
-                <SideCard xs={1}/>
-                <SideCard xs={5}/>
-                <Grid item xs={1}>
-                    <PlacementOfCards value={placeNames.BattleField}/>
-                </Grid>
-                <Grid item xs={5}/>
-                <SideCard xs={1}/>
-                <SideCard xs={3}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={1}/>
-                <BenchCard xs={3}/>
-                <Grid item xs={1}>
-                    <PlacementOfCards value={placeNames.Deck}/>
-                </Grid>
-                <SideCard xs={1}/>
-                <SideCard xs={3}/>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={1}/>
-                <HandCard xs={3}/>
-                <Grid item xs={1}>
-                    <PlacementOfCards value={placeNames.Trash}/>
-                </Grid>
-            </Grid>
+            <YourField 
+                acceptName={acceptButtonName} 
+                declineName={declineButtonName}
+                isCorrect={isCorrect}
+                yourHand={yourHand}
+                deck = {deck}
+            />
         </Box>
     );
 }

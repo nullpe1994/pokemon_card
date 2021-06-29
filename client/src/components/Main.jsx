@@ -4,7 +4,7 @@ import Home from './Home';
 import Deck from './Deck';
 import Battle from './Battle';
 import './../css/style.css';
-import UserNameContext from './UserNameContext';
+import UserNameContext from './Context/UserNameContext';
 
 const sectionTab = {home: 'ホーム', deck: 'デッキ', battle: '対戦'}
 

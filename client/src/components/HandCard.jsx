@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import PlacementOfCards from './PlacementOfCards';
+import HandCardImage from './HandCardImage';
 
 const HandCard = (props) => {
     return (
         <Grid item xs={props.xs}>
-            <PlacementOfCards value={'Hand'}/>
+            <HandCardImage handCard={props.handCard}/>
         </Grid>
     );
 }
