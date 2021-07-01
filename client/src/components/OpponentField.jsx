@@ -1,49 +1,63 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import SideCard from './SideCard';
-import BenchCard from './BenchCard';
-import HandCard from './HandCard';
-import PlacementOfCards from './PlacementOfCards';
-
-const placeNames = {
-    Side: 'Side', 
-    BattleField: 'BattleField',
-    Deck: 'Deck', 
-    Bench: 'Bench', 
-    Trash:'Trash'
-}
+import OpponentCardImage from './OpponentCardImage';
 
 const opponentField = () => {
+    const h = [0,1,2,3,4,5,6];
+    const b = [0,1,2,3,4];
+    const s = [0,1,2,3,4,5];
     return (
-        <Grid container spacing={1}>
-            <Grid item xs={1}/>
+        <Grid container spacing={0}>
+            <Grid item xs={3}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        {/* trash */}
+                        <OpponentCardImage/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {/* deck */}
+                        <OpponentCardImage/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={7}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        {/* handCards */}
+                        <Grid container spacing={5}>
+                            {h.map(ha =>
+                                <Grid item xs={1.5}>
+                                    <OpponentCardImage/>
+                                </Grid>
+                            )}
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {/* benchCards */}
+                        <Grid container spacing={10}>
+                            {b.map(be =>
+                                <Grid item xs={2.4}>
+                                    <OpponentCardImage/>
+                                </Grid>
+                            )}
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {/* battleField */}
+                        <OpponentCardImage/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            {/* sideCards */}
             <Grid item xs={2}>
-                <PlacementOfCards value={placeNames.Trash}/>
+                <Grid container spacing={0}>
+                    {s.map(si =>
+                        <Grid item xs={5.5}>
+                            <OpponentCardImage/>
+                        </Grid>
+                    )}
+                </Grid>
             </Grid>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={1}/>
-            <HandCard xs={2}/>
-            <SideCard xs={1}/>
-            <SideCard xs={2}/>
-            <Grid item xs={1}/>
-            <Grid item xs={2}>
-                <PlacementOfCards value={placeNames.Deck}/>
-            </Grid>
-            <BenchCard xs={1}/>
-            <BenchCard xs={1}/>
-            <BenchCard xs={1}/>
-            <BenchCard xs={1}/>
-            <BenchCard xs={2}/>
-            <SideCard xs={1}/>
-            <SideCard xs={2}/>
-            <Grid item xs={5}/>
-            <Grid item xs={4}>
-                <PlacementOfCards value={placeNames.BattleField}/>
-            </Grid>
-            <SideCard xs={1}/>
-            <SideCard xs={2}/>
         </Grid>
     );
 }
