@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import {useRecoilState,} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import yourHandState from '../State/yourHandState';
 import battleFieldState from '../State/battleFieldState';
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const HandCardImage = (props) => {
     const classes = useStyles();
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
-    const [battleField, setBattleField] = useRecoilState(battleFieldState);
+    const setBattleField = useSetRecoilState(battleFieldState);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
