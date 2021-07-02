@@ -8,17 +8,15 @@ import BattleFieldImage from './cardImages/BattleFieldImage';
 import SideCardImage from './cardImages/SideCardImage';
 import yourSideCardsState from './State/yourSideCardsState';
 import { useRecoilValue } from 'recoil';
+import offTurnDisplayState from './State/offTurnDisplayState';
 
-const placeNames = {
-    Side: 'Side', 
-    BattleField: 'BattleField',
-    Deck: 'Deck', 
-    Bench: 'Bench', 
+const placeNames = { 
     Trash:'Trash'
 }
 
 const YourField = (props) => {
     const sideCards = useRecoilValue(yourSideCardsState);
+    const offTurnDisplay = useRecoilValue(offTurnDisplayState);
 
     return(
         <Grid container spacing={0}>
@@ -26,7 +24,7 @@ const YourField = (props) => {
                 <Grid container spacing={0}>
                     {Object.keys(sideCards).map(key =>
                         <Grid item xs={5.5}>
-                            <SideCardImage sideCards={sideCards[key]}/>
+                            <SideCardImage sideCards={sideCards[key]} index={key}/>
                         </Grid>
                     )}
                 </Grid>
@@ -60,10 +58,14 @@ const YourField = (props) => {
                         <PlacementOfCards value={placeNames.Trash}/>
                     </Grid>
                     <Grid item xs={6}>
-                        <AcceptButton name={props.declineName} isCorrect={props.isCorrect}/>
+                        {offTurnDisplay && (
+                            <AcceptButton name={'後攻'} isCorrect={props.chooseYourOrder}/>
+                        )}
                     </Grid>
                     <Grid item xs={6}>
-                        <AcceptButton name={props.acceptName} isCorrect={props.isCorrect}/>
+                        {offTurnDisplay && (
+                            <AcceptButton name={'先攻'} isCorrect={props.chooseYourOrder}/>
+                        )}
                     </Grid>
                 </Grid>
             </Grid>
