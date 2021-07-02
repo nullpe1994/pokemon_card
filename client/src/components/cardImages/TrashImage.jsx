@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import {useRecoilValue,} from 'recoil';
-import battleFieldState from '../State/battleFieldState';
+import Tooltip from '@material-ui/core/Tooltip';
+import { useRecoilValue } from 'recoil';
+import trashState from '../State/trashState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -75,39 +76,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BattleFieldImage = () => {
+const TrashImage = () => {
     const classes = useStyles();
-    const battlePokemon = useRecoilValue(battleFieldState);
+    const trash = useRecoilValue(trashState);
+    const [trashImage, setTrashImage] = useState('');
+    
+    useEffect(() => {
+        trash.length !== 0 && (
+            setTrashImage(trash[trash.length - 1].img_url)
+        );
+    },[trash]);
+    
     return (
-        <ButtonBase
-            focusRipple
-            className={classes.image}
-            focusVisibleClassName={classes.focusVisible}
-            style={{
-                width: 130,
-            }}
-        >
-            <span
-                className={classes.imageSrc}
+        <Tooltip title={"トラッシュ: " + trash.length}>
+            <ButtonBase
+                focusRipple
+                className={classes.image}
+                focusVisibleClassName={classes.focusVisible}
                 style={{
-                    backgroundImage: `url(${battlePokemon.img_url})`,
+                    width: 130,
                 }}
-            />
-            {battlePokemon.length === 0 && (
-                <span className={classes.imageBackdrop}/>
-            )}
-            <span className={classes.imageButton}>
-                <Typography
-                    component="span"
-                    variant="subtitle1"
-                    color="inherit"
-                    className={classes.imageTitle}
-                >
-                    {'BattleField'}
-                    <span className={classes.imageMarked} />
-                </Typography>
-            </span>
-        </ButtonBase>
+            >
+                <span
+                    className={classes.imageSrc}
+                    style={{
+                        backgroundImage: `url(${trashImage})`,
+                    }}
+                />
+                <span className={classes.imageBackdrop} />
+                <span className={classes.imageButton}>
+                    <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        className={classes.imageTitle}
+                    >
+                        {'Trash'}
+                        <span className={classes.imageMarked} />
+                    </Typography>
+                </span>
+            </ButtonBase>
+        </Tooltip>
     );
 }
-export default BattleFieldImage;
+export default TrashImage;
