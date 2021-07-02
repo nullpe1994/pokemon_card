@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import jirachi from '../image/jirachiWallPaper.jpg'
 import { makeStyles, Box, Divider } from '@material-ui/core';
 import OpponentField from './OpponentField';
@@ -11,9 +11,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ShuffleTheDeck from './function/ShuffleTheDeck';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import yourHandState from './State/yourHandState';
 import yourSideCardsState from './State/yourSideCardsState';
+import phaseState from './State/phaseState';
+import battleFieldState from './State/battleFieldState';
+import offTurnDisplayState from './State/offTurnDisplayState';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -32,12 +35,31 @@ const useStyles = makeStyles(() => ({
 const Competitive = (props) => {
     const classes = useStyles();  
     const deck = props.location.state.deck;
-    const [acceptButtonName, setAcceptButtonName] = useState('先攻');
-    const [declineButtonName, setDeclineButtonName] = useState('後攻');
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
     const setYourSideCards = useSetRecoilState(yourSideCardsState);
-    const [phase, setPhase] = useState('0');
+    const [phase, setPhase] = useRecoilState(phaseState);
+    const battleField = useRecoilValue(battleFieldState);
+    const setOffTurnDisplay = useSetRecoilState(offTurnDisplayState);
     const [noBasic, setNoBasic] = useState(false);
+    
+    const whichPhase = () => {
+        if (phase === 0) {
+            if (battleField.length !== 0) {
+                for (let i=0; i<6; i++) SetSideCards();
+                setPhase((prev) => prev+1);
+            }
+        } else if (phase === 1) {
+            Draw();
+            setPhase((prev) => prev+1);
+        } else if (phase === 2) {
+            console.log('done draw, now your turn')
+        }
+    }
+    
+    useEffect(() => {
+        whichPhase();
+        console.log('phase: ' + phase);
+    },[whichPhase]);
 
     const Draw = () => {
         const newCard = DrawACard(deck.cards);
@@ -45,8 +67,6 @@ const Competitive = (props) => {
         deck.cards.pop();
         return newCard;
     }
-    
-    console.log(deck.cards);
     
     const Mulligan = () => {
         let card = "";
@@ -66,11 +86,7 @@ const Competitive = (props) => {
         }
 
         if (basicCnt === 0) setNoBasic(true);
-        else {
-            setNoBasic(false);
-            for (let i=0; i<6; i++) SetSideCards();
-        }
-
+        else setNoBasic(false);
     }
     
     const SetSideCards = () => {
@@ -79,7 +95,7 @@ const Competitive = (props) => {
         deck.cards.pop();
     }
 
-    const isCorrect = () => {
+    const chooseYourOrder = () => {
         let card = "";
         let basicCnt = 0;
 
@@ -97,6 +113,8 @@ const Competitive = (props) => {
             setNoBasic(false);
             for (let i=0; i<6; i++) SetSideCards();
         }
+        
+        setOffTurnDisplay(false);
     }
 
     return (
@@ -109,9 +127,7 @@ const Competitive = (props) => {
             <OpponentField/>
             <Divider/>
             <YourField 
-                acceptName={acceptButtonName} 
-                declineName={declineButtonName}
-                isCorrect={isCorrect}
+                chooseYourOrder={chooseYourOrder}
                 yourHand={yourHand}
                 deck = {deck}
             />
