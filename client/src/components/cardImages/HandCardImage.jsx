@@ -1,11 +1,9 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import yourHandState from '../State/yourHandState';
-import battleFieldState from '../State/battleFieldState';
+import CardComands from '../molecules/CardComands';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -30,37 +28,22 @@ const useStyles = makeStyles((theme) => ({
 
 const HandCardImage = (props) => {
     const classes = useStyles();
-    const [yourHand, setYourHand] = useRecoilState(yourHandState);
-    const setBattleField = useSetRecoilState(battleFieldState);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
+    const yourHand = useRecoilValue(yourHandState);
+    const [anchorEl, setAnchorEl] = useState(null);
+    
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
+      console.log(props.index);
     };
-  
+
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
     };
 
     const image = {
         url: props.handCard.img_url,
         width: 130,
         height: 180,
-    };
-
-    const whitchSubtypes = (subtype) => {
-        let text = "";
-        if (subtype === 2) {
-            text = "バトル場に出す"
-        }
-        return text;
-    }
-
-    const thisCard = (index) => {
-        let yourhands = [...yourHand];
-        setBattleField(yourHand[index]);
-        yourhands.splice(index, 1);
-        setYourHand(yourhands);
     };
 
     return (
@@ -81,15 +64,12 @@ const HandCardImage = (props) => {
                     }}
                 />
             </ButtonBase>
-            <Menu
-                id="simple-menu"
+            <CardComands 
+                supertype={yourHand[props.index].supertype} 
+                index={props.index} 
                 anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={() => thisCard(props.index)}>{whitchSubtypes(props.handCard.subtypes[0])}</MenuItem>
-            </Menu>
+                handleClose={handleClose}
+            />
         </div>
     );
 }
