@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import PlacementOfCards from './PlacementOfCards';
 import AcceptButton from './common/AcceptButton';
 import HandCardImage from './cardImages/HandCardImage';
 import DeckImage from './cardImages/DeckImage';
@@ -9,10 +8,7 @@ import SideCardImage from './cardImages/SideCardImage';
 import yourSideCardsState from './State/yourSideCardsState';
 import { useRecoilValue } from 'recoil';
 import offTurnDisplayState from './State/offTurnDisplayState';
-
-const placeNames = { 
-    Trash:'Trash'
-}
+import TrashImage from './cardImages/TrashImage';
 
 const YourField = (props) => {
     const sideCards = useRecoilValue(yourSideCardsState);
@@ -22,8 +18,9 @@ const YourField = (props) => {
         <Grid container spacing={0}>
             <Grid item xs={2}>
                 <Grid container spacing={0}>
+                    {/* サイドカード */}
                     {Object.keys(sideCards).map(key =>
-                        <Grid item xs={5.5}>
+                        <Grid item xs={6}>
                             <SideCardImage sideCards={sideCards[key]} index={key}/>
                         </Grid>
                     )}
@@ -31,16 +28,18 @@ const YourField = (props) => {
             </Grid>
             <Grid item xs={7}>
                 <Grid container spacing={0}>
+                    {/* バトル場 */}
                     <Grid item xs={12}>
                         <BattleFieldImage/>
                     </Grid>
                     <Grid item xs={12}>
-                        {/* ベンチカード予定 */}
+                        {/* ベンチカード */}
                     </Grid>
                     <Grid item xs={12}>
-                        <Grid  container spacing={5}>
+                        <Grid  container spacing={0}>
+                            {/* 手札 */}
                             {Object.keys(props.yourHand).map(key =>
-                                <Grid item xs={1.5}>
+                                <Grid item xs={2}>
                                     <HandCardImage handCard={props.yourHand[key]} index={key}/>
                                 </Grid>
                             )}
@@ -51,11 +50,13 @@ const YourField = (props) => {
             <Grid item xs={3}>
                 <Grid container spacing={0}>
                     {/* ダメカン表示予定場所 */}
+                    {/* デッキ */}
                     <Grid item xs={12}>
                         <DeckImage deck={props.deck}/>
                     </Grid>
+                    {/* トラッシュ */}
                     <Grid item xs={12}>
-                        <PlacementOfCards value={placeNames.Trash}/>
+                        <TrashImage/>
                     </Grid>
                     <Grid item xs={6}>
                         {offTurnDisplay && (

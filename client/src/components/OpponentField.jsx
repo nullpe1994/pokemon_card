@@ -26,7 +26,7 @@ const opponentField = () => {
                         {/* handCards */}
                         <Grid container spacing={5}>
                             {h.map(ha =>
-                                <Grid item xs={1.5}>
+                                <Grid item xs={1}>
                                     <OpponentCardImage/>
                                 </Grid>
                             )}
@@ -36,7 +36,7 @@ const opponentField = () => {
                         {/* benchCards */}
                         <Grid container spacing={10}>
                             {b.map(be =>
-                                <Grid item xs={2.4}>
+                                <Grid item xs={2}>
                                     <OpponentCardImage/>
                                 </Grid>
                             )}
@@ -52,7 +52,7 @@ const opponentField = () => {
             <Grid item xs={2}>
                 <Grid container spacing={0}>
                     {s.map(si =>
-                        <Grid item xs={5.5}>
+                        <Grid item xs={6}>
                             <OpponentCardImage/>
                         </Grid>
                     )}

@@ -109,10 +109,7 @@ const Competitive = (props) => {
         }
 
         if (basicCnt === 0) setNoBasic((prev) => !prev);
-        else {
-            setNoBasic(false);
-            for (let i=0; i<6; i++) SetSideCards();
-        }
+        else setNoBasic(false);
         
         setOffTurnDisplay(false);
     }
