@@ -42,36 +42,27 @@ const Competitive = (props) => {
     const setOffTurnDisplay = useSetRecoilState(offTurnDisplayState);
     const [noBasic, setNoBasic] = useState(false);
     
-    const whichPhase = () => {
+    useEffect(async () => {
+        // whichPhase();
+        // console.log('phase: ' + phase);
         if (phase === 0) {
             if (battleField.length !== 0) {
-                for (let i=0; i<6; i++) SetSideCards();
-                setPhase((prev) => prev+1);
+                for (let i=0; i<6; i++) {
+                    await SetSideCards();
+                }
+                setPhase(prev => prev+1);
             }
         } else if (phase === 1) {
-            Draw();
-            setPhase((prev) => prev+1);
+            await Draw();
+            setPhase(prev => prev+1);
         } else if (phase === 2) {
             console.log('done draw, now your turn')
         }
-    }
+    },[battleField,phase]);
     
-    useEffect(() => {
-        whichPhase();
-        console.log('phase: ' + phase);
-    },[whichPhase]);
-
-    const Draw = () => {
-        const newCard = DrawACard(deck.cards);
-        setYourHand((prevArray) => [...prevArray, newCard]);
-        deck.cards.pop();
-        return newCard;
-    }
-    
-    const Mulligan = () => {
-        let card = "";
+    const Mulligan = async () => {
+        setNoBasic(false);
         let basicCnt = 0;
-        
         yourHand.map(card => {
             deck.cards.push(card);
         });
@@ -79,39 +70,56 @@ const Competitive = (props) => {
         for (let i=0; i<7; i++) ShuffleTheDeck(deck.cards);
 
         for (let i=0; i<7; i++) {
-            card = Draw();
-            card.subtypes.filter((subtype) => {
-                if (subtype === 2) basicCnt++;
-            });
-        }
-
-        if (basicCnt === 0) setNoBasic(true);
-        else setNoBasic(false);
-    }
-    
-    const SetSideCards = () => {
-        const newCard = DrawACard(deck.cards);
-        setYourSideCards((prevArray) => [...prevArray, newCard]);
-        deck.cards.pop();
-    }
-
-    const chooseYourOrder = () => {
-        let card = "";
-        let basicCnt = 0;
-
-        for (let i=0; i<7; i++) {
-            card = Draw();
+            let card = [];
+            card = await Draw();
             card.subtypes.filter((subtype) => {
                 if (subtype === 2) {
                     basicCnt++;
                 }
-            });
+            }); 
         }
 
         if (basicCnt === 0) setNoBasic((prev) => !prev);
         else setNoBasic(false);
-        
+    }
+    
+    const SetSideCards = () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const card = DrawACard(deck.cards);
+                setYourSideCards((prevArray) => [...prevArray, card]);
+                deck.cards.pop();
+                resolve();
+            },300);
+        });
+    }
+
+    const Draw = () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const card = DrawACard(deck.cards);
+                setYourHand((prevArray) => [...prevArray, card]);
+                deck.cards.pop();
+                resolve(card);
+            }, 300);
+        });
+    }
+    
+    const chooseYourOrder = async () => {
         setOffTurnDisplay(false);
+        let basicCnt = 0;
+        for (let i=0; i<7; i++) {
+            let card = [];
+            card = await Draw();
+            card.subtypes.filter((subtype) => {
+                if (subtype === 2) {
+                    basicCnt++;
+                }
+            }); 
+        }
+
+        if (basicCnt === 0) setNoBasic((prev) => !prev);
+        else setNoBasic(false);
     }
 
     return (
