@@ -43,8 +43,6 @@ const Competitive = (props) => {
     const [noBasic, setNoBasic] = useState(false);
     
     useEffect(async () => {
-        // whichPhase();
-        // console.log('phase: ' + phase);
         if (phase === 0) {
             if (battleField.length !== 0) {
                 for (let i=0; i<6; i++) {
