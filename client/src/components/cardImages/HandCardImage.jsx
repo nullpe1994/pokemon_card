@@ -32,8 +32,7 @@ const HandCardImage = (props) => {
     const [anchorEl, setAnchorEl] = useState(null);
     
     const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-      console.log(props.index);
+        setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
@@ -55,7 +54,7 @@ const HandCardImage = (props) => {
                     width: image.width,
                     height: image.height,
                 }}
-                onClick={handleClick}
+                onClick={handleClick}                
             >
                 <span
                     className={classes.imageSrc}
