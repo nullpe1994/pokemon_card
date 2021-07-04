@@ -6,6 +6,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import trashState from '../State/trashState';
 import phaseState from '../State/phaseState';
+import whichCard from '../function/whichCard';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
@@ -17,7 +18,7 @@ const CardComands = (props) => {
 
     let yourhands = [...yourHand];
 
-    const witchFunc = (supertype) => {
+    const whichSuperTypeFunc = (supertype) => {
         switch (supertype) {
             case 0:
                 setSuperTypeButtonText('ポケモンにつける');
@@ -37,17 +38,14 @@ const CardComands = (props) => {
     }
 
     useEffect(() => {
-        witchFunc(props.supertype);
-    },[props.supertype, witchFunc]);
+        whichSuperTypeFunc(props.supertype);
+    },[props.handleClick]);
     
     const resetYourHand = (index) => {
         return new Promise(resolve => {
             setTimeout(() => {
                 yourhands.splice(index, 1);
-                setYourHand([])
-                yourhands.map(card => {
-                    setYourHand((prev) => [...prev, card]);
-                });
+                setYourHand(yourhands);
                 resolve();
             },);
         });
@@ -57,14 +55,15 @@ const CardComands = (props) => {
         setBattleField(yourhands[index]);
         props.handleClose();
         await resetYourHand(index);
-    };
+    }
 
     const useSpellCard = async (index) => {
         const newCard = yourhands[index];
+        whichCard(newCard, yourhands);
         setTrash((prev) => [...prev, newCard]);
         props.handleClose();
         await resetYourHand(index);
-    };
+    }
 
     const useEnergyCard = async (index) => {
         const newCard = yourhands[index];

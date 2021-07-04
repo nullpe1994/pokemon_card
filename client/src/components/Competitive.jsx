@@ -88,7 +88,7 @@ const Competitive = (props) => {
                 setYourSideCards((prevArray) => [...prevArray, card]);
                 deck.cards.pop();
                 resolve();
-            },300);
+            },150);
         });
     }
 
@@ -99,7 +99,7 @@ const Competitive = (props) => {
                 setYourHand((prevArray) => [...prevArray, card]);
                 deck.cards.pop();
                 resolve(card);
-            }, 300);
+            }, 150);
         });
     }
     

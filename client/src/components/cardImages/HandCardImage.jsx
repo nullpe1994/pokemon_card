@@ -1,6 +1,7 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Typography from '@material-ui/core/Typography';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import yourHandState from '../State/yourHandState';
 import CardComands from '../molecules/CardComands';
@@ -13,6 +14,30 @@ const useStyles = makeStyles((theme) => ({
             width: '100% !important', // Overrides inline-style
             height: 400,
         },
+        '&:hover, &$focusVisible': {
+            zIndex: 1,
+            '& $imageMarked': {
+                opacity: 0,
+            },
+            '& $imageTitle': {
+                opacity: 0,
+            },
+            '& $imageZoom': {
+                opacity: 0,
+            }
+        },
+    },
+    focusVisible: {},
+    imageButton: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: theme.palette.common.white,
     },
     imageSrc: {
         position: 'absolute',
@@ -23,6 +48,19 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: 'cover',
         backgroundPosition: 'center 40%',
         borderRadius: '5%',
+    },
+    imageTitle: {
+        position: 'relative',
+        padding: `${theme.spacing(2)}px ${theme.spacing(4)}px ${theme.spacing(1) + 6}px`,
+    },
+    imageMarked: {
+        height: 3,
+        width: 18,
+        backgroundColor: theme.palette.common.white,
+        position: 'absolute',
+        bottom: -2,
+        left: 'calc(50% - 9px)',
+        transition: theme.transitions.create('opacity'),
     },
 }));
 
@@ -62,12 +100,24 @@ const HandCardImage = (props) => {
                         backgroundImage: `url(${image.url})`,
                     }}
                 />
+                <span className={classes.imageButton}>
+                    <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        className={classes.imageTitle}
+                    >
+                        {'Hand'}
+                        <span className={classes.imageMarked} />
+                    </Typography>
+                </span>
             </ButtonBase>
             <CardComands 
                 supertype={yourHand[props.index].supertype} 
                 index={props.index} 
                 anchorEl={anchorEl}
                 handleClose={handleClose}
+                handleClick={handleClick}
             />
         </div>
     );
