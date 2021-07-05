@@ -42,6 +42,10 @@ db用のソースディレクトリ
 話し合いで使用するノート  
 [ヌルぺonenote](https://1drv.ms/u/s!AiTZjW_MrWtrgb5Oe7Ni3eTxgP3Y0g?e=JTtm46)
 
+### 各種要望
+各種要望はここに記載  
+https://github.com/nullpe1994/pokemon_card/issues/12
+
 ###  ヌルぺスケジュール
 [ヌルぺのスケジュール(googleカレンダー)](https://calendar.google.com/calendar/u/0?cid=bnVsbHBlLmRvdGFAZ21haWwuY29t)
 
