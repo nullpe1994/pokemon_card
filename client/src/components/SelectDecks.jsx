@@ -76,7 +76,7 @@ const SelectDecks = (props) => {
 
     const onClick = (e) => {
         setCards(e);
-    };
+    }
 
     const classes = useStyles();
 

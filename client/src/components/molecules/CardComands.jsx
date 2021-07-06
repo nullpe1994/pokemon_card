@@ -6,7 +6,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import trashState from '../State/trashState';
 import phaseState from '../State/phaseState';
-import whichCard from '../function/whichCard';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
@@ -59,7 +58,6 @@ const CardComands = (props) => {
 
     const useSpellCard = async (index) => {
         const newCard = yourhands[index];
-        whichCard(newCard, yourhands);
         setTrash((prev) => [...prev, newCard]);
         props.handleClose();
         await resetYourHand(index);

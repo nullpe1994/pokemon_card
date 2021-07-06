@@ -82,16 +82,16 @@ const Battle = () => {
 
     const onClick = () => {
         setOpen(true);
-    };
+    }
 
     const handleClose = () => {
         setOpen(false);
-    };
+    }
 
     const chooseOpponent = () => {
         setBool(prevState => !prevState);
         handleClose();
-    };
+    }
 
     useEffect(() => {
         // async を 関数としないと謎のエラーが出たので関数にしました。

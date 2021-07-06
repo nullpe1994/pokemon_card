@@ -42,6 +42,7 @@ const Competitive = (props) => {
     const setOffTurnDisplay = useSetRecoilState(offTurnDisplayState);
     const [noBasic, setNoBasic] = useState(false);
     
+    // socket通信実装時に修正
     useEffect(async () => {
         if (phase === 0) {
             if (battleField.length !== 0) {

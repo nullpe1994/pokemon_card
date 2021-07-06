@@ -41,7 +41,7 @@ const Card = (props) => {
     const image = {
         url: props.pokeca.img_url,
         width: '97%',
-    };
+    }
 
     return (
         <ButtonBase

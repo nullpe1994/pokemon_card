@@ -15,7 +15,7 @@ const Main = (props) => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-    };
+    }
 
     return (
         <div className='main-page'>
