@@ -12,8 +12,6 @@ require('dotenv').config();
 const url = process.env.API_BATTLE_URL; // 対戦用api url
 const port = process.env.API_BATTLE_PORT; // 対戦用api port
 
-const private = require('./battle/private');
-
 // ルーム管理用配列
 let rooms = [];
 
@@ -43,6 +41,7 @@ io.on('connection', (socket) => {
 		if (rooms.includes(`${test.opponentId}:${test.yourId}`)) {
 			room = `${test.opponentId}:${test.yourId}`;
 			socket.broadcast.to(room).emit('private_connect', {opponentId : `${test.yourId}`});
+			io.to(socket.id).emit('private_connect', {opponentId : `${test.opponentId}`});
 		} else {
 			room = `${test.yourId}:${test.opponentId}`;
 			rooms.unshift(room);
@@ -50,6 +49,7 @@ io.on('connection', (socket) => {
 		}
 		socket.join(room);
 		console.log(`join:${test.yourId}`);
+		console.log(rooms.length);
 	});
 
 	// S05. client_to_serverイベント・データを受信する
@@ -65,6 +65,6 @@ io.on('connection', (socket) => {
 	});
 	//ソケット切断時のイベント
 	socket.on('disconnect', () => {
-	  console.log('user disconnected');
+		console.log('user disconnected');
 	});
 });

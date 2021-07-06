@@ -76,10 +76,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Battle = () => {
+    const classes = useStyles();
     const userName = useContext(UserNameContext);
     const [open, setOpen] = useState(false);
     const [bool, setBool] = useState(false);
     const [userDecks, setUserDecks] = useState([]);
+    const [opponentUserName, setOpponentUserName] = useState('');
 
     const onClick = () => {
         setOpen(true);
@@ -87,6 +89,10 @@ const Battle = () => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const onChange = (event) => {
+        setOpponentUserName(event.target.value);
     }
 
     const chooseOpponent = () => {
@@ -105,13 +111,18 @@ const Battle = () => {
         }
         fetchData();
     },[userName,setUserDecks]);
-    const classes = useStyles();
 
     return (
         <div className={classes.root}>
             {!bool && <ImageButton classes={classes} Title={Titles.battle}/>}
             {!bool && <ImageButton classes={classes} Title={Titles.friendBattle} onClick={onClick}/>}
-            {bool && <SelectDecks userDecks={userDecks}/>}
+            {bool && 
+                <SelectDecks 
+                    userDecks={userDecks} 
+                    yourUserName={userName} 
+                    opponentUserName={opponentUserName}
+                />
+            }
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">フレンドと対戦</DialogTitle>
                 <DialogContent>
@@ -127,6 +138,7 @@ const Battle = () => {
                         type="text"
                         fullWidth
                         color="secondary"
+                        onChange={onChange}
                     />
                 </DialogContent>
                 <DialogActions>

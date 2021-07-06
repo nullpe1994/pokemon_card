@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -8,8 +8,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AcceptButton from '../atoms/AcceptButton'
 import ShuffleTheDeck from '../function/ShuffleTheDeck';
+import Io from "socket.io-client";
 
 const drawerWidth = 300;
+const BATTLE_URL = process.env.REACT_APP_API_BATTLE_URL; // 対戦用api url
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -29,23 +31,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CardListSideBar = (props) => {
-	
 	const classes = useStyles();
-	
 	const history = useHistory();
+	const [socket, setSocket] = useState({});
 	
 	const isCorrect = () => {
 		let deckCards = props;
-		deckCards.cards.forEach((card) => {
-			for (let i=0; i<card.number_of_cards - 1; i++) deckCards['cards'].push(card);
-			delete card.number_of_cards;
-		});
-		for (let i=0; i < 7; i++) ShuffleTheDeck(deckCards.cards);
+		let socketIo = Io(BATTLE_URL)
+		setSocket(socketIo);
 		
-		history.push({
-			pathname: '/competitive',
-			state: { deck: deckCards}
-		});
+		if (socketIo !== undefined) {
+			socketIo.emit('private', {
+				yourId: props.yourUserName,
+                opponentId: props.opponentUserName,
+            });
+            socketIo.on('private_connect', (json) => {
+				if (json.opponentId) {
+					console.log(json);
+
+					// deckCards.cards.forEach((card) => {
+					// 	for (let i=0; i<card.number_of_cards - 1; i++) {
+					// 		deckCards['cards'].push(card);
+					// 	}
+					// 	delete card.number_of_cards;
+					// });
+					// for (let i=0; i < 7; i++) {
+					// 	ShuffleTheDeck(deckCards.cards);
+					// }
+					
+					history.push({
+						pathname: '/competitive',
+						state: { deck: deckCards}
+					});
+                } else {
+					
+				}
+            });
+        }
+
 	}
 
 	return (

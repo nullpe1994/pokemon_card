@@ -71,14 +71,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 const SelectDecks = (props) => {
-
+    const classes = useStyles();
     const [cards, setCards] = useState([]);
 
     const onClick = (e) => {
         setCards(e);
     }
-
-    const classes = useStyles();
 
     return (
         <>
@@ -86,13 +84,17 @@ const SelectDecks = (props) => {
             <div className={classes.root}>
                 {props.userDecks.map((userDeck) =>
                     <ImageButton Title={userDeck.deck_name}
-                    key={userDeck.deck_id}
-                    classes={classes}
-                    onClick={() => onClick(userDeck.cards)}
+                        key={userDeck.deck_id}
+                        classes={classes}
+                        onClick={() => onClick(userDeck.cards)}
                     />
                 )}
             </div>
-            <CardListSideBar cards={cards}/>
+            <CardListSideBar 
+                cards={cards} 
+                yourUserName={props.yourUserName} 
+                opponentUserName={props.opponentUserName}
+            />
         </>
     );
 }
