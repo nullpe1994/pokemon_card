@@ -1,10 +1,10 @@
 import React from 'react';
-import SectionTab from './SectionTab';
+import SectionTab from '../molecules/SectionTab';
 import Home from './Home';
-import Deck from './Deck';
+import Deck from './/Deck';
 import Battle from './Battle';
-import './../css/style.css';
-import UserNameContext from './Context/UserNameContext';
+import '../../css/style.css';
+import UserNameContext from '../Context/UserNameContext';
 
 const sectionTab = {home: 'ホーム', deck: 'デッキ', battle: '対戦'}
 

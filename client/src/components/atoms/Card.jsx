@@ -52,15 +52,13 @@ const Card = (props) => {
                 height: image.height,
             }}
             onClick={() => props.isCorrect(props.pokeca)}
-            >
+        >
             <span
-            className={classes.imageSrc}
-            style={{
-                backgroundImage: `url(${image.url})`,
-            }}
+                className={classes.imageSrc}
+                style={{
+                    backgroundImage: `url(${image.url})`,
+                }}
             />
-            <span className={classes.imageButton}>
-            </span>
         </ButtonBase>
   );
 }

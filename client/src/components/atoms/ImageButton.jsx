@@ -13,17 +13,17 @@ const ImageButton = (props) => {
             onClick={props.onClick}
         >
         <span className={classes.imageBackdrop} />
-        <span className={classes.imageButton}>
-        <Typography
-            component="span"
-            variant="subtitle1"
-            color="inherit"
-            className={classes.imageTitle}
-        >
-            {props.Title}
-            <span className={classes.imageMarked} />
-        </Typography>
-        </span>
+			<span className={classes.imageButton}>
+				<Typography
+					component="span"
+					variant="subtitle1"
+					color="inherit"
+					className={classes.imageTitle}
+				>
+            		{props.Title}
+            		<span className={classes.imageMarked} />
+        		</Typography>
+        	</span>
         </ButtonBase>
     );
 }

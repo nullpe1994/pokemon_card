@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import Card from './Card';
-import CreatePlace from './CreatePlace';
+import Card from '../atoms/Card';
+import CreatePlace from '../organisms/CreatePlace';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import {makeStyles} from '@material-ui/core';

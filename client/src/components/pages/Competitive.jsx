@@ -1,39 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import jirachi from '../image/jirachiWallPaper.jpg'
-import { makeStyles, Box, Divider } from '@material-ui/core';
-import OpponentField from './OpponentField';
-import YourField from './YourField';
-import DrawACard from './function/DrawACard';
+import jirachi from '../../image/jirachiWallPaper.jpg'
+import { Box, Divider } from '@material-ui/core';
+import OpponentField from '../organisms/OpponentField';
+import YourField from '../organisms/YourField';
+import DrawACard from '../function/DrawACard';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import ShuffleTheDeck from './function/ShuffleTheDeck';
+import ShuffleTheDeck from '../function/ShuffleTheDeck';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import yourHandState from './State/yourHandState';
-import yourSideCardsState from './State/yourSideCardsState';
-import phaseState from './State/phaseState';
-import battleFieldState from './State/battleFieldState';
-import offTurnDisplayState from './State/offTurnDisplayState';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        flexWrap: 'wrap',
-    },
-    sideCardsBox: {
-        flexWrap: 'wrap',
-    },
-    you: {
-    },
-    opponent: {
-    },
-}));
-
+import yourHandState from '../State/yourHandState';
+import yourSideCardsState from '../State/yourSideCardsState';
+import phaseState from '../State/phaseState';
+import battleFieldState from '../State/battleFieldState';
+import offTurnDisplayState from '../State/offTurnDisplayState';
 
 const Competitive = (props) => {
-    const classes = useStyles();  
     const deck = props.location.state.deck;
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
     const setYourSideCards = useSetRecoilState(yourSideCardsState);
@@ -43,20 +28,23 @@ const Competitive = (props) => {
     const [noBasic, setNoBasic] = useState(false);
     
     // socket通信実装時に修正
-    useEffect(async () => {
-        if (phase === 0) {
-            if (battleField.length !== 0) {
-                for (let i=0; i<6; i++) {
-                    await SetSideCards();
+    useEffect(() => {
+        async function fetchDate() {
+            if (phase === 0) {
+                if (battleField.length !== 0) {
+                    for (let i=0; i<6; i++) {
+                        await SetSideCards();
+                    }
+                    setPhase(prev => prev+1);
                 }
+            } else if (phase === 1) {
+                await Draw();
                 setPhase(prev => prev+1);
+            } else if (phase === 2) {
+                console.log('done draw, now your turn')
             }
-        } else if (phase === 1) {
-            await Draw();
-            setPhase(prev => prev+1);
-        } else if (phase === 2) {
-            console.log('done draw, now your turn')
         }
+        fetchDate();
     },[battleField,phase]);
     
     const Mulligan = async () => {

@@ -1,12 +1,8 @@
-import React, { useState }from 'react';
-import { makeStyles } from '@material-ui/core';
-import CardListSideBar from './CardListSideBar';
-import ImageButton from './common/ImageButton';
+import React from 'react';
+import {makeStyles} from '@material-ui/core';
+import ImageButton from '../atoms/ImageButton';
 
 const useStyles = makeStyles((theme) => ({
-    root : {
-        display: 'flex',
-    },
     image: {
         position: 'relative',
         height: 200,
@@ -69,32 +65,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-const SelectDecks = (props) => {
-
-    const [cards, setCards] = useState([]);
-
-    const onClick = (e) => {
-        setCards(e);
-    }
-
+const DeckList = (props) => {
     const classes = useStyles();
-
     return (
-        <>
-            <h1>デッキ選択画面です。</h1>
-            <div className={classes.root}>
-                {props.userDecks.map((userDeck) =>
-                    <ImageButton Title={userDeck.deck_name}
-                    key={userDeck.deck_id}
-                    classes={classes}
-                    onClick={() => onClick(userDeck.cards)}
-                    />
-                )}
-            </div>
-            <CardListSideBar cards={cards}/>
-        </>
+        <ImageButton Title={'デッキ作成'} classes={classes} onClick={props.onClick}/>
     );
 }
 
-export default SelectDecks;
+export default DeckList;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import './../css/style.css';
+import '../../css/style.css';
 import {TextField, Box, createMuiTheme, ThemeProvider} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import AcceptButton from './common/AcceptButton';
+import AcceptButton from '../atoms/AcceptButton';
 
 const theme = createMuiTheme({
     overrides: {

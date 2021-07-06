@@ -1,14 +1,14 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import AcceptButton from './common/AcceptButton';
-import HandCardImage from './cardImages/HandCardImage';
-import DeckImage from './cardImages/DeckImage';
-import BattleFieldImage from './cardImages/BattleFieldImage';
-import SideCardImage from './cardImages/SideCardImage';
-import yourSideCardsState from './State/yourSideCardsState';
+import AcceptButton from '../atoms/AcceptButton';
+import HandCardImage from '../atoms/cardImages/HandCardImage';
+import DeckImage from '../atoms/cardImages/DeckImage';
+import BattleFieldImage from '../atoms/cardImages/BattleFieldImage';
+import SideCardImage from '../atoms/cardImages/SideCardImage';
+import yourSideCardsState from '../State/yourSideCardsState';
 import { useRecoilValue } from 'recoil';
-import offTurnDisplayState from './State/offTurnDisplayState';
-import TrashImage from './cardImages/TrashImage';
+import offTurnDisplayState from '../State/offTurnDisplayState';
+import TrashImage from '../atoms/cardImages/TrashImage';
 
 const YourField = (props) => {
     const sideCards = useRecoilValue(yourSideCardsState);

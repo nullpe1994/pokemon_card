@@ -6,8 +6,8 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import AcceptButton from './common/AcceptButton'
-import ShuffleTheDeck from './function/ShuffleTheDeck';
+import AcceptButton from '../atoms/AcceptButton'
+import ShuffleTheDeck from '../function/ShuffleTheDeck';
 
 const drawerWidth = 300;
 
@@ -59,12 +59,12 @@ const CardListSideBar = (props) => {
 		>
 			<div className={classes.drawerContainer}>
 					<List>
-					{props.cards.map((card) => (
-						<ListItem button key={card.card_id}>
-						<ListItemText primary={card.card_name}/>
-						<p>{card.number_of_cards}</p>
-						</ListItem>
-					))}
+						{props.cards.map((card) => (
+							<ListItem button key={card.card_id}>
+							<ListItemText primary={card.card_name}/>
+							<p>{card.number_of_cards}</p>
+							</ListItem>
+						))}
 					</List>
 					<Divider/>
 					<List>

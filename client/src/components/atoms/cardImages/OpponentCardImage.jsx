@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import pokeUra from '../image/poke_ura.jpg';
+import pokeUra from '../../../image/poke_ura.jpg';
 
 const useStyles = makeStyles((theme) => ({
     root: {
