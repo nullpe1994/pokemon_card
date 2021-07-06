@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import OpponentCardImage from './OpponentCardImage';
+import OpponentCardImage from '../atoms/cardImages/OpponentCardImage';
 
 const opponentField = () => {
     const h = [0,1,2,3,4,5,6];

@@ -1,10 +1,10 @@
-import React,{ useState, useEffect } from 'react';
+import React,{ useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import yourHandState from '../State/yourHandState';
-import CardComands from '../molecules/CardComands';
+import { useRecoilValue } from 'recoil';
+import yourHandState from '../../State/yourHandState';
+import CardComands from '../../molecules/CardComands';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
             '& $imageTitle': {
                 opacity: 0,
             },
-            '& $imageZoom': {
-                opacity: 0,
-            }
         },
     },
     focusVisible: {},

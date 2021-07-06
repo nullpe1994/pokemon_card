@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CreateDecks from './CreateDecks';
-import DeckList from './DeckList';
+import CreateDecks from '../pages/CreateDecks';
+import DeckList from '../molecules/DeckList';
 
 const Deck = () => {  
 

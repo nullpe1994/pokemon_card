@@ -78,7 +78,7 @@ const CardComands = (props) => {
             open={Boolean(props.anchorEl)}
             onClose={props.handleClose}
         >
-            {phase === 0 && props.supertype !== 1 ||(
+            {(phase === 0 && props.supertype !== 1) ||(
                 <MenuItem onClick={() => tcgFunction(props.index)}>{superTypeButtonText}</MenuItem>
             )}
         </Menu>

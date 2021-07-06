@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import pokeUra from '../../image/poke_ura.jpg';
+import { useRecoilValue } from 'recoil';
+import trashState from '../../State/trashState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -75,11 +76,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const HandCardImage = (props) => {
+const TrashImage = () => {
     const classes = useStyles();
-
+    const trash = useRecoilValue(trashState);
+    const [trashImage, setTrashImage] = useState('');
+    
+    useEffect(() => {
+        trash.length !== 0 && (
+            setTrashImage(trash[trash.length - 1].img_url)
+        );
+    },[trash]);
+    
     return (
-        <Tooltip title={'デッキ: ' + props.deck.cards.length}>
+        <Tooltip title={"トラッシュ: " + trash.length}>
             <ButtonBase
                 focusRipple
                 className={classes.image}
@@ -91,7 +100,7 @@ const HandCardImage = (props) => {
                 <span
                     className={classes.imageSrc}
                     style={{
-                        backgroundImage: `url(${pokeUra})`,
+                        backgroundImage: `url(${trashImage})`,
                     }}
                 />
                 <span className={classes.imageBackdrop} />
@@ -102,7 +111,7 @@ const HandCardImage = (props) => {
                         color="inherit"
                         className={classes.imageTitle}
                     >
-                        {'Deck'}
+                        {'Trash'}
                         <span className={classes.imageMarked} />
                     </Typography>
                 </span>
@@ -110,4 +119,4 @@ const HandCardImage = (props) => {
         </Tooltip>
     );
 }
-export default HandCardImage;
+export default TrashImage;
