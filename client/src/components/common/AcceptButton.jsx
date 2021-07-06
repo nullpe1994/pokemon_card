@@ -19,7 +19,12 @@ const useStyles = makeStyles( () => (
 const AcceptButton = (props) => {
     const classes = useStyles();
     return (
-        <Button className={classes.acceptButton} variant='outlined' color='primary' onClick={props.isCorrect}>
+        <Button 
+            className={classes.acceptButton} 
+            variant='outlined' 
+            color='primary' 
+            onClick={props.isCorrect}
+        >
             {props.name}
         </Button>
     );

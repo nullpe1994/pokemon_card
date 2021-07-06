@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CreateDecks from './CreateDecks';
 import DeckList from './DeckList';
 
-const Deck = (props) => {  
+const Deck = () => {  
 
     const [bool, setBool] = useState(false);
     

@@ -86,9 +86,9 @@ const SelectDecks = (props) => {
             <div className={classes.root}>
                 {props.userDecks.map((userDeck) =>
                     <ImageButton Title={userDeck.deck_name}
-                     key={userDeck.deck_id}
-                     classes={classes}
-                     onClick={() => onClick(userDeck.card_id)}
+                    key={userDeck.deck_id}
+                    classes={classes}
+                    onClick={() => onClick(userDeck.cards)}
                     />
                 )}
             </div>

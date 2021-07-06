@@ -10,7 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ImageButton from './common/ImageButton';
 import SelectDecks from './SelectDecks';
-import UserNameContext from './UserNameContext';
+import UserNameContext from './Context/UserNameContext';
 
 const Titles = {battle: '対戦', friendBattle: 'フレンドと対戦'}
 
@@ -82,16 +82,16 @@ const Battle = () => {
 
     const onClick = () => {
         setOpen(true);
-    };
+    }
 
     const handleClose = () => {
         setOpen(false);
-    };
+    }
 
     const chooseOpponent = () => {
         setBool(prevState => !prevState);
         handleClose();
-    };
+    }
 
     useEffect(() => {
         // async を 関数としないと謎のエラーが出たので関数にしました。

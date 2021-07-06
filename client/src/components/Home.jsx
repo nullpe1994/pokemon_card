@@ -14,7 +14,8 @@ const Home = () => {
         arrows: false,
         centerMode: true,
         centerPadding: "33%"
-    };
+    }
+    
     return (
         <Slider {...settings}>
             <li className="slider-item">

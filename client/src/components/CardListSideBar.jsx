@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AcceptButton from './common/AcceptButton'
+import ShuffleTheDeck from './function/ShuffleTheDeck';
 
 const drawerWidth = 300;
 
@@ -28,16 +29,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CardListSideBar = (props) => {
-
+	
 	const classes = useStyles();
-
+	
 	const history = useHistory();
-
+	
 	const isCorrect = () => {
+		let deckCards = props;
+		deckCards.cards.forEach((card) => {
+			for (let i=0; i<card.number_of_cards - 1; i++) deckCards['cards'].push(card);
+			delete card.number_of_cards;
+		});
+		for (let i=0; i < 7; i++) ShuffleTheDeck(deckCards.cards);
+		
 		history.push({
-			pathname: '/competitive'
-		})
-	};
+			pathname: '/competitive',
+			state: { deck: deckCards}
+		});
+	}
 
 	return (
 		<Drawer
@@ -50,10 +59,10 @@ const CardListSideBar = (props) => {
 		>
 			<div className={classes.drawerContainer}>
 					<List>
-					{props.cards.map((text) => (
-						<ListItem button key={text[0]}>
-						<ListItemText primary={text[1]}/>
-						<p>{text[2]}</p>
+					{props.cards.map((card) => (
+						<ListItem button key={card.card_id}>
+						<ListItemText primary={card.card_name}/>
+						<p>{card.number_of_cards}</p>
 						</ListItem>
 					))}
 					</List>
@@ -64,6 +73,6 @@ const CardListSideBar = (props) => {
 			</div>
 		</Drawer>
 	);
-};
+}
 
 export default CardListSideBar;
