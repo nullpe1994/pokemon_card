@@ -6,6 +6,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import {makeStyles} from '@material-ui/core';
 
+const DB_URL = process.env.REACT_APP_API_DB_URL; // db api url
+
 const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
@@ -29,7 +31,7 @@ const CreateDecks = (props) => {
     useEffect(() => {
         // async を 関数としないと謎のエラーが出たので関数にしました。
         async function fetchData() {
-            const res = await Axios.post('http://localhost:3001/getcards')
+            const res = await Axios.post(`${DB_URL}/getcards`)
             const json = await res.data[0];
             setCardlist(json.cardlist);
         }

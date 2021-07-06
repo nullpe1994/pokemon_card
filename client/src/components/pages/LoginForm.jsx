@@ -5,6 +5,8 @@ import {TextField, Box, createMuiTheme, ThemeProvider} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import AcceptButton from '../atoms/AcceptButton';
 
+const DB_URL = process.env.REACT_APP_API_DB_URL; // db api url
+
 const theme = createMuiTheme({
     overrides: {
         MuiInputLabel: { // Name of the component ⚛️ / style sheet
@@ -36,7 +38,7 @@ const Login = () => {
     }
     
     const isCorrect = () => {
-        Axios.get('http://localhost:3001/login',{ params: {user:userId}})
+        Axios.get(`${DB_URL}/login`,{ params: {user:userId}})
         .then((results) => {
             history.push({
                 pathname: '/main',
