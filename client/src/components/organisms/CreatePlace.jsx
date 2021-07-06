@@ -10,6 +10,8 @@ import AcceptButton from '../atoms/AcceptButton';
 import Axios from 'axios';
 import UserNameContext from '../Context/UserNameContext';
 
+const DB_URL = process.env.REACT_APP_API_DB_URL; // db api url
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		width: '100%',
@@ -38,7 +40,7 @@ const CreatePlace = (props) => {
 	const isCorrect = () => {
 		//length後々変更します
 		if (props.count >= 1) {
-			Axios.post('http://localhost:3001/createdeck',{  
+			Axios.post(`${DB_URL}/createdeck`,{  
 				userId:userName,
 				decks:props.cardDetails,
 				deckName:deckName,

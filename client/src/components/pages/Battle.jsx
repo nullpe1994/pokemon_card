@@ -12,6 +12,7 @@ import ImageButton from '../atoms/ImageButton';
 import SelectDecks from '../molecules/SelectDecks';
 import UserNameContext from '../Context/UserNameContext';
 
+const DB_URL = process.env.REACT_APP_API_DB_URL; // db api url
 const Titles = {battle: '対戦', friendBattle: 'フレンドと対戦'}
 
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +97,7 @@ const Battle = () => {
     useEffect(() => {
         // async を 関数としないと謎のエラーが出たので関数にしました。
         async function fetchData() {
-            const res = await Axios.post('http://localhost:3001/getDeck',{
+            const res = await Axios.post(`${DB_URL}/getDeck`,{
                 userId: userName,
             });
             const json = await res.data[0];
