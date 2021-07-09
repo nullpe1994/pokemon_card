@@ -104,7 +104,7 @@ const Battle = () => {
         // async を 関数としないと謎のエラーが出たので関数にしました。
         async function fetchData() {
             const res = await Axios.post(`${DB_URL}/getDeck`,{
-                userId: userName,
+                userId: userName.yourId,
             });
             const json = await res.data[0];
             setUserDecks(json.userDeck);
@@ -127,7 +127,7 @@ const Battle = () => {
                 <DialogContent>
                     <DialogContentText>
                         対戦相手のユーザーIDを入力してください。<br/>
-                        あなたのユーザーID:{userName}
+                        あなたのユーザーID:{userName.yourId}
                     </DialogContentText>
                     <TextField
                         autoFocus

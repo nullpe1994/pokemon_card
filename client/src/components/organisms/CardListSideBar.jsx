@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,8 +7,8 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AcceptButton from '../atoms/AcceptButton'
-import ShuffleTheDeck from '../function/ShuffleTheDeck';
-import Io from "socket.io-client";
+import UserNameContext from '../Context/UserNameContext';
+import Io from 'socket.io-client';
 
 const drawerWidth = 300;
 const BATTLE_URL = process.env.REACT_APP_API_BATTLE_URL; // 対戦用api url
@@ -33,42 +33,46 @@ const useStyles = makeStyles((theme) => ({
 const CardListSideBar = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
-	const [socket, setSocket] = useState({});
+    const userName = useContext(UserNameContext);
+	const socket = Io(BATTLE_URL);
+	window.socket = socket;
 	
+	const fixDeck = () => {
+		let deckCards = [...props.cards];
+		console.log(deckCards);
+		deckCards.forEach((card) => {
+			for (let i=0; i<card.number_of_cards - 1; i++) {
+				deckCards.push(card);
+			}
+			delete card.number_of_cards;
+		});
+		console.log(deckCards);
+		return deckCards;
+	}
+
 	const isCorrect = () => {
-		let deckCards = props;
-		let socketIo = Io(BATTLE_URL)
-		setSocket(socketIo);
+		let newDeck = fixDeck();
 		
-		if (socketIo !== undefined) {
-			socketIo.emit('private', {
-				yourId: props.yourUserName,
+		if (socket !== undefined) {
+			socket.emit('private', {
+				yourId: userName.yourId,
                 opponentId: props.opponentUserName,
+				deck: newDeck,
             });
-            socketIo.on('private_connect', (json) => {
+            socket.on('private_connect', (json) => {
 				if (json.opponentId) {
 					console.log(json);
-
-					// deckCards.cards.forEach((card) => {
-					// 	for (let i=0; i<card.number_of_cards - 1; i++) {
-					// 		deckCards['cards'].push(card);
-					// 	}
-					// 	delete card.number_of_cards;
-					// });
-					// for (let i=0; i < 7; i++) {
-					// 	ShuffleTheDeck(deckCards.cards);
-					// }
 					
 					history.push({
 						pathname: '/competitive',
-						state: { deck: deckCards}
+						state: { 
+							yourId: userName.yourId,
+							oppId: props.opponentUserName
+						}
 					});
-                } else {
-					
-				}
+                }
             });
         }
-
 	}
 
 	return (
@@ -84,8 +88,8 @@ const CardListSideBar = (props) => {
 					<List>
 						{props.cards.map((card) => (
 							<ListItem button key={card.card_id}>
-							<ListItemText primary={card.card_name}/>
-							<p>{card.number_of_cards}</p>
+								<ListItemText primary={card.card_name}/>
+								<p>{card.number_of_cards}</p>	
 							</ListItem>
 						))}
 					</List>
