@@ -17,20 +17,31 @@ import yourSideCardsState from '../State/yourSideCardsState';
 import phaseState from '../State/phaseState';
 import battleFieldState from '../State/battleFieldState';
 import offTurnDisplayState from '../State/offTurnDisplayState';
+import deckState from '../State/deckState';
+import UserNameContext from '../Context/UserNameContext';
+import oppDeckState from '../State/oppDeckState';
+import oppBattleFieldState from '../State/oppBattleFieldState';
 
 const Competitive = (props) => {
-    const deck = props.location.state.deck;
+    const [deck, setDeck] = useRecoilState(deckState);
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
     const setYourSideCards = useSetRecoilState(yourSideCardsState);
     const [phase, setPhase] = useRecoilState(phaseState);
     const battleField = useRecoilValue(battleFieldState);
     const setOffTurnDisplay = useSetRecoilState(offTurnDisplayState);
     const [noBasic, setNoBasic] = useState(false);
+    const userName = {
+        yourId: props.location.state.yourId, 
+        oppId: props.location.state.oppId
+    }
+    const setOppDeck = useSetRecoilState(oppDeckState);
+    const setOppBattleField = useSetRecoilState(oppBattleFieldState);
     
     // socket通信実装時に修正
     useEffect(() => {
         async function fetchDate() {
             if (phase === 0) {
+                setPhase(0);
                 if (battleField.length !== 0) {
                     for (let i=0; i<6; i++) {
                         await SetSideCards();
@@ -39,13 +50,14 @@ const Competitive = (props) => {
                 }
             } else if (phase === 1) {
                 await Draw();
+                console.log('draw');
                 setPhase(prev => prev+1);
             } else if (phase === 2) {
                 console.log('done draw, now your turn')
             }
         }
         fetchDate();
-    },[battleField,phase]);
+    },[phase, battleField]);
     
     const Mulligan = async () => {
         setNoBasic(false);
@@ -73,40 +85,60 @@ const Competitive = (props) => {
     const SetSideCards = () => {
         return new Promise(resolve => {
             setTimeout(() => {
-                const card = DrawACard(deck.cards);
-                setYourSideCards((prevArray) => [...prevArray, card]);
-                deck.cards.pop();
+                window.socket.emit('setSideCard', { yourId: userName.yourId});
+                update();
                 resolve();
-            },150);
+            },300);
         });
     }
 
     const Draw = () => {
         return new Promise(resolve => {
             setTimeout(() => {
-                const card = DrawACard(deck.cards);
-                setYourHand((prevArray) => [...prevArray, card]);
-                deck.cards.pop();
-                resolve(card);
-            }, 150);
+                // setDeck(DrawACard(userName.yourId));
+                window.socket.emit('draw', { yourId: userName.yourId });
+                update();
+                resolve();
+            },300);
         });
     }
     
     const chooseYourOrder = async () => {
         setOffTurnDisplay(false);
         let basicCnt = 0;
+        window.socket.emit('shuffleTheDeck', { yourId: userName.yourId });
         for (let i=0; i<7; i++) {
-            let card = [];
-            card = await Draw();
-            card.subtypes.filter((subtype) => {
-                if (subtype === 2) {
-                    basicCnt++;
-                }
-            }); 
+            await Draw();
         }
-
         if (basicCnt === 0) setNoBasic((prev) => !prev);
         else setNoBasic(false);
+    }
+
+    const update = () => {
+        window.socket.emit('deck', { yourId: userName.yourId });
+        window.socket.on('getDeck', (res) => {
+            setDeck(res.deckSize);
+        });
+
+        window.socket.emit('oppDeck', { oppId: userName.oppId});
+        window.socket.on('getOppDeck', (res) => {
+            setOppDeck(res.deckSize);
+        });
+
+        window.socket.emit('hand', { yourId: userName.yourId });
+        window.socket.on('getHand', (res) => {
+            setYourHand(res.hand);
+        });
+
+        window.socket.emit('sideCard', { yourId: userName.yourId });
+        window.socket.on('getSideCard', (res) => {
+            setYourSideCards(res.sideCard); 
+        });
+        
+        window.socket.emit('oppBattleField', { oppId: userName.oppId});
+        window.socket.on('getOppBattleField', (res) => {
+            setOppBattleField(res.battleField);
+        });
     }
 
     return (
@@ -118,12 +150,13 @@ const Competitive = (props) => {
         >
             <OpponentField/>
             <Divider/>
-            <YourField 
-                chooseYourOrder={chooseYourOrder}
-                yourHand={yourHand}
-                deck = {deck}
-            />
-            <Dialog
+            <UserNameContext.Provider value={userName}>
+                <YourField 
+                    chooseYourOrder={chooseYourOrder}
+                    deck = {deck}
+                />
+            </UserNameContext.Provider>
+            {/* <Dialog
                 open={noBasic}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -139,7 +172,7 @@ const Competitive = (props) => {
                         はい
                     </Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </Box>
     );
 }
