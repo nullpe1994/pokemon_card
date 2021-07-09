@@ -9,10 +9,12 @@ import yourSideCardsState from '../State/yourSideCardsState';
 import { useRecoilValue } from 'recoil';
 import offTurnDisplayState from '../State/offTurnDisplayState';
 import TrashImage from '../atoms/cardImages/TrashImage';
+import yourHandState from '../State/yourHandState';
 
 const YourField = (props) => {
     const sideCards = useRecoilValue(yourSideCardsState);
     const offTurnDisplay = useRecoilValue(offTurnDisplayState);
+    const yourHand = useRecoilValue(yourHandState);
 
     return(
         <Grid container spacing={0}>
@@ -38,9 +40,9 @@ const YourField = (props) => {
                     <Grid item xs={12}>
                         <Grid  container spacing={0}>
                             {/* 手札 */}
-                            {Object.keys(props.yourHand).map(key =>
+                            {Object.keys(yourHand).map(key =>
                                 <Grid item xs={2}>
-                                    <HandCardImage handCard={props.yourHand[key]} index={key}/>
+                                    <HandCardImage handCard={yourHand[key]} index={key}/>
                                 </Grid>
                             )}
                         </Grid>

@@ -91,8 +91,7 @@ const SelectDecks = (props) => {
                 )}
             </div>
             <CardListSideBar 
-                cards={cards} 
-                yourUserName={props.yourUserName} 
+                cards={cards}
                 opponentUserName={props.opponentUserName}
             />
         </>
