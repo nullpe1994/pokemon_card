@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from 'react';
+import React,{ useEffect, useState, useContext } from 'react';
 import {useRecoilState, useSetRecoilState, useRecoilValue} from 'recoil';
 import yourHandState from '../State/yourHandState';
 import battleFieldState from '../State/battleFieldState';
@@ -6,14 +6,18 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import trashState from '../State/trashState';
 import phaseState from '../State/phaseState';
+import deckState from '../State/deckState';
+import UserNameContext from '../Context/UserNameContext';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
     const [tcgFunction, setTcgFunction] = useState('');
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
+    const setDeck = useSetRecoilState(deckState);
     const setTrash = useSetRecoilState(trashState);
     const setBattleField = useSetRecoilState(battleFieldState);
     const phase = useRecoilValue(phaseState);
+    const userName = useContext(UserNameContext);
 
     let yourhands = [...yourHand];
 
@@ -40,7 +44,8 @@ const CardComands = (props) => {
         whichSuperTypeFunc(props.supertype);
     },[props.handleClick]);
     
-    const resetYourHand = (index) => {
+    // 削除予定関数
+    const updateYourHand = (index) => {
         return new Promise(resolve => {
             setTimeout(() => {
                 yourhands.splice(index, 1);
@@ -51,23 +56,51 @@ const CardComands = (props) => {
     }
     
     const callToBattleField = async (index) => {
-        setBattleField(yourhands[index]);
+        window.socket.emit('callToBattleField', { 
+            yourId: userName.yourId, 
+            index: index
+        });
+        update();
         props.handleClose();
-        await resetYourHand(index);
     }
 
     const useSpellCard = async (index) => {
-        const newCard = yourhands[index];
-        setTrash((prev) => [...prev, newCard]);
+        window.socket.emit('useSpellCard', {
+            yourId: userName.yourId,
+            oppId: userName.oppId,
+            index: index
+        });
+        update();
         props.handleClose();
-        await resetYourHand(index);
     }
 
     const useEnergyCard = async (index) => {
         const newCard = yourhands[index];
         setTrash((prev) => [...prev, newCard]);
         props.handleClose();
-        await resetYourHand(index);
+        await updateYourHand(index);
+    }
+
+    const update = () => {
+        window.socket.emit('deck', { yourId: userName.yourId });
+        window.socket.on('getDeck', (res) => {
+            setDeck(res.deckSize);
+        });
+
+        window.socket.emit('hand', { yourId: userName.yourId });
+        window.socket.on('getHand', (res) => {
+            setYourHand(res.hand);
+        });
+
+        window.socket.emit('battleField', {yourId: userName.yourId});
+        window.socket.on('getBattleField', (res) => {
+            setBattleField(res.battleField);
+        });
+
+        window.socket.emit('trash', { yourId: userName.yourId });
+        window.socket.on('getTrash', (res) => {
+            setTrash(res.trash);
+        });
     }
 
     return(
