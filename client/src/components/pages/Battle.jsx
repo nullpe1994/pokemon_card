@@ -119,7 +119,6 @@ const Battle = () => {
             {bool && 
                 <SelectDecks 
                     userDecks={userDecks} 
-                    yourUserName={userName} 
                     opponentUserName={opponentUserName}
                 />
             }
