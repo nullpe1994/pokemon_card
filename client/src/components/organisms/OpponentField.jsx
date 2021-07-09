@@ -1,6 +1,8 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import OpponentCardImage from '../atoms/cardImages/OpponentCardImage';
+import OppDeckImage from '../atoms/cardImages/OppDeckImage';
+import OppBattleFieldImage from '../atoms/cardImages/OppBattleFieldImage';
 
 const opponentField = () => {
     const h = [0,1,2,3,4,5,6];
@@ -16,7 +18,7 @@ const opponentField = () => {
                     </Grid>
                     <Grid item xs={12}>
                         {/* deck */}
-                        <OpponentCardImage/>
+                        <OppDeckImage/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -42,9 +44,12 @@ const opponentField = () => {
                             )}
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid container spacing={10}>
                         {/* battleField */}
-                        <OpponentCardImage/>
+                        <Grid item xs={9}>
+                            <OppBattleFieldImage/>
+                        </Grid>
+                        <Grid item xs={3}/>
                     </Grid>
                 </Grid>
             </Grid>
