@@ -13,8 +13,8 @@ const url = process.env.API_BATTLE_URL; // 対戦用api url
 const port = process.env.API_BATTLE_PORT; // 対戦用api port
 
 // ルーム管理用配列
-let rooms = [];
-let player = {};
+let rooms = {};
+let roomPlayers = {};
 
 // express設定
 router.use(express.json())
@@ -33,35 +33,74 @@ router.get('/', (req, res) => {});
 
 io.on('connection', (socket) => {
 	//ユーザーのソケット接続時のイベント
+	let roomKey = '';
 	// console.log('a user connected');
 
+	const twoDice = () => {
+		return Math.ceil(Math.random()*6) + Math.ceil(Math.random()*6); 
+	}
 	// プライベート対戦ルーム入室
-	socket.on('private', (test) => {
-		let room = '';
-		oppName = test.opponentId;
-		// プライベートルーム作成
-		if (rooms.includes(`${test.opponentId}:${test.yourId}`)) {
-			room = `${test.opponentId}:${test.yourId}`;
-			socket.broadcast.to(room).emit('private_connect', {opponentId : `${test.yourId}`});
-			io.to(socket.id).emit('private_connect', {opponentId : `${test.opponentId}`});
-		} else {
-			room = `${test.yourId}:${test.opponentId}`;
-			rooms.unshift(room);
-			io.to(socket.id).emit('private_connect', {opponentId : ``});
-		}
-		player[test.yourId] =  {
-			'deck': test.deck,
+	socket.on('private', (userState) => {
+		roomKey =  `${userState.oppId}:${userState.yourId}`;
+		let diceRoll = true;
+
+		const player =  {
+			'deck': userState.deck,
 			'hand': [],
 			'sideCard': [],
 			'bench': [],
 			'trash': [],
-			'battleField': []
+			'battleField': [],
+			'dice': 0
 		}
-		
-		// console.log(player);
-		socket.join(room);
-		console.log(`join:${test.yourId}`);
-		console.log(rooms.length);
+		// プライベートルーム作成
+		if (rooms[roomKey]) {
+			rooms[roomKey].player[userState.yourId] = player;
+			roomPlayers[userState.yourId] = roomKey;
+			rooms[roomKey].player[userState.yourId].dice = twoDice();
+
+			while(diceRoll) {
+				if (rooms[roomKey].player[userState.yourId].dice > rooms[roomKey].player[userState.oppId].dice) {
+					rooms[roomKey].status.whichTurn = userState.yourId;
+					diceRoll = false;
+				} else if (rooms[roomKey].player[userState.yourId].dice < rooms[roomKey].player[userState.oppId].dice){
+					rooms[roomKey].status.whichTurn = userState.oppId;
+					diceRoll = false;
+				} else {
+					rooms[roomKey].player[userState.yourId].dice = twoDice();
+					rooms[roomKey].player[userState.oppId].dice = twoDice();
+				}
+			}
+
+			socket.broadcast.to(roomKey).emit('private_connect', { 
+				oppId : `${userState.yourId}` ,
+				whichTurn: rooms[roomKey].status.whichTurn
+			});
+			io.to(socket.id).emit('private_connect', { 
+				oppId : `${userState.oppId}`,
+				whichTurn: rooms[roomKey].status.whichTurn
+			});
+		} else {
+			roomKey = `${userState.yourId}:${userState.oppId}`;
+			roomPlayers[userState.yourId] = roomKey;
+
+			const status = {
+				phase: 0,
+				whichTurn: '',
+			}
+			rooms[roomKey] = { 
+				status: status,
+				player: {
+					[userState.yourId] : player,
+				}
+			};
+			rooms[roomKey].player[userState.yourId].dice = twoDice();
+
+			io.to(socket.id).emit('private_connect', { oppId : `` });
+		}
+
+		socket.join(roomKey);
+		console.log(`join:${userState.yourId}`);
 	});
 
 	// S05. client_to_serverイベント・データを受信する
@@ -70,83 +109,145 @@ io.on('connection', (socket) => {
         io.to(room).emit('server_to_client', {value : data.value});
     });
 
-	// デッキの残り枚数
-	socket.on('deck', (userState) => {
-		io.to(socket.id).emit('getDeck', {deckSize: player[userState.yourId].deck.length});
-	});
+	const getRoom = (userName) => {
+		return rooms[roomPlayers[userName]];
+	}
 
-	socket.on('oppDeck', (oppState) => {
-		io.to(socket.id).emit('getOppDeck', {deckSize: player[oppState.oppId].deck.length});
-	});
-	
-	// 現在の手札の詳細
-	socket.on('hand', (userState) => {
-		io.to(socket.id).emit('getHand', { hand: player[userState.yourId].hand });
-	});
-
-	// サイドカードの枚数
-	socket.on('sideCard', (userState) => {
-		io.to(socket.id).emit('getSideCard', { 
-			sideCard: player[userState.yourId].sideCard
+	const updateYourField = (yourId) => {
+		const room = getRoom(yourId);
+		io.to(socket.id).emit('broadcast', {
+			deckSize: room.player[yourId].deck.length,
+			hand: room.player[yourId].hand,
+			sideCard: room.player[yourId].sideCard,
+			trash: room.player[yourId].trash,
+			battleField: room.player[yourId].battleField,
+			yourTurn: room.player[yourId].yourTurn
 		});
+		socket.broadcast.to(roomKey).emit('oppBroadcast', {
+			oppDeckSize: room.player[yourId].deck.length,
+			oppHand: room.player[yourId].hand,
+			oppBattleField: room.player[yourId].battleField
+		});
+	}
+
+	const updateOppField = (oppId) => {
+		const room = getRoom(oppId);
+		socket.broadcast.to(roomKey).emit('broadcast', {
+			deckSize: room.player[oppId].deck.length,
+			hand: room.player[oppId].hand,
+			sideCard: room.player[oppId].sideCard,
+			trash: room.player[oppId].trash,
+			battleField: room.player[oppId].battleField
+		});
+		io.to(socket.id).emit('oppBroadcast', {
+			oppDeckSize: room.player[oppId].deck.length,
+			oppHand: room.player[oppId].hand,
+			oppBattleField: room.player[oppId].battleField
+		});
+	}
+
+	// 種ポケモン？
+	// socket.on('noBasic', (userState) => {
+	// 	let hand = player[userState.yourId].hand;
+	// 	let noBasic = true;
+	// 	let basics = hand.map(card => {
+	// 		return card.subtypes.filter(subtype => {
+	// 			if (subtype === 2) noBasic = false;
+	// 		});
+	// 	});
+	// 	console.log(basics);
+	// 	basics = [];
+	// 	if (noBasic) io.to(socket.id).emit('getNoBasic', { basic: noBasic });
+	// 	else io.to(socket.id).emit('getNoBasic', { basic: noBasic });
+	// });
+
+	// マリガン
+	socket.on('mulligan', (userState) => {
+		const room = getRoom(userState.yourId);
+		let handCnt = player[userState.yourId].hand.length;
+		for (let i=0; i<handCnt; i++) {
+			room.player[userState.yourId].deck.push(
+				room.player[userState.yourId].hand.pop()
+			);
+		}
+		updateYourField(userState.yourId);
 	});
 
-	// トラッシュカードの枚数
-	socket.on('trash', (userState) => {
-		io.to(socket.id).emit('getTrash', {
-			trash: player[userState.yourId].trash
-		});
+	// 先攻後攻
+	socket.on('chooseYourOrder', (userState) => {
+		const room = getRoom(userState.yourId);
+		const oppRoom = getRoom(userState.oppId);
+		room.player[userState.yourId].yourTurn = userState.whichOrder;
+		oppRoom.player[userState.oppId].yourTurn = !userState.whichOrder;
 	});
 
-	// バトルフィールドの詳細
-	socket.on('battleField', (userState) => {
-		io.to(socket.id).emit('getBattleField', { 
-			battleField: player[userState.yourId].battleField
-		});
+	// ドロー関数
+	socket.on('draw', (userState) => {
+		const room = getRoom(userState.yourId);
+		room.player[userState.yourId].hand.push(
+			room.player[userState.yourId].deck.pop()
+		);
+		updateYourField(userState.yourId);
 	});
 
-	socket.on('oppBattleField', (oppState) => {
-		io.to(socket.id).emit('getOppBattleField', {
-			battleField: player[oppState.oppId].battleField
-		});
+	socket.on('oppDraw', (userState) => {
+		const room = getRoom(userState.oppId);
+		room.player[userState.oppId].hand.push(
+			room.player[userState.oppId].deck.pop()
+		);
+		updateOppField(userState.oppId);
+	});
+
+	// サイドカード設置関数
+	socket.on('setSideCard', (userState) => {
+		const room = getRoom(userState.yourId);
+		room.player[userState.yourId].sideCard.push(
+			room.player[userState.yourId].deck.pop()
+		);
+		updateYourField(userState.yourId);
 	});
 
 	// バトルフィールド設置関数
 	socket.on('callToBattleField', (userState) => {
-		player[userState.yourId].battleField = player[userState.yourId].hand[userState.index];
-		player[userState.yourId].hand.splice(userState.index, 1);
+		const room = getRoom(userState.yourId);
+		room.player[userState.yourId].battleField = room.player[userState.yourId].hand[userState.index];
+		room.player[userState.yourId].hand.splice(userState.index, 1);
+		updateYourField(userState.yourId);
 	});
 
 	// トレーナーズカード使用関数
 	socket.on('useSpellCard', (userState) => {
-		let cardName = player[userState.yourId].hand[userState.index].card_name;
-
-		player[userState.yourId].trash.push(
-			player[userState.yourId].hand[userState.index].img_url
+		const room = getRoom(userState.yourId);
+		let cardName = room.player[userState.yourId].hand[userState.index].card_name;
+		room.player[userState.yourId].trash.push(
+			room.player[userState.yourId].hand[userState.index].img_url
 		);
-		player[userState.yourId].hand.splice(userState.index, 1);
+		room.player[userState.yourId].hand.splice(userState.index, 1);
 		whichSpells(cardName, userState.yourId, userState.oppId);
+		updateYourField(userState.yourId);
 	});
 
 	const whichSpells = (cardName, yourId, oppId) => {
-		let yourHandCnt = player[yourId].hand.length;
-		let oppHandCnt = player[oppId].hand.length;
+		const room = getRoom(yourId);
+		const oppRoom = getRoom(oppId);
+		let yourHandCnt = room.player[yourId].hand.length;
+		let oppHandCnt = oppRoom.player[oppId].hand.length;
 		switch(cardName) {
 			case '博士の研究（アララギ博士）':
 				for (let i=0; i<yourHandCnt; i++) {
-					player[yourId].trash.push(
-						player[yourId].hand[0]
+					room.player[yourId].trash.push(
+						room.player[yourId].hand[0]
 					);
-					player[yourId].hand.splice(0, 1);
+					room.player[yourId].hand.splice(0, 1);
 				}
 				for (let i=0; i<7; i++) {
-					player[yourId].hand.push(
-						player[yourId].deck.pop()
+					room.player[yourId].hand.push(
+						room.player[yourId].deck.pop()
 					);
 				}
 				break;
 			case 'マリィ':
-				let yourHand = player[yourId].hand;
+				let yourHand = room.player[yourId].hand;
 				for (let i=yourHandCnt-1; 0<i; i--) {
 					let r = Math.floor(Math.random() * (i+1));
 					let tmp = yourHand[i];
@@ -154,13 +255,13 @@ io.on('connection', (socket) => {
 					yourHand[r] = tmp;
 				}
 				for (let i=0; i<yourHandCnt; i++) {
-					player[yourId].deck.splice(0, 0, yourHand[i]);
+					room.player[yourId].deck.splice(0, 0, yourHand[i]);
 				}
-				player[yourId].hand = [];
+				room.player[yourId].hand = [];
 				for (i=0; i<5; i++) Draw(yourId);
 				
-				let oppHand = player[oppId].hand;
-				console.log(player[oppId].hand);
+				let oppHand = oppRoom.player[oppId].hand;
+				console.log(oppRoom.player[oppId].hand);
 				for (let i=oppHandCnt-1; 0<i; i--) {
 					let r = Math.floor(Math.random() * (i+1));
 					let tmp = oppHand[i];
@@ -168,18 +269,19 @@ io.on('connection', (socket) => {
 					oppHand[r] = tmp;
 				}
 				for (let i=0; i<oppHandCnt; i++) {
-					player[oppId].deck.splice(0, 0, oppHand[i]);
+					oppRoom.player[oppId].deck.splice(0, 0, oppHand[i]);
 				}
-				player[oppId].hand = [];
+				oppRoom.player[oppId].hand = [];
 				for (i=0; i<4; i++) Draw(oppId);
-				console.log(player[oppId].hand);
+				updateOppField(oppId);
 				break;
 		}
 	}
 
 	// デッキシャッフル関数
 	socket.on('shuffleTheDeck', (userState) => {
-		let deck = player[userState.yourId].deck
+		const room = getRoom(userState.yourId);
+		let deck = room.player[userState.yourId].deck;
 		for (let j=0; j<7; j++) {
 			for (let i=(deck.length - 1); 0 < i; i--) {
 				let r = Math.floor(Math.random() * (i + 1));
@@ -189,28 +291,15 @@ io.on('connection', (socket) => {
 				deck[r] = tmp;
 			}
 		}
-		player[userState.yourId].deck = deck;
+		room.player[userState.yourId].deck = deck;
 	});
 
 	const Draw = (userName) => {
-		player[userName].hand.push(
-			player[userName].deck.pop()
+		const room = getRoom(userName);
+		room.player[userName].hand.push(
+			room.player[userName].deck.pop()
 		);
 	}
-	
-	// ドロー関数
-	socket.on('draw', (userState) => {
-		player[userState.yourId].hand.push(
-			player[userState.yourId].deck.pop()
-		);
-	});
-
-	// サイドカード設置関数
-	socket.on('setSideCard', (userState) => {
-		player[userState.yourId].sideCard.push(
-			player[userState.yourId].deck.pop()
-		);
-	});
 
 	// 対戦相手へ送信受信時
 	socket.on('you_to_opponent', (test) => {
