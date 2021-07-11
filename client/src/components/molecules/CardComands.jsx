@@ -1,18 +1,20 @@
 import React,{ useEffect, useState, useContext } from 'react';
 import {useRecoilState, useSetRecoilState, useRecoilValue} from 'recoil';
-import yourHandState from '../State/yourHandState';
-import battleFieldState from '../State/battleFieldState';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import yourHandState from '../State/yourHandState';
+import battleFieldState from '../State/battleFieldState';
 import trashState from '../State/trashState';
 import phaseState from '../State/phaseState';
 import deckState from '../State/deckState';
+import oppHandState from '../State/oppHandState';
 import UserNameContext from '../Context/UserNameContext';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
     const [tcgFunction, setTcgFunction] = useState('');
     const [yourHand, setYourHand] = useRecoilState(yourHandState);
+    const setOppHand = useSetRecoilState(oppHandState);
     const setDeck = useSetRecoilState(deckState);
     const setTrash = useSetRecoilState(trashState);
     const setBattleField = useSetRecoilState(battleFieldState);
@@ -58,9 +60,9 @@ const CardComands = (props) => {
     const callToBattleField = async (index) => {
         window.socket.emit('callToBattleField', { 
             yourId: userName.yourId, 
+            oppId: userName.oppId,
             index: index
         });
-        update();
         props.handleClose();
     }
 
@@ -70,7 +72,6 @@ const CardComands = (props) => {
             oppId: userName.oppId,
             index: index
         });
-        update();
         props.handleClose();
     }
 
@@ -81,28 +82,6 @@ const CardComands = (props) => {
         await updateYourHand(index);
     }
 
-    const update = () => {
-        window.socket.emit('deck', { yourId: userName.yourId });
-        window.socket.on('getDeck', (res) => {
-            setDeck(res.deckSize);
-        });
-
-        window.socket.emit('hand', { yourId: userName.yourId });
-        window.socket.on('getHand', (res) => {
-            setYourHand(res.hand);
-        });
-
-        window.socket.emit('battleField', {yourId: userName.yourId});
-        window.socket.on('getBattleField', (res) => {
-            setBattleField(res.battleField);
-        });
-
-        window.socket.emit('trash', { yourId: userName.yourId });
-        window.socket.on('getTrash', (res) => {
-            setTrash(res.trash);
-        });
-    }
-
     return(
         <Menu
             id="simple-menu"
@@ -111,9 +90,10 @@ const CardComands = (props) => {
             open={Boolean(props.anchorEl)}
             onClose={props.handleClose}
         >
-            {(phase === 0 && props.supertype !== 1) ||(
+            {/* {(phase === 0 && props.supertype !== 1) ||(
                 <MenuItem onClick={() => tcgFunction(props.index)}>{superTypeButtonText}</MenuItem>
-            )}
+            )} */}
+            <MenuItem onClick={() => tcgFunction(props.index)}>{superTypeButtonText}</MenuItem>
         </Menu>
     );
 }
