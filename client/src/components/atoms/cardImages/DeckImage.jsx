@@ -4,7 +4,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import deckState from '../../State/deckState';
-import useRecoilValue from 'recoil';
+import { useRecoilValue } from 'recoil';
 import pokeUra from '../../../image/poke_ura.jpg';
 
 const useStyles = makeStyles((theme) => ({
