@@ -81,7 +81,7 @@ const Battle = () => {
     const [open, setOpen] = useState(false);
     const [bool, setBool] = useState(false);
     const [userDecks, setUserDecks] = useState([]);
-    const [opponentUserName, setOpponentUserName] = useState('');
+    const [oppId, setOppId] = useState('');
 
     const onClick = () => {
         setOpen(true);
@@ -92,7 +92,7 @@ const Battle = () => {
     }
 
     const onChange = (event) => {
-        setOpponentUserName(event.target.value);
+        setOppId(event.target.value);
     }
 
     const chooseOpponent = () => {
@@ -119,7 +119,7 @@ const Battle = () => {
             {bool && 
                 <SelectDecks 
                     userDecks={userDecks} 
-                    opponentUserName={opponentUserName}
+                    oppId={oppId}
                 />
             }
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
