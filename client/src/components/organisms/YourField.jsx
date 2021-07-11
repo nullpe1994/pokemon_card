@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Grid } from '@material-ui/core';
 import AcceptButton from '../atoms/AcceptButton';
 import HandCardImage from '../atoms/cardImages/HandCardImage';
@@ -7,14 +7,16 @@ import BattleFieldImage from '../atoms/cardImages/BattleFieldImage';
 import SideCardImage from '../atoms/cardImages/SideCardImage';
 import yourSideCardsState from '../State/yourSideCardsState';
 import { useRecoilValue } from 'recoil';
-import offTurnDisplayState from '../State/offTurnDisplayState';
+import turnDisplayState from '../State/turnDisplayState';
 import TrashImage from '../atoms/cardImages/TrashImage';
 import yourHandState from '../State/yourHandState';
+import UserNameContext from '../Context/UserNameContext';
 
 const YourField = (props) => {
     const sideCards = useRecoilValue(yourSideCardsState);
-    const offTurnDisplay = useRecoilValue(offTurnDisplayState);
+    const turnDisplay = useRecoilValue(turnDisplayState);
     const yourHand = useRecoilValue(yourHandState);
+    const userName = useContext(UserNameContext);
 
     return(
         <Grid container spacing={0}>
@@ -41,7 +43,7 @@ const YourField = (props) => {
                         <Grid  container spacing={0}>
                             {/* 手札 */}
                             {Object.keys(yourHand).map(key =>
-                                <Grid item xs={2}>
+                                <Grid item xs={1}>
                                     <HandCardImage handCard={yourHand[key]} index={key}/>
                                 </Grid>
                             )}
@@ -60,16 +62,22 @@ const YourField = (props) => {
                     <Grid item xs={12}>
                         <TrashImage/>
                     </Grid>
-                    <Grid item xs={6}>
-                        {offTurnDisplay && (
-                            <AcceptButton name={'後攻'} isCorrect={props.chooseYourOrder}/>
-                        )}
-                    </Grid>
-                    <Grid item xs={6}>
-                        {offTurnDisplay && (
-                            <AcceptButton name={'先攻'} isCorrect={props.chooseYourOrder}/>
-                        )}
-                    </Grid>
+                        <Grid item xs={6}>
+                            {turnDisplay === userName.yourId && (
+                                <AcceptButton 
+                                    name={'後攻'} 
+                                    isCorrect={() => props.chooseYourOrder(false)}
+                                />
+                            )}
+                        </Grid>
+                        <Grid item xs={6}>
+                            {turnDisplay === userName.yourId && (
+                                <AcceptButton 
+                                    name={'先攻'} 
+                                    isCorrect={() => props.chooseYourOrder(true)}
+                                />
+                            )}
+                        </Grid>
                 </Grid>
             </Grid>
         </Grid>
