@@ -7,6 +7,7 @@ var io = require('socket.io')(http,{
 	},
 });
 
+const deckUtil = require('./util/deckUtil.js');
 // config
 require('dotenv').config();
 const url = process.env.API_BATTLE_URL; // 対戦用api url
@@ -282,16 +283,7 @@ io.on('connection', (socket) => {
 	socket.on('shuffleTheDeck', (userState) => {
 		const room = getRoom(userState.yourId);
 		let deck = room.player[userState.yourId].deck;
-		for (let j=0; j<7; j++) {
-			for (let i=(deck.length - 1); 0 < i; i--) {
-				let r = Math.floor(Math.random() * (i + 1));
-		
-				let tmp = deck[i];
-				deck[i] = deck[r];
-				deck[r] = tmp;
-			}
-		}
-		room.player[userState.yourId].deck = deck;
+		room.player[userState.yourId].deck = deckUtil.shuffle(deck);
 	});
 
 	const Draw = (userName) => {
