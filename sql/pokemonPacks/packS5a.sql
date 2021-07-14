@@ -36,7 +36,7 @@ INSERT INTO pokemon_card (
     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
     isAbilities, weaknesses, convertedRetreatCost, img_url, isDelete
 ) VALUES (
-    'S5a045', 'ガラル ファイヤーV', '1', '{2}', '220', '1',
+    'S5a045', 'ガラル ファイヤーV', '1', '{2,21}', '220', '1',
     '1', '2', '1', '190',
     '1', '6', '2', 'https://www.pokemon-card.com/assets/images/card_images/large/S5a/039312_P_GARARUFAIYAV.jpg', '0'
 );
