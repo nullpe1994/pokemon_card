@@ -8,6 +8,7 @@ var io = require('socket.io')(http,{
 });
 
 const deckUtil = require('./util/deckUtil.js');
+
 // config
 require('dotenv').config();
 const url = process.env.API_BATTLE_URL; // 対戦用api url
