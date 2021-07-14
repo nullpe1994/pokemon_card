@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
@@ -42,14 +42,12 @@ const CardListSideBar = (props) => {
 	
 	const fixDeck = () => {
 		let deckCards = [...props.cards];
-		console.log(deckCards);
 		deckCards.forEach((card) => {
 			for (let i=0; i<card.number_of_cards - 1; i++) {
 				deckCards.push(card);
 			}
 			delete card.number_of_cards;
 		});
-		console.log(deckCards);
 		return deckCards;
 	}
 

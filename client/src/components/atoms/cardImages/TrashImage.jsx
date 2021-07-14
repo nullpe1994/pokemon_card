@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import trashState from '../../State/trashState';
-import trashImageState from '../../State/trashImageState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -80,11 +79,12 @@ const useStyles = makeStyles((theme) => ({
 const TrashImage = () => {
     const classes = useStyles();
     const trash = useRecoilValue(trashState);
-    const [trashImage,setTrashImage] = useRecoilState(trashImageState);
-    
-    useEffect(() => { 
-        setTrashImage(trash[trash.length-1]);
-    },[trash]);
+
+    const image = {
+        url: trash[trash.length-1],
+        width: 130,
+        height: 180
+    }
     
     return (
         <Tooltip title={"トラッシュ: " + trash.length}>
@@ -93,13 +93,14 @@ const TrashImage = () => {
                 className={classes.image}
                 focusVisibleClassName={classes.focusVisible}
                 style={{
-                    width: 130,
+                    width: image.width,
+                    height: image.height
                 }}
             >
                 <span
                     className={classes.imageSrc}
                     style={{
-                        backgroundImage: `url(${trashImage})`,
+                        backgroundImage: `url(${image.url})`,
                     }}
                 />
                 <span className={classes.imageBackdrop} />

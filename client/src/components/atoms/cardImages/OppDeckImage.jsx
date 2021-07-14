@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import oppDeckState from '../../State/oppDeckState';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import { useRecoilValue } from 'recoil';
 import pokeUra from '../../../image/poke_ura.jpg';
 
 const useStyles = makeStyles((theme) => ({
