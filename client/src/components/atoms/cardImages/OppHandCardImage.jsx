@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import trashState from '../../State/trashState';
-import trashImageState from '../../State/trashImageState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         position: 'relative',
-        height: 180,
         margin: '10px',
         [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
@@ -18,9 +13,6 @@ const useStyles = makeStyles((theme) => ({
         },
         '&:hover, &$focusVisible': {
             zIndex: 1,
-            '& $imageBackdrop': {
-                opacity: 0.15,
-            },
             '& $imageMarked': {
                 opacity: 0,
             },
@@ -51,17 +43,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundPosition: 'center 40%',
         borderRadius: '5%',
     },
-    imageBackdrop: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        backgroundColor: theme.palette.common.black,
-        opacity: 0.4,
-        transition: theme.transitions.create('opacity'),
-        borderRadius: '5%',
-    },
     imageTitle: {
         position: 'relative',
         padding: `${theme.spacing(2)}px ${theme.spacing(4)}px ${theme.spacing(1) + 6}px`,
@@ -77,32 +58,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TrashImage = () => {
+const OppHandCardImage = (props) => {
     const classes = useStyles();
-    const trash = useRecoilValue(trashState);
-    const [trashImage,setTrashImage] = useRecoilState(trashImageState);
-    
-    useEffect(() => { 
-        setTrashImage(trash[trash.length-1]);
-    },[trash]);
-    
+
+    const image = {
+        url: props.oppHandCard.img_url,
+        width: 130,
+        height: 180,
+    };
+
     return (
-        <Tooltip title={"トラッシュ: " + trash.length}>
+        <div>
             <ButtonBase
                 focusRipple
                 className={classes.image}
-                focusVisibleClassName={classes.focusVisible}
                 style={{
-                    width: 130,
-                }}
+                    width: image.width,
+                    height: image.height,
+                }}              
             >
                 <span
                     className={classes.imageSrc}
                     style={{
-                        backgroundImage: `url(${trashImage})`,
+                        backgroundImage: `url(${image.url})`,
                     }}
                 />
-                <span className={classes.imageBackdrop} />
                 <span className={classes.imageButton}>
                     <Typography
                         component="span"
@@ -110,12 +90,12 @@ const TrashImage = () => {
                         color="inherit"
                         className={classes.imageTitle}
                     >
-                        {'Trash'}
+                        {'Hand'}
                         <span className={classes.imageMarked} />
                     </Typography>
                 </span>
             </ButtonBase>
-        </Tooltip>
+        </div>
     );
 }
-export default TrashImage;
+export default OppHandCardImage;
