@@ -17,6 +17,7 @@ import requireCostState from '../State/requireCostState';
 import handOfIndexState from '../State/handOfIndexState';
 import HandGalleryImage from '../atoms/cardImages/HandGalleryImage';
 import countState from '../State/countState';
+import cardNameState from '../State/cardNameState';
 
 const CardGallery = (props) => {
 	const [open, setOpen] = React.useState(true);
@@ -29,6 +30,7 @@ const CardGallery = (props) => {
 	const [requireCost, setRequireCost] = useRecoilState(requireCostState);
 	const handOfIndex = useRecoilValue(handOfIndexState);
 	const setCount = useSetRecoilState(countState);
+	const cardName = useRecoilValue(cardNameState);
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -42,13 +44,14 @@ const CardGallery = (props) => {
 
 	const requestSearch = () => {
 		if (requireCost) {
+			let index = handOfIndex;
+			let payCostIndex = choosenCards[0];
 			if (choosenCards.length > 0) {
-				let index = handOfIndex;
-				let payCostIndex = choosenCards[0];
 				if (payCostIndex >= handOfIndex) payCostIndex++;
 				window.socket.emit('requireCost', {
 					yourId: userName.yourId,
 					oppId: userName.oppId,
+					cardName: cardName,
 					index: payCostIndex
 				});
 				if (choosenCards[0] < index) index--;
@@ -57,7 +60,7 @@ const CardGallery = (props) => {
 					oppId: userName.oppId,
 					index: index
 				});
-			} 
+			}
 			setRequireCost(false);
 		} else {
 			window.socket.emit('searchCardsFromDeck', {

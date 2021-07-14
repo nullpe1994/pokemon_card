@@ -87,11 +87,16 @@ const CardGalleryImage = (props) => {
         height: 180,
     };
     let onDisplay = false;
+    let compareSuperType = false;
     let compareTypes = [];
     switch(whichSort) {
-        case 'subtypes':
+        case 'supertype':
+            if (card.supertype === searchSort) onDisplay = true;
+            break;
+        case 'pokemonSubtypes':
+            if (card.supertype === 1) compareSuperType = true;
             compareTypes = card.subtypes.filter(subtype => searchSort.includes(subtype));
-            onDisplay = searchSort.includes(compareTypes[0]);
+            if (compareSuperType) onDisplay = searchSort.includes(compareTypes[0]);
             break;
         case 'hp':
             if (card.hp !== null) if(card.hp <= searchSort) onDisplay = true;

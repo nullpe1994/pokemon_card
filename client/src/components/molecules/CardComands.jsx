@@ -11,6 +11,8 @@ import contentTextState from '../State/contentTextState';
 import UserNameContext from '../Context/UserNameContext';
 import galleryState from '../State/galleryState';
 import handOfIndexState from '../State/handOfIndexState';
+import searchSortState from '../State/searchSortState';
+import cardNameState from '../State/cardNameState';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
@@ -23,6 +25,8 @@ const CardComands = (props) => {
     const setRequireCost = useSetRecoilState(requireCostState);
     const setGallery = useSetRecoilState(galleryState);
     const setHandOfIndex = useSetRecoilState(handOfIndexState);
+    const setCardName = useSetRecoilState(cardNameState);
+    const setSearchSort = useSetRecoilState(searchSortState);
     const userName = useContext(UserNameContext);
 
     
@@ -58,20 +62,33 @@ const CardComands = (props) => {
         }
     
         const useSpellCard = async (index) => {
-            if (props.cardName === 'クイックボール') {
-                let newYourHands = [...newHands];
-                newYourHands.splice(index, 1);
-                setGallery(newYourHands);
-                setContentText('トラッシュするカードを1枚選んでください');
-                setHowMany(1);
-                setRequireCost(true);
-                setHandOfIndex(index);
-            } else {
-                window.socket.emit('useSpellCard', {
-                    yourId: userName.yourId,
-                    oppId: userName.oppId,
-                    index: index
-                });
+            let newYourHands = [...newHands];
+            switch(props.cardName) {
+                case 'クイックボール':
+                    newYourHands.splice(index, 1);
+                    setGallery(newYourHands);
+                    setContentText('トラッシュするカードを1枚選んでください');
+                    setHowMany(1);
+                    setRequireCost(true);
+                    setHandOfIndex(index);
+                    setCardName(props.cardName);
+                    break;
+                case 'ポケモン通信':
+                    newYourHands.splice(index, 1);
+                    setGallery(newYourHands);
+                    setContentText('デッキに戻すポケモンを1枚選んでください');
+                    setHowMany(1);
+                    setRequireCost(true);
+                    setHandOfIndex(index);
+                    setCardName(props.cardName);
+                    setSearchSort(1);
+                    break;
+                default :
+                    window.socket.emit('useSpellCard', {
+                        yourId: userName.yourId,
+                        oppId: userName.oppId,
+                        index: index
+                    });
             }
             props.handleClose();
         }

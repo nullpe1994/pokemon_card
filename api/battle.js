@@ -316,7 +316,7 @@ io.on('connection', (socket) => {
 				cardDetail['sortDigit'] = [21];
 				cardDetail['cardText'] = '冒険家の発見: Vポケモンを3枚まで選んでください';
 				cardDetail['howMany'] = 3;
-				cardDetail['whichSort'] = 'subtypes';
+				cardDetail['whichSort'] = 'pokemonSubtypes';
 				cardUtil(cardDetail);
 				break;
 			case 'レベルボール':
@@ -330,14 +330,21 @@ io.on('connection', (socket) => {
 				cardDetail['sortDigit'] = [0, 9, 16, 17, 22];
 				cardDetail['cardText'] = 'しんかのおこう: 進化ポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
-				cardDetail['whichSort'] = 'subtypes';
+				cardDetail['whichSort'] = 'pokemonSubtypes';
 				cardUtil(cardDetail);
 				break;
 			case 'クイックボール':
 				cardDetail['sortDigit'] = [2];
 				cardDetail['cardText'] = 'クイックボール: たねポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
-				cardDetail['whichSort'] = 'subtypes';
+				cardDetail['whichSort'] = 'pokemonSubtypes';
+				cardUtil(cardDetail);
+				break;
+			case 'ポケモン通信':
+				cardDetail['sortDigit'] = 1;
+				cardDetail['cardText'] = 'ポケモン通信: ポケモンを1枚選んでください';
+				cardDetail['howMany'] = 1;
+				cardDetail['whichSort'] = 'supertype';
 				cardUtil(cardDetail);
 				break;
 			default: 
@@ -367,9 +374,20 @@ io.on('connection', (socket) => {
 	// pay cost function
 	socket.on('requireCost', (userState) => {
 		const room = getRoom(userState.yourId);
-		room.player[userState.yourId].trash.push(
-			room.player[userState.yourId].hand[userState.index].img_url
-		);
+		switch(userState.cardName) {
+			case 'クイックボール':
+				room.player[userState.yourId].trash.push(
+					room.player[userState.yourId].hand[userState.index].img_url
+				);
+				break;
+			case 'ポケモン通信':
+				room.player[userState.yourId].deck.push(
+					room.player[userState.yourId].hand[userState.index].img_url
+				)
+				break;
+			default :
+				console.log('関数がないよ！');
+		}
 		room.player[userState.yourId].hand.splice(userState.index, 1);
 		updateYourField(userState.yourId);
 	});

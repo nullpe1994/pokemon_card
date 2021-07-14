@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import choosenCardsState from '../../State/choosenCardsState';
 import howManyState from '../../State/howManyState';
 import countState from '../../State/countState';
+import cardNameState from '../../State/cardNameState';
+import searchSortState from '../../State/searchSortState';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +36,17 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         color: theme.palette.common.white,
     },
+    imageBackdrop: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        backgroundColor: theme.palette.common.black,
+        opacity: 0.4,
+        transition: theme.transitions.create('opacity'),
+        borderRadius: '5%',
+    },
     imageSrc: {
         position: 'absolute',
         left: 0,
@@ -62,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
 const HandGalleryImage = (props) => {
     const classes = useStyles();
     const card = props.card;
+    const searchSort = useRecoilValue(searchSortState);
     const howMany = useRecoilValue(howManyState);
+    const cardName = useRecoilValue(cardNameState);
     const [choosenCards, setChoosenCards] = useRecoilState(choosenCardsState);
     const [isSelected, setIsSelected] = useState(false);
     const [count, setCount] = useRecoilState(countState);
@@ -72,22 +87,32 @@ const HandGalleryImage = (props) => {
         height: 180,
     };
 
+    let onDisplay = false;
+    switch(cardName) {
+        case 'ポケモン通信':
+            if (card.supertype === searchSort) onDisplay = true;
+            break;
+        default :
+            onDisplay = true;
+    }
     const selected = () => {
         let newChoosenCards = [];
-        if (!isSelected && count < howMany) {
-            setIsSelected(prev => !prev);
-            setChoosenCards([...choosenCards, props.index]);
-            setCount(prev => prev + 1);
-        } else if (isSelected){
-            setIsSelected(prev => !prev);
-            newChoosenCards = [...choosenCards];
-            newChoosenCards.forEach((newChoosenCard, index) => {
-                if(newChoosenCard === props.index) {
-                    newChoosenCards.splice(index, 1);
-                }
-            });
-            setChoosenCards(newChoosenCards);
-            setCount(prev => prev - 1);
+        if (onDisplay) {
+            if (!isSelected && count < howMany) {
+                setIsSelected(prev => !prev);
+                setChoosenCards([...choosenCards, props.index]);
+                setCount(prev => prev + 1);
+            } else if (isSelected){
+                setIsSelected(prev => !prev);
+                newChoosenCards = [...choosenCards];
+                newChoosenCards.forEach((newChoosenCard, index) => {
+                    if(newChoosenCard === props.index) {
+                        newChoosenCards.splice(index, 1);
+                    }
+                });
+                setChoosenCards(newChoosenCards);
+                setCount(prev => prev - 1);
+            }
         }
     }
 
@@ -107,6 +132,9 @@ const HandGalleryImage = (props) => {
                     backgroundImage: `url(${image.url})`,
                 }}
             />
+            {(!onDisplay || count >= howMany || isSelected)&&(
+                <span className={classes.imageBackdrop} />
+            )}
             {isSelected &&(
                 <span className={classes.imageButton}>
                     <Typography
