@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import deckState from '../../State/deckState';
+import { useRecoilValue } from 'recoil';
 import pokeUra from '../../../image/poke_ura.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -75,11 +77,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const HandCardImage = (props) => {
+const DeckImage = () => {
     const classes = useStyles();
-
+    const deck = useRecoilValue(deckState);
     return (
-        <Tooltip title={'デッキ: ' + props.deck.cards.length}>
+        <Tooltip title={`デッキ: ${deck}`}>
             <ButtonBase
                 focusRipple
                 className={classes.image}
@@ -110,4 +112,4 @@ const HandCardImage = (props) => {
         </Tooltip>
     );
 }
-export default HandCardImage;
+export default DeckImage;

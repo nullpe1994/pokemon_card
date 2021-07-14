@@ -76,10 +76,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Battle = () => {
+    const classes = useStyles();
     const userName = useContext(UserNameContext);
     const [open, setOpen] = useState(false);
     const [bool, setBool] = useState(false);
     const [userDecks, setUserDecks] = useState([]);
+    const [oppId, setOppId] = useState('');
 
     const onClick = () => {
         setOpen(true);
@@ -87,6 +89,10 @@ const Battle = () => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const onChange = (event) => {
+        setOppId(event.target.value);
     }
 
     const chooseOpponent = () => {
@@ -98,26 +104,30 @@ const Battle = () => {
         // async を 関数としないと謎のエラーが出たので関数にしました。
         async function fetchData() {
             const res = await Axios.post(`${DB_URL}/getDeck`,{
-                userId: userName,
+                userId: userName.yourId,
             });
             const json = await res.data[0];
             setUserDecks(json.userDeck);
         }
         fetchData();
     },[userName,setUserDecks]);
-    const classes = useStyles();
 
     return (
         <div className={classes.root}>
             {!bool && <ImageButton classes={classes} Title={Titles.battle}/>}
             {!bool && <ImageButton classes={classes} Title={Titles.friendBattle} onClick={onClick}/>}
-            {bool && <SelectDecks userDecks={userDecks}/>}
+            {bool && 
+                <SelectDecks 
+                    userDecks={userDecks} 
+                    oppId={oppId}
+                />
+            }
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">フレンドと対戦</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         対戦相手のユーザーIDを入力してください。<br/>
-                        あなたのユーザーID:{userName}
+                        あなたのユーザーID:{userName.yourId}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -127,6 +137,7 @@ const Battle = () => {
                         type="text"
                         fullWidth
                         color="secondary"
+                        onChange={onChange}
                     />
                 </DialogContent>
                 <DialogActions>

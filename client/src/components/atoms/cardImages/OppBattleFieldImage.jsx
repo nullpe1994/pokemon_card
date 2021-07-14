@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import trashState from '../../State/trashState';
-import trashImageState from '../../State/trashImageState';
+import {useRecoilValue,} from 'recoil';
+import OppBattleFieldState from '../../State/oppBattleFieldState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -77,45 +75,39 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TrashImage = () => {
+const OppBattleFieldImage = () => {
     const classes = useStyles();
-    const trash = useRecoilValue(trashState);
-    const [trashImage,setTrashImage] = useRecoilState(trashImageState);
-    
-    useEffect(() => { 
-        setTrashImage(trash[trash.length-1]);
-    },[trash]);
-    
+    const battlePokemon = useRecoilValue(OppBattleFieldState);
     return (
-        <Tooltip title={"トラッシュ: " + trash.length}>
-            <ButtonBase
-                focusRipple
-                className={classes.image}
-                focusVisibleClassName={classes.focusVisible}
+        <ButtonBase
+            focusRipple
+            className={classes.image}
+            focusVisibleClassName={classes.focusVisible}
+            style={{
+                width: 130,
+            }}
+        >
+            <span
+                className={classes.imageSrc}
                 style={{
-                    width: 130,
+                    backgroundImage: `url(${battlePokemon.img_url})`,
                 }}
-            >
-                <span
-                    className={classes.imageSrc}
-                    style={{
-                        backgroundImage: `url(${trashImage})`,
-                    }}
-                />
-                <span className={classes.imageBackdrop} />
-                <span className={classes.imageButton}>
-                    <Typography
-                        component="span"
-                        variant="subtitle1"
-                        color="inherit"
-                        className={classes.imageTitle}
-                    >
-                        {'Trash'}
-                        <span className={classes.imageMarked} />
-                    </Typography>
-                </span>
-            </ButtonBase>
-        </Tooltip>
+            />
+            {battlePokemon.length === 0 && (
+                <span className={classes.imageBackdrop}/>
+            )}
+            <span className={classes.imageButton}>
+                <Typography
+                    component="span"
+                    variant="subtitle1"
+                    color="inherit"
+                    className={classes.imageTitle}
+                >
+                    {'BattleField'}
+                    <span className={classes.imageMarked} />
+                </Typography>
+            </span>
+        </ButtonBase>
     );
 }
-export default TrashImage;
+export default OppBattleFieldImage;
