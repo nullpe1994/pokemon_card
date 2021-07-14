@@ -90,9 +90,7 @@ const CardComands = (props) => {
             open={Boolean(props.anchorEl)}
             onClose={props.handleClose}
         >
-            {/* {(phase === 0 && props.supertype !== 1) ||(
-                <MenuItem onClick={() => tcgFunction(props.index)}>{superTypeButtonText}</MenuItem>
-            )} */}
+            {/* 関数ごとにボタンの表示や非表示を実装する予定 */}
             <MenuItem onClick={() => tcgFunction(props.index)}>{superTypeButtonText}</MenuItem>
         </Menu>
     );

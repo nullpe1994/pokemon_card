@@ -2,7 +2,7 @@
 # api
 /api/node_modules
 # config
-api/.env
+/api/.env
 
 # client
 # dependencies
@@ -28,4 +28,4 @@ api/.env
 /client/yarn-error.log*
 
 # config
-client/.env
+/client/.env

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const CardListSideBar = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
-    const userName = useContext(UserNameContext);
+	const userName = useContext(UserNameContext);
 	const setTurnDisplay = useSetRecoilState(turnDisplayState);
 	const socket = Io(BATTLE_URL);
 	window.socket = socket;
