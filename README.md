@@ -34,6 +34,7 @@ db用のソースディレクトリ
 プルリク作成時に気を付けてほしいこと
 * linked issueに対応するissueを選択(プルリク作成後にしか選択できないっぽい？)
 * reviewersにnullpeつける
+* projectでtodoを選択。プルリク作成後、todoのプルダウンでレビュー者の看カンバンを選択
   
 [return to menu](#menu)
 
