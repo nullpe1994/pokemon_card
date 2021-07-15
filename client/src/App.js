@@ -4,6 +4,9 @@ import LoginForm from './components/pages/LoginForm';
 import Main from './components/pages/Main';
 import Competitive from './components/pages/Competitive';
 import {RecoilRoot} from 'recoil';
+import Cookies from 'js-cookie'
+
+Cookies.set('name', 'value', { samesite: 'lax' });
 
 function App() {
   return (
