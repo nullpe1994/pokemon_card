@@ -100,13 +100,13 @@ const HandGalleryImage = (props) => {
         if (onDisplay) {
             if (!isSelected && count < howMany) {
                 setIsSelected(prev => !prev);
-                setChoosenCards([...choosenCards, props.index]);
+                setChoosenCards([...choosenCards, props.ingameId]);
                 setCount(prev => prev + 1);
             } else if (isSelected){
                 setIsSelected(prev => !prev);
                 newChoosenCards = [...choosenCards];
                 newChoosenCards.forEach((newChoosenCard, index) => {
-                    if(newChoosenCard === props.index) {
+                    if(newChoosenCard === props.ingameId) {
                         newChoosenCards.splice(index, 1);
                     }
                 });

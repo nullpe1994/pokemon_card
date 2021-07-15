@@ -14,10 +14,10 @@ import choosenCardsState from '../State/choosenCardsState';
 import UserNameContext from '../Context/UserNameContext';
 import displayGalleryState from '../State/displayGalleryState';
 import requireCostState from '../State/requireCostState';
-import handOfIndexState from '../State/handOfIndexState';
 import HandGalleryImage from '../atoms/cardImages/HandGalleryImage';
 import countState from '../State/countState';
 import cardNameState from '../State/cardNameState';
+import ingameIdState from '../State/ingameIdState';
 
 const CardGallery = (props) => {
 	const [open, setOpen] = React.useState(true);
@@ -28,9 +28,9 @@ const CardGallery = (props) => {
 	const userName = useContext(UserNameContext);
 	const setDisplayGallery = useSetRecoilState(displayGalleryState);
 	const [requireCost, setRequireCost] = useRecoilState(requireCostState);
-	const handOfIndex = useRecoilValue(handOfIndexState);
 	const setCount = useSetRecoilState(countState);
 	const cardName = useRecoilValue(cardNameState);
+	const ingameId = useRecoilValue(ingameIdState);
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -44,21 +44,18 @@ const CardGallery = (props) => {
 
 	const requestSearch = () => {
 		if (requireCost) {
-			let index = handOfIndex;
-			let payCostIndex = choosenCards[0];
 			if (choosenCards.length > 0) {
-				if (payCostIndex >= handOfIndex) payCostIndex++;
 				window.socket.emit('requireCost', {
 					yourId: userName.yourId,
 					oppId: userName.oppId,
 					cardName: cardName,
-					index: payCostIndex
+					ingameId: choosenCards[0]
 				});
-				if (choosenCards[0] < index) index--;
+				// costをPayした後に使用するカードのIDをゲームへ送る
 				window.socket.emit('useSpellCard', {
 					yourId: userName.yourId,
 					oppId: userName.oppId,
-					index: index
+					ingameId: ingameId
 				});
 			}
 			setRequireCost(false);
@@ -108,12 +105,12 @@ const CardGallery = (props) => {
 				<DialogContentText> {contentText} </DialogContentText>
 				{!requireCost && (
 					Object.keys(gallery).map(key => 
-						<CardGalleryImage card={gallery[key]} index={key}/>	
+						<CardGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
 					)
 				)}
 				{requireCost && (
 					Object.keys(gallery).map(key => 
-						<HandGalleryImage card={gallery[key]} index={key}/>	
+						<HandGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
 					)
 				)}
 			</DialogContent>
