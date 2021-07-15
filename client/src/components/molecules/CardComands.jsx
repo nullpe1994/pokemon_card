@@ -127,7 +127,8 @@ const CardComands = (props) => {
         battleField.length, setContentText, setGallery, 
         props, setHandOfIndex, setHowMany, 
         setTrash, setRequireCost, setHands, 
-        userName.oppId, userName.yourId, hands
+        userName.oppId, userName.yourId, hands,
+        setCardName, setSearchSort
     ]);
 
     useEffect(() => {

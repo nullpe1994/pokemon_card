@@ -263,6 +263,7 @@ io.on('connection', (socket) => {
 		let yourHandCnt = room.player[yourId].hand.length;
 		let oppHandCnt = oppRoom.player[oppId].hand.length;
 		let yourHand = [];
+		let oppHand = [];
 		const cardDetail = {
 			yourId: yourId,
 			sortDigit: 0,
@@ -298,7 +299,7 @@ io.on('connection', (socket) => {
 				room.player[yourId].hand = [];
 				for (i=0; i<5; i++) draw(yourId);
 				
-				let oppHand = oppRoom.player[oppId].hand;
+				oppHand = oppRoom.player[oppId].hand;
 				for (let i=oppHandCnt-1; 0<i; i--) {
 					let r = Math.floor(Math.random() * (i+1));
 					let tmp = oppHand[i];
@@ -310,6 +311,16 @@ io.on('connection', (socket) => {
 				}
 				oppRoom.player[oppId].hand = [];
 				for (i=0; i<4; i++) draw(oppId);
+				updateOppField(oppId);
+				break;
+			case 'リセットスタンプ':
+				let oppSideSize = oppRoom.player[oppId].sideCard.length;
+				oppHand = oppRoom.player[oppId].hand;
+				for (let i=0; i<oppHandCnt; i++) {
+					oppRoom.player[oppId].deck.push(oppHand.pop())
+				}
+				deckUtil.shuffle(oppRoom.player[oppId].deck);
+				for (i=0; i<oppSideSize; i++) draw(oppId);
 				updateOppField(oppId);
 				break;
 			case '冒険家の発見':
