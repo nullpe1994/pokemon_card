@@ -40,20 +40,24 @@ const CardListSideBar = (props) => {
 	const socket = Io(BATTLE_URL);
 	window.socket = socket;
 	
-	const fixDeck = () => {
-		let deckCards = [...props.cards];
+	const fixDeck = (deckCards) => {
 		deckCards.forEach((card) => {
 			for (let i=0; i<card.number_of_cards - 1; i++) {
-				deckCards.push(card);
+				const newCard = Object.assign({},card);
+				delete newCard.number_of_cards;
+				deckCards.push(newCard);
 			}
 			delete card.number_of_cards;
 		});
 		return deckCards;
 	}
-
+	
 	const isCorrect = () => {
-		let newDeck = fixDeck();
-		
+		let deckCards = [...props.cards];
+		let newDeck = fixDeck(deckCards);
+		for(let i=0; i<60; i++) {
+			newDeck[i].ingame_id = `${userName.yourId}:${i + 1}`;
+		}
 		if (socket !== undefined) {
 			socket.emit('private', {
 				yourId: userName.yourId,
@@ -73,6 +77,7 @@ const CardListSideBar = (props) => {
                 }
             });
         }
+		console.log(newDeck);
 	}
 
 	return (
