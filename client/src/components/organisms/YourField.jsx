@@ -35,9 +35,9 @@ const YourField = (props) => {
 			<Grid item xs={2}>
 				<Grid container spacing={0}>
 					{/* サイドカード */}
-					{Object.keys(sideCard).map(key =>
+					{sideCard.map(side =>
 						<Grid item xs={6}>
-							<SideCardImage sideCard={sideCard[key]} index={key}/>
+							<SideCardImage sideCard={side}/>
 						</Grid>
 					)}
 				</Grid>
@@ -51,9 +51,9 @@ const YourField = (props) => {
 					<Grid item xs={12}>
 						<Grid  container spacing={0}>
 							{/* ベンチ */}
-							{Object.keys(bench).map(key => 
+							{bench.map(benchCard => 
 								<Grid item xs ={2}>
-									<BenchCardImage bench={bench[key]} index={key}/>
+									<BenchCardImage benchCard={benchCard}/>
 								</Grid>
 							)}
 						</Grid>

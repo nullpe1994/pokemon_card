@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BenchCardImage = (props) => {
     const classes = useStyles();
-    const bench = props.bench;
+    const bench = props.benchCard;
     const image = {
         url: bench.img_url,
         width: 130,
