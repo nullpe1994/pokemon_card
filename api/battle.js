@@ -47,10 +47,7 @@ io.on('connection', (socket) => {
 		roomKey =  `${userState.oppId}:${userState.yourId}`;
 		let diceRoll = true;
 
-		let energyAndTool = {
-			'energyDetail': [],
-			'toolDetail': [],
-		};
+		let energyAndTool = {};
 		for (let i=0; i<60; i++) {
 			energyAndTool[`${userState.deck[i].ingame_id}`] = {
 				energyCnt : {
@@ -67,6 +64,8 @@ io.on('connection', (socket) => {
 					'water': 0,
 					'rapidStrikeEnergy': 0,
 				},
+				energyDetail: [],
+				toolDetail: [],
 			}
 		}
 
@@ -219,7 +218,7 @@ io.on('connection', (socket) => {
 		const index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 		const energy = room.player[userState.yourId].hand[index];
 		const energyAndTool = room.player[userState.yourId].energyAndTool[userState.getCards[0]];
-		room.player[userState.yourId].energyAndTool.energyDetail.push(
+		energyAndTool.energyDetail.push(
 			room.player[userState.yourId].hand[index]
 		);
 		room.player[userState.yourId].hand.splice(index, 1);
@@ -257,7 +256,7 @@ io.on('connection', (socket) => {
 		}
 		updateYourField(userState.yourId);
 		console.log(energyAndTool);
-		console.log(room.player[userState.yourId].energyAndTool.energyDetail);
+		console.log(energyAndTool.energyDetail);
 	});
 
 	// マリガン
