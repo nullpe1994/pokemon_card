@@ -18,6 +18,7 @@ import HandGalleryImage from '../atoms/cardImages/HandGalleryImage';
 import countState from '../State/countState';
 import cardNameState from '../State/cardNameState';
 import ingameIdState from '../State/ingameIdState';
+import howManyState from '../State/howManyState';
 
 const CardGallery = (props) => {
 	const [open, setOpen] = React.useState(true);
@@ -28,9 +29,10 @@ const CardGallery = (props) => {
 	const userName = useContext(UserNameContext);
 	const setDisplayGallery = useSetRecoilState(displayGalleryState);
 	const [requireCost, setRequireCost] = useRecoilState(requireCostState);
-	const setCount = useSetRecoilState(countState);
+	const [count, setCount] = useRecoilState(countState);
 	const cardName = useRecoilValue(cardNameState);
 	const ingameId = useRecoilValue(ingameIdState);
+    const howMany = useRecoilValue(howManyState);
 
 	const handleClickOpen = (scrollType) => () => {
 		setOpen(true);
@@ -39,6 +41,8 @@ const CardGallery = (props) => {
 
 	const handleClose = () => {
 		setOpen(false);
+        setChoosenCards([]);
+		setCount(0);
 		if (requireCost) setRequireCost(false);
 	};
 
@@ -60,13 +64,17 @@ const CardGallery = (props) => {
 			}
 			setRequireCost(false);
 		} else {
-			window.socket.emit('searchCardsFromDeck', {
-				yourId: userName.yourId,
-				oppId: userName.oppId,
-				getCards: choosenCards,
-			});
-			setOpen(false);
-			setDisplayGallery(false);
+			if (howMany === count) {
+				window.socket.emit('searchCardsFromDeck', {
+					yourId: userName.yourId,
+					oppId: userName.oppId,
+					getCards: choosenCards,
+				});
+				setOpen(false);
+				setDisplayGallery(false);
+			} else {
+				console.log('カードを選択してください');
+			}
 		}
 		setGallery([]);
 		setChoosenCards([]);

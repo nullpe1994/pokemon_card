@@ -85,21 +85,22 @@ const PokemonGalleryImage = (props) => {
 
     const selected = () => {
         let newChoosenCards = [];
-        if (!isSelected && count < 1) {
+        if (!isSelected && count < howMany) {
             setIsSelected(prev => !prev);
-            setChoosenCards([...choosenCards, props.index]);
+            setChoosenCards([...choosenCards, props.ingameId]);
             setCount(prev => prev + 1);
         } else if (isSelected){
             setIsSelected(prev => !prev);
             newChoosenCards = [...choosenCards];
             newChoosenCards.forEach((newChoosenCard, index) => {
-                if(newChoosenCard === props.index) {
+                if(newChoosenCard === props.ingameId) {
                     newChoosenCards.splice(index, 1);
                 }
             });
             setChoosenCards(newChoosenCards);
             setCount(prev => prev - 1);
         }
+        console.log(choosenCards);
     } 
 
     return (

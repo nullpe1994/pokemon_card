@@ -4,11 +4,11 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import {useRecoilValue,} from 'recoil';
 import battleFieldState from '../../State/battleFieldState';
+import EnergyBadge from '../../molecules/EnergyBadge';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         position: 'relative',
-        height: 180,
         margin: '10px',
         [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
@@ -73,6 +73,10 @@ const useStyles = makeStyles((theme) => ({
         left: 'calc(50% - 9px)',
         transition: theme.transitions.create('opacity'),
     },
+    iconEnergy: {
+        position: 'absolute',
+        left: '90%',
+    }
 }));
 
 const BattleFieldImage = () => {
@@ -85,6 +89,7 @@ const BattleFieldImage = () => {
             focusVisibleClassName={classes.focusVisible}
             style={{
                 width: 130,
+                height: 180,
             }}
         >
             <span
@@ -106,6 +111,9 @@ const BattleFieldImage = () => {
                     {'BattleField'}
                     <span className={classes.imageMarked} />
                 </Typography>
+            </span>
+            <span className={classes.iconEnergy}>
+                <EnergyBadge ingameId={battlePokemon.ingame_id}/>
             </span>
         </ButtonBase>
     );

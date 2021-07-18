@@ -124,7 +124,6 @@ const CardGalleryImage = (props) => {
                 setCount(prev => prev - 1);
             }
         }
-        console.log(choosenCards);
     } 
 
     return (

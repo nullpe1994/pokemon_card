@@ -1,3 +1,4 @@
+const e = require('express');
 const express = require('express');
 const router = express();
 const http = require('http').createServer(router);
@@ -46,6 +47,29 @@ io.on('connection', (socket) => {
 		roomKey =  `${userState.oppId}:${userState.yourId}`;
 		let diceRoll = true;
 
+		let energyAndTool = {
+			'energyDetail': [],
+			'toolDetail': [],
+		};
+		for (let i=0; i<60; i++) {
+			energyAndTool[`${userState.deck[i].ingame_id}`] = {
+				energyCnt : {
+					'colorless': 0,
+					'darkness': 0,
+					'dragon': 0,
+					'fairy':  0,
+					'fighting':  0,
+					'fire': 0,
+					'grass': 0,
+					'lightning': 0,
+					'metal': 0,
+					'psychic': 0,
+					'water': 0,
+					'rapidStrikeEnergy': 0,
+				},
+			}
+		}
+
 		const player =  {
 			'deck': userState.deck,
 			'hand': [],
@@ -53,6 +77,8 @@ io.on('connection', (socket) => {
 			'bench': [],
 			'trash': [],
 			'battleField': [],
+			'energyAndTool': energyAndTool,
+			'depot': [],
 			'dice': 0
 		}
 		// プライベートルーム作成
@@ -127,7 +153,8 @@ io.on('connection', (socket) => {
 			sideCard: room.player[yourId].sideCard,
 			bench: room.player[yourId].bench,
 			trash: room.player[yourId].trash,
-			battleField: room.player[yourId].battleField
+			battleField: room.player[yourId].battleField,
+			energyAndTool : room.player[yourId].energyAndTool,
 		});
 		socket.broadcast.to(roomKey).emit('oppBroadcast', {
 			oppDeckSize: room.player[yourId].deck.length,
@@ -135,7 +162,8 @@ io.on('connection', (socket) => {
 			oppSideCard: room.player[yourId].sideCard,
 			oppBench: room.player[yourId].bench,
 			oppTrash: room.player[yourId].trash,
-			oppBattleField: room.player[yourId].battleField
+			oppBattleField: room.player[yourId].battleField,
+			oppEnergyAndTool: room.player[yourId].energyAndTool,
 		});
 	}
 
@@ -147,7 +175,8 @@ io.on('connection', (socket) => {
 			sideCard: room.player[oppId].sideCard,
 			bench: room.player[oppId].bench,
 			trash: room.player[oppId].trash,
-			battleField: room.player[oppId].battleField
+			battleField: room.player[oppId].battleField,
+			energyAndTool : room.player[oppId].energyAndTool,
 		});
 		io.to(socket.id).emit('oppBroadcast', {
 			oppDeckSize: room.player[oppId].deck.length,
@@ -155,7 +184,8 @@ io.on('connection', (socket) => {
 			oppSideCard: room.player[oppId].sideCard,
 			oppBench: room.player[oppId].bench,
 			oppTrash: room.player[oppId].trash,
-			oppBattleField: room.player[oppId].battleField
+			oppBattleField: room.player[oppId].battleField,
+			energyAndTool : room.player[oppId].energyAndTool,
 		});
 	}
 
@@ -173,10 +203,67 @@ io.on('connection', (socket) => {
 	// 	else io.to(socket.id).emit('getNoBasic', { basic: noBasic });
 	// });
 
+	const getIndex = (array, ingameId) => {
+		let index = 0;
+		for (let i=0; i<array.length; i++) {
+			if (array[i].ingame_id === ingameId) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	// エナジー、グッズ追加
+	socket.on('giveEnergy', (userState) => {
+		const room = getRoom(userState.yourId);
+		const index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
+		const energy = room.player[userState.yourId].hand[index];
+		const energyAndTool = room.player[userState.yourId].energyAndTool[userState.getCards[0]];
+		room.player[userState.yourId].energyAndTool.energyDetail.push(
+			room.player[userState.yourId].hand[index]
+		);
+		room.player[userState.yourId].hand.splice(index, 1);
+		switch (energy.card_name) {
+			case '基本悪エネルギー':
+				energyAndTool.energyCnt.darkness += 1;
+				break;
+			case '基本フェアリーエネルギー':
+				energyAndTool.energyCnt.fairy += 1;
+				break;
+			case '基本闘エネルギー':
+				energyAndTool.energyCnt.fighting += 1;
+				break;
+			case '基本炎エネルギー':
+				energyAndTool.energyCnt.fire += 1;	
+				break;
+			case '基本草エネルギー':
+				energyAndTool.energyCnt.grass += 1;
+				break;
+			case '基本雷エネルギー':
+				energyAndTool.energyCnt.lightning += 1;
+				break;
+			case '基本闘エネルギー':
+				energyAndTool.energyCnt.metal += 1;
+				break;
+			case '基本超エネルギー':
+				energyAndTool.energyCnt.psychic += 1;
+				break;
+			case '基本水エネルギー':
+				energyAndTool.energyCnt.water += 1;
+				break;
+			case 'れんげきエネルギー':
+				energyAndTool.energyCnt.rapidStrikeEnergy += 1;
+				break;
+		}
+		updateYourField(userState.yourId);
+		console.log(energyAndTool);
+		console.log(room.player[userState.yourId].energyAndTool.energyDetail);
+	});
+
 	// マリガン
 	socket.on('mulligan', (userState) => {
 		const room = getRoom(userState.yourId);
-		let handCnt = player[userState.yourId].hand.length;
+		let handCnt = room.player[userState.yourId].hand.length;
 		for (let i=0; i<handCnt; i++) {
 			room.player[userState.yourId].deck.push(
 				room.player[userState.yourId].hand.pop()
@@ -250,16 +337,6 @@ io.on('connection', (socket) => {
 		whichSpells(cardName, userState.yourId, userState.oppId);
 		updateYourField(userState.yourId);
 	});
-
-	const getIndex = (array, ingameId) => {
-		let index = 0;
-		for (let i=0; i<array.length; i++) {
-			if (array[i].ingame_id === ingameId) {
-				index = i;
-			}
-		}
-		return index;
-	}
 
 	const cardUtil = (cardDetail) => {
 		const room = getRoom(cardDetail.yourId);

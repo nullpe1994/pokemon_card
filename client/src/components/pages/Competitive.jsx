@@ -25,6 +25,7 @@ import contentTextState from '../State/contentTextState';
 import searchSortState from '../State/searchSortState';
 import howManyState from '../State/howManyState';
 import whichSortState from '../State/whichSortState';
+import energyAndToolState from '../State/energyAndToolState';
 // import NoBasicDialog from '../molecules/NoBasicDialog';
 
 const Competitive = (props) => {
@@ -42,6 +43,7 @@ const Competitive = (props) => {
     const setHowMany = useSetRecoilState(howManyState);
     const setSearchSort = useSetRecoilState(searchSortState);
     const setWhichSort = useSetRecoilState(whichSortState);
+    const setEnergyAndTool = useSetRecoilState(energyAndToolState);
     // Nobasic工事中です
     // const [noBasic, setNoBasic] = useState(false);
     const userName = {
@@ -56,25 +58,26 @@ const Competitive = (props) => {
     const setOppBattleField = useSetRecoilState(oppBattleFieldState);
 
     useEffect(() => {
-        window.socket.on('statuses', status => {
-            setPhase(status.phase);
-            setWhichTurn(status.whichTurn);
+        window.socket.on('statuses', res => {
+            setPhase(res.phase);
+            setWhichTurn(res.whichTurn);
         });
-        window.socket.on('broadcast', players => {
-            setDeck(players.deckSize);
-            setHand(players.hand);
-            setSideCard(players.sideCard);
-            setBench(players.bench);
-            setTrash(players.trash);
-            setBattleField(players.battleField);
+        window.socket.on('broadcast', res => {
+            setDeck(res.deckSize);
+            setHand(res.hand);
+            setSideCard(res.sideCard);
+            setBench(res.bench);
+            setTrash(res.trash);
+            setBattleField(res.battleField);
+            setEnergyAndTool(res.energyAndTool);
         });
-        window.socket.on('oppBroadcast', players => {
-            setOppDeck(players.oppDeckSize);
-            setOppHand(players.oppHand);
-            setOppSideCard(players.oppSideCard);
-            setOppBench(players.oppBench);
-            setOppTrash(players.oppTrash);
-            setOppBattleField(players.oppBattleField);
+        window.socket.on('oppBroadcast', res => {
+            setOppDeck(res.oppDeckSize);
+            setOppHand(res.oppHand);
+            setOppSideCard(res.oppSideCard);
+            setOppBench(res.oppBench);
+            setOppTrash(res.oppTrash);
+            setOppBattleField(res.oppBattleField);
         });
         window.socket.on('searchRequest', res =>{
             setGallery(res.deck);
@@ -89,7 +92,7 @@ const Competitive = (props) => {
             window.socket.current.disconnect();
         };
     },[
-        setPhase, setWhichTurn, 
+        setPhase, setWhichTurn, setEnergyAndTool,
         setDeck, setHand, setSideCard, setBench, setTrash, setBattleField, 
         setOppDeck, setOppHand, setOppSideCard, setOppBench, setOppTrash, setOppBattleField, 
         setGallery, setSearchSort, setContentText, setHowMany, setWhichSort, setDisplayGallery

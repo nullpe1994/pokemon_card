@@ -67,7 +67,7 @@ const YourField = (props) => {
 								</Grid>
 							)} */}
 							{hands.map(handCard => 
-								<Grid item xs={1}>
+								<Grid item xs={1} key={handCard.ingame_id}>
 									<HandCardImage handCard={handCard}/>
 								</Grid>
 							)}

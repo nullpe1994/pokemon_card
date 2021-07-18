@@ -11,7 +11,6 @@ import UserNameContext from '../Context/UserNameContext';
 import galleryState from '../State/galleryState';
 import searchSortState from '../State/searchSortState';
 import cardNameState from '../State/cardNameState';
-import benchState from '../State/benchState';
 import displayGiveEnergyState from '../State/displayGiveEnergyState';
 import ingameIdState from '../State/ingameIdState';
 
@@ -20,7 +19,6 @@ const CardComands = (props) => {
     const [tcgFunction, setTcgFunction] = useState('');
     const hands = useRecoilValue(HandsState);
     const battleField = useRecoilValue(battleFieldState);
-    const bench = useRecoilValue(benchState);
 	const setContentText = useSetRecoilState(contentTextState);
     const setHowMany = useSetRecoilState(howManyState);
     const setRequireCost = useSetRecoilState(requireCostState);
@@ -111,15 +109,18 @@ const CardComands = (props) => {
             props.handleClose();
         }
     
-        const useEnergyCard = async (index) => {
+        const useEnergyCard = async (ingameId) => {
+            setHowMany(1);
+            setIngameId(ingameId);
             setDisplayGiveEnergy(true);
             props.handleClose();
         }
     },[
         battleField.length, setContentText, setGallery, 
-        props, setHowMany, 
+        props, setHowMany, setDisplayGiveEnergy,
         setRequireCost, setCardName, setSearchSort,
-        userName.oppId, userName.yourId, hands
+        userName.oppId, userName.yourId, hands,
+        setIngameId
     ]);
 
     useEffect(() => {
