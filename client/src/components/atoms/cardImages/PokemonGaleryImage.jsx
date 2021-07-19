@@ -100,7 +100,6 @@ const PokemonGalleryImage = (props) => {
             setChoosenCards(newChoosenCards);
             setCount(prev => prev - 1);
         }
-        console.log(choosenCards);
     } 
 
     return (

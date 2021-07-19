@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React from 'react';
 import Badge from '@material-ui/core/Badge';
 import EnergyIcon from '../atoms/EnergyIcon';
 import colorlessIcon from '../../image/typeIcons/colorlessIcon.png';
@@ -11,10 +11,10 @@ import lightningIcon from '../../image/typeIcons/lightningIcon.png';
 import metalIcon from '../../image/typeIcons/metalIcon.png';
 import psychicIcon from '../../image/typeIcons/psychicIcon.png';
 import waterIcon from '../../image/typeIcons/waterIcon.png';
-import waterFightingIcon from '../../image/typeIcons/waterFightingIcon.png';
+import rapidStrikeIcon from '../../image/typeIcons/rapidStrikeIcon.png';
+import singleStrikeIcon from '../../image/typeIcons/singleStrikeIcon.png';
 import energyAndToolState from '../State/energyAndToolState';
 import { useRecoilValue } from 'recoil';
-import phaseState from '../State/phaseState';
 
 const typeIcons = {
     colorless: {
@@ -57,115 +57,128 @@ const typeIcons = {
         color: 'primary',
         children: <EnergyIcon icon={waterIcon}/>,
     },
-    waterFighting: {
+    rapidStrike: {
         color: 'primary',
-        children: <EnergyIcon icon={waterFightingIcon}/>,
+        children: <EnergyIcon icon={rapidStrikeIcon}/>,
     },
+    singleStrike: {
+        color: 'primary',
+        children: <EnergyIcon icon={singleStrikeIcon}/>,
+    }
 };
 
 const EnergyBadge = (props) => {
     const energyAndTool = useRecoilValue(energyAndToolState);
-    const ingameId = energyAndTool[`${props.ingameId}`];
+    const cardDetail = energyAndTool[`${props.ingameId}`];
     return (
         <div>
-            {(ingameId !== undefined && ingameId.energyCnt.colorless > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.colorless > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.colorless} max={99} {...typeIcons.colorless} display='block'
+                    badgeContent={cardDetail.energyCnt.colorless} max={99} {...typeIcons.colorless} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.darkness > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.darkness > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.darkness} max={99} {...typeIcons.darkness} display='block'
+                    badgeContent={cardDetail.energyCnt.darkness} max={99} {...typeIcons.darkness} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.dragon > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.dragon > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.dragon} max={99} {...typeIcons.dragon} display='block'
+                    badgeContent={cardDetail.energyCnt.dragon} max={99} {...typeIcons.dragon} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }} 
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.fairy > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.fairy > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.fairy} max={99} {...typeIcons.fairy} display='block'
+                    badgeContent={cardDetail.energyCnt.fairy} max={99} {...typeIcons.fairy} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.fighting > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.fighting > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.fighting} max={99} {...typeIcons.fighting} display='block'
+                    badgeContent={cardDetail.energyCnt.fighting} max={99} {...typeIcons.fighting} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.grass > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.grass > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.grass} max={99} {...typeIcons.grass} display='block'
+                    badgeContent={cardDetail.energyCnt.grass} max={99} {...typeIcons.grass} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.lightning > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.lightning > 0) && (
             <Badge
-                badgeContent={ingameId.energyCnt.lightning} max={99} {...typeIcons.lightning} display='block'
+                badgeContent={cardDetail.energyCnt.lightning} max={99} {...typeIcons.lightning} display='block'
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                 }}
             />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.metal > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.metal > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.metal} max={99} {...typeIcons.metal} display='block'
+                    badgeContent={cardDetail.energyCnt.metal} max={99} {...typeIcons.metal} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.psychic > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.psychic > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.psychic} max={99} {...typeIcons.psychic} display='block'
+                    badgeContent={cardDetail.energyCnt.psychic} max={99} {...typeIcons.psychic} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.water > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.water > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.water} max={99} {...typeIcons.water} display='block'
+                    badgeContent={cardDetail.energyCnt.water} max={99} {...typeIcons.water} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(ingameId !== undefined && ingameId.energyCnt.rapidStrikeEnergy > 0) && (
+            {(cardDetail !== undefined && cardDetail.energyCnt.rapidStrikeEnergy > 0) && (
                 <Badge
-                    badgeContent={ingameId.energyCnt.rapidStrikeEnergy} max={99} {...typeIcons.waterFighting} display='block'
+                    badgeContent={cardDetail.energyCnt.rapidStrikeEnergy} max={99} {...typeIcons.rapidStrike} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
+            )}
+            {(cardDetail !== undefined && cardDetail.energyCnt.singleStrikeEnergy > 0) && (
+                <Badge
+                badgeContent={cardDetail.energyCnt.singleStrikeEnergy} max={99} {...typeIcons.singleStrike} display='block'
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+            />
             )}
         </div>
     );

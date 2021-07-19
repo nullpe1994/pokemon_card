@@ -49,6 +49,7 @@ const FieldPokemonGallery = () => {
         setOpen(false);
         setChoosenCards([]);
         setCount(0);
+        setDisplayGiveEnergy(false);
     }
 
 	const descriptionElementRef = React.useRef(null);
@@ -76,7 +77,7 @@ const FieldPokemonGallery = () => {
                 <PokemonGalleryImage card={battleField} ingameId={battleField.ingame_id}/>
             <DialogContentText> {'ベンチ'} </DialogContentText>
                 {Object.keys(bench).map(key => 
-                    <PokemonGalleryImage card={bench[key]} ingameId={bench[key].ingame_id}/>	
+                    <PokemonGalleryImage key={bench[key].ingame_id} card={bench[key]} ingameId={bench[key].ingame_id}/>	
                 )}
         </DialogContent>
         <DialogActions>

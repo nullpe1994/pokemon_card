@@ -37,7 +37,7 @@ const YourField = (props) => {
 					{/* サイドカード */}
 					{sideCard.map(side =>
 						<Grid item xs={6}>
-							<SideCardImage sideCard={side}/>
+							<SideCardImage key={side.ingame_id} sideCard={side}/>
 						</Grid>
 					)}
 				</Grid>
@@ -53,7 +53,7 @@ const YourField = (props) => {
 							{/* ベンチ */}
 							{bench.map(benchCard => 
 								<Grid item xs ={2}>
-									<BenchCardImage benchCard={benchCard}/>
+									<BenchCardImage key={benchCard.ingame_id} benchCard={benchCard}/>
 								</Grid>
 							)}
 						</Grid>
@@ -67,8 +67,8 @@ const YourField = (props) => {
 								</Grid>
 							)} */}
 							{hands.map(handCard => 
-								<Grid item xs={1} key={handCard.ingame_id}>
-									<HandCardImage handCard={handCard}/>
+								<Grid item xs={1}>
+									<HandCardImage key={handCard.ingame_id} handCard={handCard}/>
 								</Grid>
 							)}
 						</Grid>

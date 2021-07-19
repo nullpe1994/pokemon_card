@@ -63,6 +63,7 @@ io.on('connection', (socket) => {
 					'psychic': 0,
 					'water': 0,
 					'rapidStrikeEnergy': 0,
+					'singleStrikeEnergy': 0,
 				},
 				energyDetail: [],
 				toolDetail: [],
@@ -253,10 +254,17 @@ io.on('connection', (socket) => {
 			case 'れんげきエネルギー':
 				energyAndTool.energyCnt.rapidStrikeEnergy += 1;
 				break;
+			case 'いちげきエネルギー':
+				energyAndTool.energyCnt.singleStrikeEnergy += 1;
+				break;
+			case 'ハイド悪エネルギー':
+				energyAndTool.energyCnt.darkness += 1;
+				break;
+			case 'ウィークガードエネルギー':
+				energyAndTool.energyCnt.colorless += 1;
+				break;
 		}
 		updateYourField(userState.yourId);
-		console.log(energyAndTool);
-		console.log(energyAndTool.energyDetail);
 	});
 
 	// マリガン

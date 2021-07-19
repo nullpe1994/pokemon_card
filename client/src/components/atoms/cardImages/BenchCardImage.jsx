@@ -1,7 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilValue } from 'recoil';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import EnergyBadge from '../../molecules/EnergyBadge';
 import Typography from '@material-ui/core/Typography';
+import energyAndToolState from '../../State/energyAndToolState';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -56,11 +60,17 @@ const useStyles = makeStyles((theme) => ({
         left: 'calc(50% - 9px)',
         transition: theme.transitions.create('opacity'),
     },
+    iconEnergy: {
+        position: 'absolute',
+        left: '90%',
+    }
 }));
 
 const BenchCardImage = (props) => {
     const classes = useStyles();
     const bench = props.benchCard;
+    const energyAndTool = useRecoilValue(energyAndToolState);
+    const cardDetail = energyAndTool[`${bench.ingame_id}`];
     const image = {
         url: bench.img_url,
         width: 130,
@@ -68,32 +78,41 @@ const BenchCardImage = (props) => {
     };
 
     return (
-        <ButtonBase
-            focusRipple
-            className={classes.image}
-            style={{
-                width: image.width,
-                height: image.height,
-            }}            
+        <Tooltip title={
+            <span style={{whiteSpace: 'pre-line'}}>
+                {cardDetail !== undefined && (cardDetail.energyDetail.map(energy => "エナジーカード: " + `${energy.card_name} \n`))}
+            </span>}
         >
-            <span
-                className={classes.imageSrc}
+            <ButtonBase
+                focusRipple
+                className={classes.image}
                 style={{
-                    backgroundImage: `url(${image.url})`,
-                }}
-            />
-            <span className={classes.imageButton}>
-                <Typography
-                    component="span"
-                    variant="subtitle1"
-                    color="inherit"
-                    className={classes.imageTitle}
-                >
-                    {'Bench'}
-                    <span className={classes.imageMarked} />
-                </Typography>
-            </span>
-        </ButtonBase>
+                    width: image.width,
+                    height: image.height,
+                }}            
+            >
+                <span
+                    className={classes.imageSrc}
+                    style={{
+                        backgroundImage: `url(${image.url})`,
+                    }}
+                />
+                <span className={classes.imageButton}>
+                    <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        className={classes.imageTitle}
+                    >
+                        {'Bench'}
+                        <span className={classes.imageMarked} />
+                    </Typography>
+                </span>
+                <span className={classes.iconEnergy}>
+                    <EnergyBadge ingameId={bench.ingame_id}/>
+                </span>
+            </ButtonBase>
+        </Tooltip>
     );
 }
 export default BenchCardImage;
