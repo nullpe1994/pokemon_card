@@ -3,14 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import oppDeckState from '../../State/oppDeckState';
 import { useRecoilValue } from 'recoil';
-import pokeUra from '../../../image/poke_ura.jpg';
+import oppTrashState from '../../State/oppTrashState';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         position: 'relative',
-        height: 180,
         margin: '10px',
         [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
@@ -77,23 +75,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OppDeckImage = () => {
+const OppTrashImage = () => {
     const classes = useStyles();
-    const oppDeck = useRecoilValue(oppDeckState);
+    const oppTrash = useRecoilValue(oppTrashState);
+    
+    const image = {
+        url: oppTrash[oppTrash.length-1],
+        width: 130,
+        height: 180
+    }
+    
     return (
-        <Tooltip title={`デッキ: ${oppDeck}`}>
+        <Tooltip title={"トラッシュ: " + oppTrash.length}>
             <ButtonBase
                 focusRipple
                 className={classes.image}
                 focusVisibleClassName={classes.focusVisible}
                 style={{
-                    width: 130,
+                    width: image.width,
+                    height: image.height
                 }}
             >
                 <span
                     className={classes.imageSrc}
                     style={{
-                        backgroundImage: `url(${pokeUra})`,
+                        backgroundImage: `url(${image.url})`,
                     }}
                 />
                 <span className={classes.imageBackdrop} />
@@ -104,7 +110,7 @@ const OppDeckImage = () => {
                         color="inherit"
                         className={classes.imageTitle}
                     >
-                        {'Deck'}
+                        {'Trash'}
                         <span className={classes.imageMarked} />
                     </Typography>
                 </span>
@@ -112,4 +118,4 @@ const OppDeckImage = () => {
         </Tooltip>
     );
 }
-export default OppDeckImage;
+export default OppTrashImage;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Tooltip from '@material-ui/core/Tooltip';
 import pokeUra from '../../../image/poke_ura.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,24 +29,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OpponentCardImage = () => {
+const OppSideCardImage = (props) => {
     const classes = useStyles();
-
+    const sideCard = props.oppSideCard;
+    
     return (
-        <ButtonBase
-            focusRipple
-            className={classes.image}
-            style={{
-                width: 130,
-            }}
-            >
-            <span
-            className={classes.imageSrc}
-            style={{
-                backgroundImage: `url(${pokeUra})`,
-            }}
-            />
-        </ButtonBase>
+        // Tooltipは削除予定
+        <Tooltip title={"サイドカード: " + sideCard.card_name}>
+            <ButtonBase
+                focusRipple
+                className={classes.image}
+                style={{
+                    width: 130,
+                }}
+                >
+                <span
+                className={classes.imageSrc}
+                style={{
+                    backgroundImage: `url(${pokeUra})`,
+                }}
+                />
+            </ButtonBase>
+        </Tooltip>
     );
 }
-export default OpponentCardImage;
+export default OppSideCardImage;

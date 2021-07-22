@@ -122,14 +122,6 @@ INSERT INTO pokemon_types VALUES ('8', 'Metal');
 INSERT INTO pokemon_types VALUES ('9', 'Psychic');
 INSERT INTO pokemon_types VALUES ('10', 'Water');
 
-
--- INSERT INTO pokemon_card (
---     pokemon_card_id, pokemon_card_name, supertype, subtypes, hp, types, evolvesFrom, 
---     first_skill_type, first_skill_type_cost, first_skill_colorless_cost, first_skill_attack_damage,
---     second_skill_type, second_skill_type_cost, second_skill_colorless_cost, second_skill_attack_damage,
---     isAbilities, weaknesses, resistances, convertedRetreatCost, img_url, isDelete
--- ) 
-
 -- Vスタートデッキ水　ホエルオー,Vスタートデッキ草　フシギバナ
 INSERT INTO pokemon_card (
     pokemon_card_id, pokemon_card_name, supertype, subtypes, 

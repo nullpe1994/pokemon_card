@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 const SideCardImage = (props) => {
     const classes = useStyles();
-    const sideCards = props.sideCards;
+    const sideCard = props.sideCard;
     
     return (
         // Tooltipは削除予定
-        <Tooltip title={"サイドカード: " + sideCards.card_name}>
+        <Tooltip title={"サイドカード: " + sideCard.card_name}>
             <ButtonBase
                 focusRipple
                 className={classes.image}

@@ -2,13 +2,15 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import {useRecoilValue,} from 'recoil';
+import { useRecoilValue } from 'recoil';
 import battleFieldState from '../../State/battleFieldState';
+import EnergyBadge from '../../molecules/EnergyBadge';
+import energyAndToolState from '../../State/energyAndToolState';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
     image: {
         position: 'relative',
-        height: 180,
         margin: '10px',
         [theme.breakpoints.down('xs')]: {
             width: '100% !important', // Overrides inline-style
@@ -73,41 +75,58 @@ const useStyles = makeStyles((theme) => ({
         left: 'calc(50% - 9px)',
         transition: theme.transitions.create('opacity'),
     },
+    iconEnergy: {
+        position: 'absolute',
+        left: '90%',
+    }
 }));
 
 const BattleFieldImage = () => {
     const classes = useStyles();
     const battlePokemon = useRecoilValue(battleFieldState);
+    const energyAndTool = useRecoilValue(energyAndToolState);
+    const cardDetail = energyAndTool[`${battlePokemon.ingame_id}`];
+
     return (
-        <ButtonBase
-            focusRipple
-            className={classes.image}
-            focusVisibleClassName={classes.focusVisible}
-            style={{
-                width: 130,
-            }}
+        <Tooltip title={
+            <span style={{whiteSpace: 'pre-line'}}>
+                {cardDetail !== undefined && (cardDetail.energyDetail.map(energy => "エナジーカード: " + `${energy.card_name} \n`))}
+            </span>}
         >
-            <span
-                className={classes.imageSrc}
+            <ButtonBase
+                focusRipple
+                className={classes.image}
+                focusVisibleClassName={classes.focusVisible}
                 style={{
-                    backgroundImage: `url(${battlePokemon.img_url})`,
+                    width: 130,
+                    height: 180,
                 }}
-            />
-            {battlePokemon.length === 0 && (
-                <span className={classes.imageBackdrop}/>
-            )}
-            <span className={classes.imageButton}>
-                <Typography
-                    component="span"
-                    variant="subtitle1"
-                    color="inherit"
-                    className={classes.imageTitle}
-                >
-                    {'BattleField'}
-                    <span className={classes.imageMarked} />
-                </Typography>
-            </span>
-        </ButtonBase>
+            >
+                <span
+                    className={classes.imageSrc}
+                    style={{
+                        backgroundImage: `url(${battlePokemon.img_url})`,
+                    }}
+                />
+                {battlePokemon.length === 0 && (
+                    <span className={classes.imageBackdrop}/>
+                )}
+                <span className={classes.imageButton}>
+                    <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        className={classes.imageTitle}
+                    >
+                        {'BattleField'}
+                        <span className={classes.imageMarked} />
+                    </Typography>
+                </span>
+                <span className={classes.iconEnergy}>
+                    <EnergyBadge ingameId={battlePokemon.ingame_id}/>
+                </span>
+            </ButtonBase>
+        </Tooltip>
     );
 }
 export default BattleFieldImage;
