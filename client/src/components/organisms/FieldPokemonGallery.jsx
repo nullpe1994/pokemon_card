@@ -17,22 +17,22 @@ import ingameIdState from '../State/ingameIdState';
 import UserNameContext from '../Context/UserNameContext';
 
 const FieldPokemonGallery = () => {
-	const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(true);
     const battleField = useRecoilValue(battleFieldState);
     const bench = useRecoilValue(benchState);
     const [choosenCards,　setChoosenCards] = useRecoilState(choosenCardsState);
     const ingameId = useRecoilValue(ingameIdState);
     const userName = useContext(UserNameContext);
     const howMany = useRecoilValue(howManyState);
-	const [count, setCount] = useRecoilState(countState);
+    const [count, setCount] = useRecoilState(countState);
     const [displayGiveEnergy, setDisplayGiveEnergy] = useRecoilState(displayGiveEnergyState);
 
-	const handleClose = () => {
-		setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
         setChoosenCards([]);
         setCount(0);
-		if (displayGiveEnergy) setDisplayGiveEnergy(false);
-	};
+        if (displayGiveEnergy) setDisplayGiveEnergy(false);
+    };
 
     const setEnergyToPokemon = () => {
         if (howMany === count) {
@@ -62,7 +62,7 @@ const FieldPokemonGallery = () => {
 		}
 	}, [open]);
 
-	return (
+    return (
         <Dialog
             open={open}
             fullWidth={true}

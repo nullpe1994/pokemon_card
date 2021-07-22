@@ -19,7 +19,7 @@ const CardComands = (props) => {
     const [tcgFunction, setTcgFunction] = useState('');
     const hands = useRecoilValue(HandsState);
     const battleField = useRecoilValue(battleFieldState);
-	const setContentText = useSetRecoilState(contentTextState);
+    const setContentText = useSetRecoilState(contentTextState);
     const setHowMany = useSetRecoilState(howManyState);
     const setRequireCost = useSetRecoilState(requireCostState);
     const setGallery = useSetRecoilState(galleryState);
