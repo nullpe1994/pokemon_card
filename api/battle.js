@@ -535,6 +535,14 @@ io.on('connection', (socket) => {
 				cardDetail['whichSort'] = 'supertype';
 				cardUtil(cardDetail);
 				break;
+			case '霧の水晶':
+				cardDetail['gallery'] = room.player[yourId].deck;
+				cardDetail['sortDigit'] = [2];
+				cardDetail['cardText'] = '霧の水晶: 超タイプのたねポケモン、または超エネルギーを1枚選んでください';
+				cardDetail['howMany'] = 1;
+				cardDetail['whichSort'] = '霧の水晶';
+				cardUtil(cardDetail);
+				break;
 			default: 
 				console.log('カードの関数が無いよ！');
 		}

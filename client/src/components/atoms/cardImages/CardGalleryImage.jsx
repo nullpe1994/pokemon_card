@@ -87,19 +87,24 @@ const CardGalleryImage = (props) => {
         height: 180,
     };
     let onDisplay = false;
-    let compareSuperType = false;
+    let compareBool = false;
     let compareTypes = [];
     switch(whichSort) {
         case 'supertype':
             if (card.supertype === searchSort) onDisplay = true;
             break;
         case 'pokemonSubtypes':
-            if (card.supertype === 1) compareSuperType = true;
+            if (card.supertype === 1) compareBool = true;
             compareTypes = card.subtypes.filter(subtype => searchSort.includes(subtype));
-            if (compareSuperType) onDisplay = searchSort.includes(compareTypes[0]);
+            if (compareBool) onDisplay = searchSort.includes(compareTypes[0]);
             break;
         case 'hp':
             if (card.hp !== null) if(card.hp <= searchSort) onDisplay = true;
+            break;
+        case '霧の水晶':
+            if (card.types === 9) compareBool = true;
+            compareTypes = card.subtypes.filter(subtype => searchSort.includes(subtype));
+            if (compareBool) onDisplay = searchSort.includes(compareTypes[0]);
             break;
         default:
             console.log('このカードの関数はまだありません');
