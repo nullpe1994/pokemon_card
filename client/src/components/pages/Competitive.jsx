@@ -25,7 +25,6 @@ import contentTextState from '../State/contentTextState';
 import searchSortState from '../State/searchSortState';
 import howManyState from '../State/howManyState';
 import whichSortState from '../State/whichSortState';
-import energyAndToolState from '../State/energyAndToolState';
 // import NoBasicDialog from '../molecules/NoBasicDialog';
 
 const Competitive = (props) => {
@@ -43,7 +42,6 @@ const Competitive = (props) => {
     const setHowMany = useSetRecoilState(howManyState);
     const setSearchSort = useSetRecoilState(searchSortState);
     const setWhichSort = useSetRecoilState(whichSortState);
-    const setEnergyAndTool = useSetRecoilState(energyAndToolState);
     // Nobasic工事中です
     // const [noBasic, setNoBasic] = useState(false);
     const userName = {
@@ -69,7 +67,6 @@ const Competitive = (props) => {
             setBench(res.bench);
             setTrash(res.trash);
             setBattleField(res.battleField);
-            setEnergyAndTool(res.energyAndTool);
         });
         window.socket.on('oppBroadcast', res => {
             setOppDeck(res.oppDeckSize);
@@ -80,7 +77,7 @@ const Competitive = (props) => {
             setOppBattleField(res.oppBattleField);
         });
         window.socket.on('searchRequest', res =>{
-            setGallery(res.deck);
+            setGallery(res.gallery);
             setSearchSort(res.searchSort);
             setContentText(res.contentText);
             setHowMany(res.howMany);
@@ -92,7 +89,7 @@ const Competitive = (props) => {
             window.socket.current.disconnect();
         };
     },[
-        setPhase, setWhichTurn, setEnergyAndTool,
+        setPhase, setWhichTurn,
         setDeck, setHand, setSideCard, setBench, setTrash, setBattleField, 
         setOppDeck, setOppHand, setOppSideCard, setOppBench, setOppTrash, setOppBattleField, 
         setGallery, setSearchSort, setContentText, setHowMany, setWhichSort, setDisplayGallery

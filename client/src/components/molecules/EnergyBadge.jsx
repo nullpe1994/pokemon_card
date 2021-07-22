@@ -13,8 +13,6 @@ import psychicIcon from '../../image/typeIcons/psychicIcon.png';
 import waterIcon from '../../image/typeIcons/waterIcon.png';
 import rapidStrikeIcon from '../../image/typeIcons/rapidStrikeIcon.png';
 import singleStrikeIcon from '../../image/typeIcons/singleStrikeIcon.png';
-import energyAndToolState from '../State/energyAndToolState';
-import { useRecoilValue } from 'recoil';
 
 const typeIcons = {
     colorless: {
@@ -68,112 +66,111 @@ const typeIcons = {
 };
 
 const EnergyBadge = (props) => {
-    const energyAndTool = useRecoilValue(energyAndToolState);
-    const cardDetail = energyAndTool[`${props.ingameId}`];
+    const card = props.card.energyCnt;
     return (
         <div>
-            {(cardDetail !== undefined && cardDetail.energyCnt.colorless > 0) && (
+            {(card !== undefined && card.colorless > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.colorless} max={99} {...typeIcons.colorless} display='block'
+                    badgeContent={card.colorless} max={99} {...typeIcons.colorless} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.darkness > 0) && (
+            {(card !== undefined && card.darkness > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.darkness} max={99} {...typeIcons.darkness} display='block'
+                    badgeContent={card.darkness} max={99} {...typeIcons.darkness} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.dragon > 0) && (
+            {(card !== undefined && card.dragon > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.dragon} max={99} {...typeIcons.dragon} display='block'
+                    badgeContent={card.dragon} max={99} {...typeIcons.dragon} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }} 
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.fairy > 0) && (
+            {(card !== undefined && card.fairy > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.fairy} max={99} {...typeIcons.fairy} display='block'
+                    badgeContent={card.fairy} max={99} {...typeIcons.fairy} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.fighting > 0) && (
+            {(card !== undefined && card.fighting > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.fighting} max={99} {...typeIcons.fighting} display='block'
+                    badgeContent={card.fighting} max={99} {...typeIcons.fighting} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.grass > 0) && (
+            {(card !== undefined && card.grass > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.grass} max={99} {...typeIcons.grass} display='block'
+                    badgeContent={card.grass} max={99} {...typeIcons.grass} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.lightning > 0) && (
+            {(card !== undefined && card.lightning > 0) && (
             <Badge
-                badgeContent={cardDetail.energyCnt.lightning} max={99} {...typeIcons.lightning} display='block'
+                badgeContent={card.lightning} max={99} {...typeIcons.lightning} display='block'
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                 }}
             />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.metal > 0) && (
+            {(card !== undefined && card.metal > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.metal} max={99} {...typeIcons.metal} display='block'
+                    badgeContent={card.metal} max={99} {...typeIcons.metal} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.psychic > 0) && (
+            {(card !== undefined && card.psychic > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.psychic} max={99} {...typeIcons.psychic} display='block'
+                    badgeContent={card.psychic} max={99} {...typeIcons.psychic} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.water > 0) && (
+            {(card !== undefined && card.water > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.water} max={99} {...typeIcons.water} display='block'
+                    badgeContent={card.water} max={99} {...typeIcons.water} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.rapidStrikeEnergy > 0) && (
+            {(card !== undefined && card.rapidStrikeEnergy > 0) && (
                 <Badge
-                    badgeContent={cardDetail.energyCnt.rapidStrikeEnergy} max={99} {...typeIcons.rapidStrike} display='block'
+                    badgeContent={card.rapidStrikeEnergy} max={99} {...typeIcons.rapidStrike} display='block'
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}
                 />
             )}
-            {(cardDetail !== undefined && cardDetail.energyCnt.singleStrikeEnergy > 0) && (
+            {(card !== undefined && card.singleStrikeEnergy > 0) && (
                 <Badge
-                badgeContent={cardDetail.energyCnt.singleStrikeEnergy} max={99} {...typeIcons.singleStrike} display='block'
+                badgeContent={card.singleStrikeEnergy} max={99} {...typeIcons.singleStrike} display='block'
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
