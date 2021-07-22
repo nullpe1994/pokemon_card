@@ -48,32 +48,53 @@ const CardGallery = (props) => {
 
 	const requestSearch = () => {
 		if (requireCost) {
-			if (choosenCards.length > 0) {
-				window.socket.emit('requireCost', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					cardName: cardName,
-					ingameId: choosenCards[0]
-				});
-				// costをPayした後に使用するカードのIDをゲームへ送る
-				window.socket.emit('useSpellCard', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					ingameId: ingameId
-				});
+			switch (cardName) {
+				case 'ポケモンいれかえ':
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: ingameId,
+							choosenCards: choosenCards[0]
+						});
+					}
+					break;
+					} 
+				default: 
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: choosenCards[0]
+						});
+						// costをPayした後に使用するカードのIDをゲームへ送る
+						window.socket.emit('useSpellCard', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							ingameId: ingameId
+						});
+					} 
 			}
 			setRequireCost(false);
 		} else {
-			if (howMany === count) {
-				window.socket.emit('searchCardsFromDeck', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					getCards: choosenCards,
-				});
-				setOpen(false);
-				setDisplayGallery(false);
-			} else {
-				console.log('カードを選択してください');
+			switch (cardName) {
+				case 'ふつうのつりざお':
+					
+					break;
+				default:
+					if (howMany === count) {
+						window.socket.emit('searchCardsFromDeck', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							getCards: choosenCards,
+						});
+						setOpen(false);
+						setDisplayGallery(false);
+					} else {
+						console.log('カードを選択してください');
+					}
 			}
 		}
 		setGallery([]);

@@ -99,6 +99,14 @@ const CardComands = (props) => {
                     setCardName(props.cardName);
                     setSearchSort(1);
                     break;
+                case 'ポケモンいれかえ':
+                    setGallery(bench);
+                    setContentText('ポケモンいれかえ: 自分のバトルポケモンをベンチポケモンと入れ替える');
+                    setHowMany(1);
+                    setIngameId(ingameId);
+                    setRequireCost(true);
+                    setCardName(props.cardName);
+                    break;
                 default :
                     window.socket.emit('useSpellCard', {
                         yourId: userName.yourId,

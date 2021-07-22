@@ -585,6 +585,25 @@ io.on('connection', (socket) => {
 				room.player[userState.yourId].deck.push(
 					room.player[userState.yourId].hand[index]
 				);
+			case 'ポケモンいれかえ':
+				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
+				room.player[userState.yourId].trash.push(
+					room.player[userState.yourId].hand[index]
+				); 
+				room.player[userState.yourId].hand.splice(index, 1);
+				getCardsIndex = getIndex(room.player[userState.yourId].bench, userState.choosenCards);
+
+				// depotにBattleFieldのポケモンを一時保管
+				room.player[userState.yourId].depot.push(room.player[userState.yourId].battleField);
+				room.player[userState.yourId].battleField = {};
+				// バトルフィールドにベンチの選ばれたカードを追加
+				room.player[userState.yourId].battleField = room.player[userState.yourId].bench[getCardsIndex];
+
+				// ベンチから選ばれたカードを削除
+				room.player[userState.yourId].bench.splice(getCardsIndex, 1);
+				// ベンチに一時保管しておいたカードを追加
+				room.player[userState.yourId].bench.push(room.player[userState.yourId].depot.pop());
+				break;
 				break;
 			default :
 				console.log('関数がないよ！');
