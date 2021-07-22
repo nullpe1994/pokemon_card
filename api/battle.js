@@ -45,40 +45,19 @@ io.on('connection', (socket) => {
 	socket.on('private', (userState) => {
 		roomKey =  `${userState.oppId}:${userState.yourId}`;
 		let diceRoll = true;
-
-		let energyAndTool = {};
-		for (let i=0; i<60; i++) {
-			energyAndTool[`${userState.deck[i].ingame_id}`] = {
-				energyCnt : {
-					'colorless': 0,
-					'darkness': 0,
-					'dragon': 0,
-					'fairy':  0,
-					'fighting':  0,
-					'fire': 0,
-					'grass': 0,
-					'lightning': 0,
-					'metal': 0,
-					'psychic': 0,
-					'water': 0,
-					'rapidStrikeEnergy': 0,
-					'singleStrikeEnergy': 0,
-				},
-				energyDetail: [],
-				toolDetail: [],
-			}
-		}
+		// BattleField,BenchのObjectを作って、その各Objectにカードの情報であるKeyを作成する。
+		// カード選択時にDBにあるデータでObjectの中身を初期化する。
+		// ポケモンが死んだ場合は、BenchにあるObjectそのものをBattleFieldに代入する。
 
 		const player =  {
-			'deck': userState.deck,
-			'hand': [],
-			'sideCard': [],
-			'bench': [],
-			'trash': [],
-			'battleField': [],
-			'energyAndTool': energyAndTool,
-			'depot': [],
-			'dice': 0
+			deck: userState.deck,
+			hand: [],
+			sideCard: [],
+			bench: [],
+			trash: [],
+			battleField: [],
+			depot: [],
+			dice: 0
 		}
 		// プライベートルーム作成
 		if (rooms[roomKey]) {
@@ -153,7 +132,6 @@ io.on('connection', (socket) => {
 			bench: room.player[yourId].bench,
 			trash: room.player[yourId].trash,
 			battleField: room.player[yourId].battleField,
-			energyAndTool : room.player[yourId].energyAndTool,
 		});
 		socket.broadcast.to(roomKey).emit('oppBroadcast', {
 			oppDeckSize: room.player[yourId].deck.length,
@@ -162,7 +140,6 @@ io.on('connection', (socket) => {
 			oppBench: room.player[yourId].bench,
 			oppTrash: room.player[yourId].trash,
 			oppBattleField: room.player[yourId].battleField,
-			oppEnergyAndTool: room.player[yourId].energyAndTool,
 		});
 	}
 
@@ -175,7 +152,6 @@ io.on('connection', (socket) => {
 			bench: room.player[oppId].bench,
 			trash: room.player[oppId].trash,
 			battleField: room.player[oppId].battleField,
-			energyAndTool : room.player[oppId].energyAndTool,
 		});
 		io.to(socket.id).emit('oppBroadcast', {
 			oppDeckSize: room.player[oppId].deck.length,
@@ -184,8 +160,62 @@ io.on('connection', (socket) => {
 			oppBench: room.player[oppId].bench,
 			oppTrash: room.player[oppId].trash,
 			oppBattleField: room.player[oppId].battleField,
-			energyAndTool : room.player[oppId].energyAndTool,
 		});
+	}
+
+	const pokemonCardState = (card) => {
+		const FieldPokemonState = {
+			energyCnt : {
+				colorless: 0,
+				darkness: 0,
+				dragon: 0,
+				fairy:  0,
+				fighting:  0,
+				fire: 0,
+				grass: 0,
+				lightning: 0,
+				metal: 0,
+				psychic: 0,
+				water: 0,
+				rapidStrikeEnergy: 0,
+				singleStrikeEnergy: 0,
+			},
+			energyDetail: [],
+			toolDetail: [],
+			initializedState: {
+				hp: card.hp,
+				first_skill_type_cost: card.first_skill_type_cost,
+				first_skill_colorless_cost: card.first_skill_colorless_cost,
+				first_skill_attack_damage: card.first_skill_attack_damage,
+				second_skill_type_cost: card.second_skill_type_cost,
+				second_skill_colorless_cost: card.second_skill_colorless_cost,
+				second_skill_attack_damage: card.second_skill_attack_damage,
+				weaknesses: card.weaknesses,
+				convertedRetreatCost: card.convertedRetreatCost,
+			},
+			variableState: {
+				hp: 0,
+				first_skill_type_cost: 0,
+				first_skill_colorless_cost: 0,
+				first_skill_attack_damage: 0,
+				second_skill_type_cost: 0,
+				second_skill_colorless_cost: 0,
+				second_skill_attack_damage: 0,
+				weaknesses: 0,
+				convertedRetreatCost: 0,
+			},
+			supertype: card.supertype,
+			subtypes: card.subtypes,
+			types: card.types,
+			evolvesFrom: card.evolvesFrom,
+			first_skill_type: card.first_skill_type,
+			second_skill_type: card.second_skill_type,
+			ingameId: card.ingame_id,
+			isAbilities: card.isAbilities,
+			resistances: card.resistances,
+			img_url: card.img_url,
+		}
+		return FieldPokemonState;
 	}
 
 	// 種ポケモン？
@@ -217,54 +247,102 @@ io.on('connection', (socket) => {
 		const room = getRoom(userState.yourId);
 		const index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 		const energy = room.player[userState.yourId].hand[index];
-		const energyAndTool = room.player[userState.yourId].energyAndTool[userState.getCards[0]];
-		energyAndTool.energyDetail.push(
-			room.player[userState.yourId].hand[index]
-		);
-		room.player[userState.yourId].hand.splice(index, 1);
-		switch (energy.card_name) {
-			case '基本悪エネルギー':
-				energyAndTool.energyCnt.darkness += 1;
-				break;
-			case '基本フェアリーエネルギー':
-				energyAndTool.energyCnt.fairy += 1;
-				break;
-			case '基本闘エネルギー':
-				energyAndTool.energyCnt.fighting += 1;
-				break;
-			case '基本炎エネルギー':
-				energyAndTool.energyCnt.fire += 1;	
-				break;
-			case '基本草エネルギー':
-				energyAndTool.energyCnt.grass += 1;
-				break;
-			case '基本雷エネルギー':
-				energyAndTool.energyCnt.lightning += 1;
-				break;
-			case '基本闘エネルギー':
-				energyAndTool.energyCnt.metal += 1;
-				break;
-			case '基本超エネルギー':
-				energyAndTool.energyCnt.psychic += 1;
-				break;
-			case '基本水エネルギー':
-				energyAndTool.energyCnt.water += 1;
-				break;
-			case 'れんげきエネルギー':
-				energyAndTool.energyCnt.rapidStrikeEnergy += 1;
-				break;
-			case 'いちげきエネルギー':
-				energyAndTool.energyCnt.singleStrikeEnergy += 1;
-				break;
-			case 'ハイド悪エネルギー':
-				energyAndTool.energyCnt.darkness += 1;
-				break;
-			case 'ウィークガードエネルギー':
-				energyAndTool.energyCnt.colorless += 1;
-				break;
+		const battleFieldState = room.player[userState.yourId].battleField;
+		const benchState = room.player[userState.yourId].bench;
+		if (userState.whichField === 0) {
+			energyState(energy.card_name, battleFieldState);
+			battleFieldState.energyDetail.push(
+				room.player[userState.yourId].hand[index]
+			);
+			room.player[userState.yourId].hand.splice(index, 1);
+		} else if (userState.whichField === 1) {
+			energyState(energy.card_name, benchState);
+			benchState.energyDetail.push(
+				room.player[userState.yourId].hand[index]
+			);
+			room.player[userState.yourId].hand.splice(index, 1);
+		} else {
+			console.log('error: giveEnergy');
 		}
 		updateYourField(userState.yourId);
 	});
+
+	socket.on('giveTool', (userState) => {
+		const room = getRoom(userState.yourId);
+		const index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
+		const tool = room.player[userState.yourId].hand[index];
+		const battleFieldState = room.player[userState.yourId].battleField;
+		const benchState = room.player[userState.yourId].bench;
+		if (userState.whichField === 0) {
+			toolState(tool.card_name, battleFieldState);
+			battleFieldState.toolDetail.push(
+				room.player[userState.yourId].hand[index]
+			);
+			room.player[userState.yourId].hand.splice(index, 1);
+		} else if (userState.whichField === 1) {
+			toolState(tool.card_name, benchState);
+			benchState.toolDetail.push(
+				room.player[userState.yourId].hand[index]
+			);
+			room.player[userState.yourId].hand.splice(index, 1);
+		} else {
+			console.log('error: giveTool');
+		}
+		updateYourField(userState.yourId);
+	});
+
+	const toolState = (card_name, bfBench) => {
+		switch (card_name) {
+			case '大きなおまもり':
+				bfBench.variableState.hp = 30;
+			case 'ふうせん':
+				bfBench.variableState.convertedRetreatCost = -2;
+		}
+	}
+
+	const energyState = (card_name, bfBench) => {
+		switch (card_name) {
+			case '基本悪エネルギー':
+				bfBench.energyCnt.darkness += 1;
+				break;
+			case '基本フェアリーエネルギー':
+				bfBench.energyCnt.fairy += 1;
+				break;
+			case '基本闘エネルギー':
+				bfBench.energyCnt.fighting += 1;
+				break;
+			case '基本炎エネルギー':
+				bfBench.energyCnt.fire += 1;	
+				break;
+			case '基本草エネルギー':
+				bfBench.energyCnt.grass += 1;
+				break;
+			case '基本雷エネルギー':
+				bfBench.energyCnt.lightning += 1;
+				break;
+			case '基本闘エネルギー':
+				bfBench.energyCnt.metal += 1;
+				break;
+			case '基本超エネルギー':
+				bfBench.energyCnt.psychic += 1;
+				break;
+			case '基本水エネルギー':
+				bfBench.energyCnt.water += 1;
+				break;
+			case 'れんげきエネルギー':
+				bfBench.energyCnt.rapidStrikeEnergy += 1;
+				break;
+			case 'いちげきエネルギー':
+				bfBench.energyCnt.singleStrikeEnergy += 1;
+				break;
+			case 'ハイド悪エネルギー':
+				bfBench.energyCnt.darkness += 1;
+				break;
+			case 'ウィークガードエネルギー':
+				bfBench.energyCnt.colorless += 1;
+				break;
+		}
+	}
 
 	// マリガン
 	socket.on('mulligan', (userState) => {
@@ -313,7 +391,7 @@ io.on('connection', (socket) => {
 			updateOppField(userState.oppId);
 		}
 		index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
-		room.player[userState.yourId].battleField = room.player[userState.yourId].hand[index];
+		room.player[userState.yourId].battleField = pokemonCardState(room.player[userState.yourId].hand[index]);
 		room.player[userState.yourId].hand.splice(index, 1);
 		updateYourField(userState.yourId);
 	});
@@ -323,7 +401,7 @@ io.on('connection', (socket) => {
 		const room = getRoom(userState.yourId);
 		let index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 		room.player[userState.yourId].bench.push(
-			room.player[userState.yourId].hand[index]
+			pokemonCardState(room.player[userState.yourId].hand[index])
 		);
 		room.player[userState.yourId].hand.splice(index, 1);
 		updateYourField(userState.yourId);
@@ -337,7 +415,7 @@ io.on('connection', (socket) => {
 		let cardIndex = getIndex(hand, userState.ingameId);
 		let cardName = hand[cardIndex].card_name;
 		room.player[userState.yourId].trash.push(
-			room.player[userState.yourId].hand[cardIndex].img_url
+			room.player[userState.yourId].hand[cardIndex]
 		);
 		room.player[userState.yourId].hand.splice(cardIndex, 1);
 		whichSpells(cardName, userState.yourId, userState.oppId);
