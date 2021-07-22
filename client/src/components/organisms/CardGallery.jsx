@@ -60,7 +60,17 @@ const CardGallery = (props) => {
 						});
 					}
 					break;
-					} 
+				case 'ボスの指令（フラダリ）':
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: ingameId,
+							choosenCards: choosenCards[0],
+						});
+					}
+					break;
 				default: 
 					if (choosenCards.length > 0) {
 						window.socket.emit('requireCost', {

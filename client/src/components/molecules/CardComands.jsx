@@ -107,6 +107,14 @@ const CardComands = (props) => {
                     setRequireCost(true);
                     setCardName(props.cardName);
                     break;
+                case 'ボスの指令（フラダリ）':
+                    setGallery(oppBench);
+                    setContentText('ボスの指令: 相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える');
+                    setHowMany(1);
+                    setIngameId(ingameId);
+                    setRequireCost(true);
+                    setCardName(props.cardName);
+                    break;
                 default :
                     window.socket.emit('useSpellCard', {
                         yourId: userName.yourId,

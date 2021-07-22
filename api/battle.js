@@ -604,6 +604,26 @@ io.on('connection', (socket) => {
 				// ベンチに一時保管しておいたカードを追加
 				room.player[userState.yourId].bench.push(room.player[userState.yourId].depot.pop());
 				break;
+			case 'ボスの指令（フラダリ）':
+				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
+				room.player[userState.yourId].trash.push(
+					room.player[userState.yourId].hand[index]
+				); 
+				room.player[userState.yourId].hand.splice(index, 1);
+
+				getCardsIndex = getIndex(oppRoom.player[userState.oppId].bench, userState.choosenCards);
+				// depotにBattleFieldのポケモンを一時保管
+				oppRoom.player[userState.oppId].depot.push(oppRoom.player[userState.oppId].battleField);
+				oppRoom.player[userState.oppId].battleField = {};
+				// バトルフィールドにベンチの選ばれたカードを追加
+				oppRoom.player[userState.oppId].battleField = oppRoom.player[userState.oppId].bench[getCardsIndex];
+
+				// ベンチから選ばれたカードを削除
+				oppRoom.player[userState.oppId].bench.splice(getCardsIndex, 1);
+
+				// ベンチに一時保管しておいたカードを追加
+				oppRoom.player[userState.oppId].bench.push(oppRoom.player[userState.oppId].depot.pop());
+				updateOppField(userState.oppId);
 				break;
 			default :
 				console.log('関数がないよ！');
