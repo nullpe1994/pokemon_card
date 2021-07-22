@@ -423,9 +423,8 @@ io.on('connection', (socket) => {
 	});
 
 	const cardUtil = (cardDetail) => {
-		const room = getRoom(cardDetail.yourId);
 		io.to(socket.id).emit('searchRequest', {
-			deck: room.player[cardDetail.yourId].deck,
+			gallery: cardDetail.gallery,
 			searchSort: cardDetail.sortDigit,
 			contentText: cardDetail.cardText,
 			howMany: cardDetail.howMany,
@@ -501,6 +500,7 @@ io.on('connection', (socket) => {
 				updateOppField(oppId);
 				break;
 			case '冒険家の発見':
+				cardDetail['gallery'] = room.player[yourId].deck;
 				cardDetail['sortDigit'] = [21];
 				cardDetail['cardText'] = '冒険家の発見: Vポケモンを3枚まで選んでください';
 				cardDetail['howMany'] = 3;
@@ -508,6 +508,7 @@ io.on('connection', (socket) => {
 				cardUtil(cardDetail);
 				break;
 			case 'レベルボール':
+				cardDetail['gallery'] = room.player[yourId].deck;
 				cardDetail['sortDigit'] = 90;
 				cardDetail['cardText'] = 'レベルボール: HPが90以下のポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
@@ -515,6 +516,7 @@ io.on('connection', (socket) => {
 				cardUtil(cardDetail);
 				break;
 			case 'しんかのおこう':
+				cardDetail['gallery'] = room.player[yourId].deck;
 				cardDetail['sortDigit'] = [0, 9, 16, 17, 22];
 				cardDetail['cardText'] = 'しんかのおこう: 進化ポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
@@ -522,6 +524,7 @@ io.on('connection', (socket) => {
 				cardUtil(cardDetail);
 				break;
 			case 'クイックボール':
+				cardDetail['gallery'] = room.player[yourId].deck;
 				cardDetail['sortDigit'] = [2];
 				cardDetail['cardText'] = 'クイックボール: たねポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
@@ -529,6 +532,7 @@ io.on('connection', (socket) => {
 				cardUtil(cardDetail);
 				break;
 			case 'ポケモン通信':
+				cardDetail['gallery'] = room.player[yourId].deck;
 				cardDetail['sortDigit'] = 1;
 				cardDetail['cardText'] = 'ポケモン通信: ポケモンを1枚選んでください';
 				cardDetail['howMany'] = 1;
@@ -543,6 +547,14 @@ io.on('connection', (socket) => {
 				cardDetail['whichSort'] = '霧の水晶';
 				cardUtil(cardDetail);
 				break;
+			// case 'ふつうのつりざお':
+			// 	cardDetail['gallery'] = room.player[yourId].trash;
+			// 	cardDetail['sortDigit'] = 1;
+			// 	cardDetail['cardText'] = 'ふつうのつりざお: 自分のトラッシュからポケモンを2枚まで選んでください';
+			// 	cardDetail['howMany'] = 2;
+			// 	cardDetail['whichSort'] = 'supertype';
+			// 	cardUtil(cardDetail);
+			// 	break;
 			default: 
 				console.log('カードの関数が無いよ！');
 		}
@@ -572,19 +584,26 @@ io.on('connection', (socket) => {
 	// pay cost function
 	socket.on('requireCost', (userState) => {
 		const room = getRoom(userState.yourId);
+		const oppRoom = getRoom(userState.oppId);
 		let index = 0;
+		let getCardsIndex = 0;
 		switch(userState.cardName) {
 			case 'クイックボール':
-				index = getIndex(room.player[userState.yourId].hand, userState.ingameId)
+				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 				room.player[userState.yourId].trash.push(
 					room.player[userState.yourId].hand[index]
 				); 
+				room.player[userState.yourId].hand.splice(index, 1);
+				room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
 				break;
 			case 'ポケモン通信':
-				index = getIndex(room.player[userState.yourId].hand, userState.ingameId)
+				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 				room.player[userState.yourId].deck.push(
 					room.player[userState.yourId].hand[index]
 				);
+				room.player[userState.yourId].hand.splice(index, 1);
+				room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
+				break;
 			case 'ポケモンいれかえ':
 				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
 				room.player[userState.yourId].trash.push(
@@ -628,7 +647,6 @@ io.on('connection', (socket) => {
 			default :
 				console.log('関数がないよ！');
 		}
-		room.player[userState.yourId].hand.splice(index, 1);
 		updateYourField(userState.yourId);
 	});
 
