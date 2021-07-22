@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,6 +15,7 @@ import choosenCardsState from '../State/choosenCardsState';
 import howManyState from '../State/howManyState';
 import ingameIdState from '../State/ingameIdState';
 import UserNameContext from '../Context/UserNameContext';
+import displayGiveToolState from '../State/displayGiveToolState';
 
 const FieldPokemonGallery = () => {
     const [open, setOpen] = React.useState(true);
@@ -25,6 +26,7 @@ const FieldPokemonGallery = () => {
     const userName = useContext(UserNameContext);
     const howMany = useRecoilValue(howManyState);
     const [count, setCount] = useRecoilState(countState);
+    const [displayGiveTool, setDisplayGiveTool] = useRecoilState(displayGiveToolState);
     const [displayGiveEnergy, setDisplayGiveEnergy] = useRecoilState(displayGiveEnergyState);
 
     const handleClose = () => {
@@ -35,21 +37,42 @@ const FieldPokemonGallery = () => {
     };
 
     const setEnergyToPokemon = () => {
-        if (howMany === count) {
-            // エナジーを追加するポケモンIDと追加するエナジーのカードIDをAPIに送って
-            // ポケモンIDのEnergyDetailにエナジーカードのDetail、
-            // energyCntに紐づいている属性のカウントをPlusする
-            window.socket.emit('giveEnergy', {
-                yourId: userName.yourId,
-                oppId: userName.oppId,
-                ingameId: ingameId,
-                getCards: choosenCards,
-            });
+        let whichField = 0;
+        if (battleField.ingame_id === choosenCards[0]) whichField = 0;
+        else whichField = 1;
+        if (displayGiveEnergy) {
+            if (howMany === count) {
+                // エナジーを追加するポケモンIDと追加するエナジーのカードIDをAPIに送って
+                // ポケモンIDのEnergyDetailにエナジーカードのDetail、
+                // energyCntに紐づいている属性のカウントをPlusする
+                window.socket.emit('giveEnergy', {
+                    yourId: userName.yourId,
+                    oppId: userName.oppId,
+                    ingameId: ingameId,
+                    getCards: choosenCards[0],
+                    whichField: whichField,
+                });
+            }
+            setOpen(false);
+            setChoosenCards([]);
+            setCount(0);
+            setDisplayGiveEnergy(false);
         }
-        setOpen(false);
-        setChoosenCards([]);
-        setCount(0);
-        setDisplayGiveEnergy(false);
+        if (displayGiveTool) {
+            if (howMany === count) {
+                window.socket.emit('giveTool', {
+                    yourId: userName.yourId,
+                    oppId: userName.oppId,
+                    ingameId: ingameId,
+                    getCards: choosenCards[0],
+                    whichField: whichField,
+                });
+            }
+            setOpen(false);
+            setChoosenCards([]);
+            setCount(0);
+            setDisplayGiveTool(false);
+        }
     }
 
 	const descriptionElementRef = React.useRef(null);
@@ -86,7 +109,7 @@ const FieldPokemonGallery = () => {
             </Button>
         </DialogActions>
         </Dialog>
-	);
+    );
 }
 
 export default FieldPokemonGallery;

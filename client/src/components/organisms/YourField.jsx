@@ -19,6 +19,7 @@ import chooseYourOrder from '../util/chooseYourOrder';
 import requireCostState from '../State/requireCostState';
 import displayGiveEnergyState from '../State/displayGiveEnergyState';
 import FieldPokemonGallery from './FieldPokemonGallery';
+import displayGiveToolState from '../State/displayGiveToolState';
 
 const YourField = (props) => {
 	const sideCard = useRecoilValue(sideCardState);
@@ -29,6 +30,7 @@ const YourField = (props) => {
 	const userName = useContext(UserNameContext);
 	const requireCost = useRecoilValue(requireCostState);
 	const displayGiveEnergy = useRecoilValue(displayGiveEnergyState);
+	const displayGiveTool = useRecoilValue(displayGiveToolState);
 
 	return(
 		<Grid container spacing={0}>
@@ -118,6 +120,9 @@ const YourField = (props) => {
 								<CardGallery title={'あなたの手札'}/>
 							)}
 							{displayGiveEnergy && (
+								<FieldPokemonGallery/>
+							)}
+							{displayGiveTool && (
 								<FieldPokemonGallery/>
 							)}
 						</Grid>

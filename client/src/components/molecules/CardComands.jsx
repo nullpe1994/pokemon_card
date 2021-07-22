@@ -13,6 +13,9 @@ import searchSortState from '../State/searchSortState';
 import cardNameState from '../State/cardNameState';
 import displayGiveEnergyState from '../State/displayGiveEnergyState';
 import ingameIdState from '../State/ingameIdState';
+import benchState from '../State/benchState';
+import oppBenchState from '../State/oppBenchState';
+import displayGiveToolState from '../State/displayGiveToolState';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
@@ -27,7 +30,10 @@ const CardComands = (props) => {
     const setSearchSort = useSetRecoilState(searchSortState);
     const userName = useContext(UserNameContext);
     const setDisplayGiveEnergy = useSetRecoilState(displayGiveEnergyState);
+    const setDisplayGiveTool = useSetRecoilState(displayGiveToolState);
     const setIngameId = useSetRecoilState(ingameIdState);
+    const bench = useRecoilValue(benchState);
+    const oppBench = useRecoilValue(oppBenchState);
     
     const cardComandsFunc = useCallback(() => {
         let newHands = [...hands];
@@ -48,8 +54,14 @@ const CardComands = (props) => {
                     break;
                 }
             case 2:
-                setSuperTypeButtonText('使用する');
-                setTcgFunction(() => useSpellCard);
+                const isTool = props.subtypes.includes(10);
+                if (isTool) {
+                    setSuperTypeButtonText('ポケモンにつける');
+                    setTcgFunction(() => useToolCard);
+                } else {
+                    setSuperTypeButtonText('使用する');
+                    setTcgFunction(() => useSpellCard);
+                }
                 break;
             default:
                 console.log('nothing');
@@ -83,7 +95,7 @@ const CardComands = (props) => {
                 case 'クイックボール':
                     newYourHands.splice(index, 1);
                     setGallery(newYourHands);
-                    setContentText('トラッシュするカードを1枚選んでください');
+                    setContentText('クイックボール: トラッシュするカードを1枚選んでください');
                     setHowMany(1);
                     setIngameId(ingameId);
                     setRequireCost(true);
@@ -92,7 +104,7 @@ const CardComands = (props) => {
                 case 'ポケモン通信':
                     newYourHands.splice(index, 1);
                     setGallery(newYourHands);
-                    setContentText('デッキに戻すポケモンを1枚選んでください');
+                    setContentText('ポケモン通信: デッキに戻すポケモンを1枚選んでください');
                     setHowMany(1);
                     setIngameId(ingameId);
                     setRequireCost(true);
@@ -125,10 +137,17 @@ const CardComands = (props) => {
             props.handleClose();
         }
     
-        const useEnergyCard = async (ingameId) => {
+        const useEnergyCard = (ingameId) => {
             setHowMany(1);
             setIngameId(ingameId);
             setDisplayGiveEnergy(true);
+            props.handleClose();
+        }
+
+        const useToolCard = (ingameId) => {
+            setHowMany(1);
+            setIngameId(ingameId);
+            setDisplayGiveTool(true);
             props.handleClose();
         }
     },[
@@ -136,7 +155,7 @@ const CardComands = (props) => {
         props, setHowMany, setDisplayGiveEnergy,
         setRequireCost, setCardName, setSearchSort,
         userName.oppId, userName.yourId, hands,
-        setIngameId
+        setIngameId, bench, oppBench
     ]);
 
     useEffect(() => {
