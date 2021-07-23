@@ -590,6 +590,13 @@ io.on('connection', (socket) => {
 				cardDetail['whichSort'] = '霧の水晶';
 				cardUtil(cardDetail);
 				break;
+			case 'やまびこホーン':
+				cardDetail['gallery'] = oppRoom.player[oppId].trash;
+				cardDetail['sortDigit'] = [2];
+				cardDetail['cardText'] = 'やまびこホーン: 相手のトラッシュからたねポケモンを1枚選んでください';
+				cardDetail['howMany'] = 1;
+				cardDetail['whichSort'] = 'pokemonSubtypes';
+				cardUtil(cardDetail);
 			// case 'ふつうのつりざお':
 			// 	cardDetail['gallery'] = room.player[yourId].trash;
 			// 	cardDetail['sortDigit'] = 1;
@@ -622,6 +629,19 @@ io.on('connection', (socket) => {
 		})
 		room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
 		updateYourField(userState.yourId);
+	});
+
+	socket.on('yamabikoHorn', (userState) => {
+		const oppRoom = getRoom(userState.oppId);
+		let getCards = userState.getCards;
+		const index = getIndex(oppRoom.player[userState.oppId].trash, getCards);
+
+		oppRoom.player[userState.oppId].bench.push(
+			pokemonCardState(oppRoom.player[userState.oppId].trash[index])
+		);
+		oppRoom.player[userState.oppId].trash.splice(index, 1);
+		updateYourField(userState.yourId);
+		updateOppField(userState.oppId);
 	});
 
 	// pay cost function

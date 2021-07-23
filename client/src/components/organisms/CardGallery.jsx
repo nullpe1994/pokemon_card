@@ -87,6 +87,20 @@ const CardGallery = (props) => {
 				case 'ふつうのつりざお':
 					
 					break;
+				case 'やまびこホーン':
+					if (howMany === count) {
+						window.socket.emit('yamabikoHorn', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							getCards: choosenCards[0],
+						});
+						console.log(choosenCards[0]);
+						setOpen(false);
+						setDisplayGallery(false);
+					} else {
+						console.log('カードを選択してください');
+					}
+					break;
 				default:
 					if (howMany === count) {
 						window.socket.emit('searchCardsFromDeck', {

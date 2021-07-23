@@ -135,6 +135,9 @@ const CardComands = (props) => {
                     setIngameId(ingameId);
                     setCardName(props.cardName);
                     setEnergySwitch(true);
+                    break;
+                case 'やまびこホーン':
+                    setCardName(props.cardName);
                 default :
                     window.socket.emit('useSpellCard', {
                         yourId: userName.yourId,
