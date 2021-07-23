@@ -106,6 +106,9 @@ const CardGalleryImage = (props) => {
             compareTypes = card.subtypes.filter(subtype => searchSort.includes(subtype));
             if (compareBool) onDisplay = searchSort.includes(compareTypes[0]);
             break;
+        case 'singleStrike':
+            if (card.card_name === searchSort) onDisplay = true;
+            break;
         default:
             console.log('このカードの関数はまだありません');
     }

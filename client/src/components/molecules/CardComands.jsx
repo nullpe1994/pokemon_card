@@ -138,6 +138,20 @@ const CardComands = (props) => {
                     break;
                 case 'やまびこホーン':
                     setCardName(props.cardName);
+                    window.socket.emit('useSpellCard', {
+                        yourId: userName.yourId,
+                        oppId: userName.oppId,
+                        ingameId: ingameId
+                    });
+                    break;
+                case '活力の壺':
+                    setCardName(props.cardName);
+                    window.socket.emit('useSpellCard', {
+                        yourId: userName.yourId,
+                        oppId: userName.oppId,
+                        ingameId: ingameId
+                    });
+                    break;
                 default :
                     window.socket.emit('useSpellCard', {
                         yourId: userName.yourId,

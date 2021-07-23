@@ -101,6 +101,15 @@ const CardGallery = (props) => {
 						console.log('カードを選択してください');
 					}
 					break;
+				case '活力の壺':
+					window.socket.emit('katuryokuNoTsubo', {
+						yourId: userName.yourId,
+						oppId: userName.oppId,
+						getCards: choosenCards,
+					});
+					console.log(choosenCards[0]);
+					setOpen(false);
+					setDisplayGallery(false);
 				default:
 					if (howMany === count) {
 						window.socket.emit('searchCardsFromDeck', {

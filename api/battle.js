@@ -597,6 +597,15 @@ io.on('connection', (socket) => {
 				cardDetail['howMany'] = 1;
 				cardDetail['whichSort'] = 'pokemonSubtypes';
 				cardUtil(cardDetail);
+				break;
+			case '活力の壺':
+				cardDetail['gallery'] = room.player[yourId].trash;
+				cardDetail['sortDigit'] = 'いちげきエネルギー';
+				cardDetail['cardText'] = '活力の壺: いちげきエネルギーを2枚まで選んでください';
+				cardDetail['howMany'] = 2;
+				cardDetail['whichSort'] = 'singleStrike';
+				cardUtil(cardDetail);
+				break;
 			// case 'ふつうのつりざお':
 			// 	cardDetail['gallery'] = room.player[yourId].trash;
 			// 	cardDetail['sortDigit'] = 1;
@@ -626,7 +635,7 @@ io.on('connection', (socket) => {
 					}
 				}
 			}
-		})
+		});
 		room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
 		updateYourField(userState.yourId);
 	});
@@ -642,6 +651,25 @@ io.on('connection', (socket) => {
 		oppRoom.player[userState.oppId].trash.splice(index, 1);
 		updateYourField(userState.yourId);
 		updateOppField(userState.oppId);
+	});
+
+	socket.on('katuryokuNoTsubo', (userState) => {
+		const room = getRoom(userState.yourId);
+		let getCards = [...userState.getCards];
+		const howMany = getCards.length;
+		let newTrash = room.player[userState.yourId].trash;
+		Object.keys(newTrash).map(key => {
+			if (newTrash[key] !== undefined) {
+				let ingameId = newTrash[key].ingame_id;
+				for (let i=0; i<howMany; i++) {
+					if (ingameId === getCards[i]) {
+						room.player[userState.yourId].deck.push(newTrash[key]);
+						newTrash.splice(key, 1);
+					}
+				}
+			}
+		});
+		updateYourField(userState.yourId);
 	});
 
 	// pay cost function
