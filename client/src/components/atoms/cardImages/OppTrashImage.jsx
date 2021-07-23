@@ -78,9 +78,9 @@ const useStyles = makeStyles((theme) => ({
 const OppTrashImage = () => {
     const classes = useStyles();
     const oppTrash = useRecoilValue(oppTrashState);
+    let oppTrashImg = oppTrash[oppTrash.length-1];
     
     const image = {
-        url: oppTrash[oppTrash.length-1],
         width: 130,
         height: 180
     }
@@ -96,12 +96,14 @@ const OppTrashImage = () => {
                     height: image.height
                 }}
             >
-                <span
-                    className={classes.imageSrc}
-                    style={{
-                        backgroundImage: `url(${image.url})`,
-                    }}
-                />
+                {oppTrashImg !== undefined && (
+                    <span
+                        className={classes.imageSrc}
+                        style={{
+                            backgroundImage: `url(${oppTrashImg.img_url})`,
+                        }}
+                    />
+                )}
                 <span className={classes.imageBackdrop} />
                 <span className={classes.imageButton}>
                     <Typography
