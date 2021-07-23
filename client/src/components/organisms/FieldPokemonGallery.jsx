@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,15 +16,17 @@ import howManyState from '../State/howManyState';
 import ingameIdState from '../State/ingameIdState';
 import UserNameContext from '../Context/UserNameContext';
 import displayGiveToolState from '../State/displayGiveToolState';
+import contentTextState from '../State/contentTextState';
 
 const FieldPokemonGallery = () => {
-    const [open, setOpen] = React.useState(true);
     const battleField = useRecoilValue(battleFieldState);
     const bench = useRecoilValue(benchState);
-    const [choosenCards,　setChoosenCards] = useRecoilState(choosenCardsState);
     const ingameId = useRecoilValue(ingameIdState);
     const userName = useContext(UserNameContext);
+    const [open, setOpen] = React.useState(true);
+    const [choosenCards,　setChoosenCards] = useRecoilState(choosenCardsState);
     const howMany = useRecoilValue(howManyState);
+    const contentText = useRecoilValue(contentTextState);
     const [count, setCount] = useRecoilState(countState);
     const [displayGiveTool, setDisplayGiveTool] = useRecoilState(displayGiveToolState);
     const [displayGiveEnergy, setDisplayGiveEnergy] = useRecoilState(displayGiveEnergyState);
@@ -38,6 +40,7 @@ const FieldPokemonGallery = () => {
 
     const setEnergyToPokemon = () => {
         let whichField = 0;
+        console.log(choosenCards[0]);
         if (battleField.ingame_id === choosenCards[0]) whichField = 0;
         else whichField = 1;
         if (displayGiveEnergy) {
@@ -94,7 +97,7 @@ const FieldPokemonGallery = () => {
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
         >
-        <DialogTitle id="scroll-dialog-title">{'あなたのフィールドステータス'}</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">{contentText}</DialogTitle>
         <DialogContent>
             <DialogContentText> {'バトル場'} </DialogContentText>
                 <PokemonGalleryImage card={battleField} ingameId={battleField.ingame_id}/>

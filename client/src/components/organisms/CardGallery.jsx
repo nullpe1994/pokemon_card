@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import Button from '@material-ui/core/Button';
-import AcceptButton from '../atoms/AcceptButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -33,12 +32,7 @@ const CardGallery = (props) => {
 	const cardName = useRecoilValue(cardNameState);
 	const ingameId = useRecoilValue(ingameIdState);
     const howMany = useRecoilValue(howManyState);
-
-	const handleClickOpen = (scrollType) => () => {
-		setOpen(true);
-		setScroll(scrollType);
-	};
-
+	
 	const handleClose = () => {
 		setOpen(false);
         setChoosenCards([]);
@@ -123,48 +117,40 @@ const CardGallery = (props) => {
 	}, [open]);
 
 	return (
-		<div>
+		<Dialog
+			open={open}
+			fullWidth={true}
+			maxWidth={'md'}
+			onClose={handleClose}
+			scroll={scroll}
+			aria-labelledby="scroll-dialog-title"
+			aria-describedby="scroll-dialog-description"
+		>
+		<DialogTitle id="scroll-dialog-title">{props.title}</DialogTitle>
+		<DialogContent dividers={scroll === 'paper'}>
+			<DialogContentText> {contentText} </DialogContentText>
 			{!requireCost && (
-				<AcceptButton 
-					isCorrect={handleClickOpen('paper')}
-					name={'デッキ'}
-				/>
+				Object.keys(gallery).map(key => 
+					<CardGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
+				)
 			)}
-			<Dialog
-				open={open}
-				fullWidth={true}
-				maxWidth={'md'}
-				onClose={handleClose}
-				scroll={scroll}
-				aria-labelledby="scroll-dialog-title"
-				aria-describedby="scroll-dialog-description"
-			>
-			<DialogTitle id="scroll-dialog-title">{props.title}</DialogTitle>
-			<DialogContent dividers={scroll === 'paper'}>
-				<DialogContentText> {contentText} </DialogContentText>
-				{!requireCost && (
-					Object.keys(gallery).map(key => 
-						<CardGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
-					)
-				)}
-				{requireCost && (
-					Object.keys(gallery).map(key => 
-						<HandGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
-					)
-				)}
-			</DialogContent>
-			<DialogActions>
-			{!requireCost && (
-				<Button onClick={handleClose} color="secondary">
-					フィールドを見る
-				</Button>
+			{requireCost && (
+				Object.keys(gallery).map(key => 
+					<HandGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
+				)
 			)}
-				<Button onClick={requestSearch} color="secondary">
-					確定
-				</Button>
-			</DialogActions>
-			</Dialog>
-		</div>
+		</DialogContent>
+		<DialogActions>
+		{!requireCost && (
+			<Button onClick={handleClose} color="secondary">
+				フィールドを見る
+			</Button>
+		)}
+			<Button onClick={requestSearch} color="secondary">
+				確定
+			</Button>
+		</DialogActions>
+		</Dialog>
 	);
 }
 

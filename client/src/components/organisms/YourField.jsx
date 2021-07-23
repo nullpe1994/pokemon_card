@@ -20,6 +20,8 @@ import requireCostState from '../State/requireCostState';
 import displayGiveEnergyState from '../State/displayGiveEnergyState';
 import FieldPokemonGallery from './FieldPokemonGallery';
 import displayGiveToolState from '../State/displayGiveToolState';
+import EnergySwitchGallery from './EnergySwitchGallery';
+import energySwitchState from '../State/energySwitchState';
 
 const YourField = (props) => {
 	const sideCard = useRecoilValue(sideCardState);
@@ -31,6 +33,8 @@ const YourField = (props) => {
 	const requireCost = useRecoilValue(requireCostState);
 	const displayGiveEnergy = useRecoilValue(displayGiveEnergyState);
 	const displayGiveTool = useRecoilValue(displayGiveToolState);
+	const energySwitch = useRecoilValue(energySwitchState);
+	console.log(bench);
 
 	return(
 		<Grid container spacing={0}>
@@ -124,6 +128,9 @@ const YourField = (props) => {
 							)}
 							{displayGiveTool && (
 								<FieldPokemonGallery/>
+							)}
+							{energySwitch && (
+								<EnergySwitchGallery/>
 							)}
 						</Grid>
 				</Grid>

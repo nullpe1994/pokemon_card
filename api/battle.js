@@ -210,7 +210,7 @@ io.on('connection', (socket) => {
 			evolvesFrom: card.evolvesFrom,
 			first_skill_type: card.first_skill_type,
 			second_skill_type: card.second_skill_type,
-			ingameId: card.ingame_id,
+			ingame_id: card.ingame_id,
 			isAbilities: card.isAbilities,
 			resistances: card.resistances,
 			img_url: card.img_url,
@@ -249,15 +249,16 @@ io.on('connection', (socket) => {
 		const energy = room.player[userState.yourId].hand[index];
 		const battleFieldState = room.player[userState.yourId].battleField;
 		const benchState = room.player[userState.yourId].bench;
+		const benchIndex = getIndex(benchState, userState.getCards);
 		if (userState.whichField === 0) {
-			energyState(energy.card_name, battleFieldState);
+			energyState(energy.card_name, battleFieldState, 1);
 			battleFieldState.energyDetail.push(
 				room.player[userState.yourId].hand[index]
 			);
 			room.player[userState.yourId].hand.splice(index, 1);
 		} else if (userState.whichField === 1) {
-			energyState(energy.card_name, benchState);
-			benchState.energyDetail.push(
+			energyState(energy.card_name, benchState[benchIndex], 1);
+			benchState[benchIndex].energyDetail.push(
 				room.player[userState.yourId].hand[index]
 			);
 			room.player[userState.yourId].hand.splice(index, 1);
@@ -273,6 +274,7 @@ io.on('connection', (socket) => {
 		const tool = room.player[userState.yourId].hand[index];
 		const battleFieldState = room.player[userState.yourId].battleField;
 		const benchState = room.player[userState.yourId].bench;
+		const benchIndex = getIndex(benchState, userState.getCards);
 		if (userState.whichField === 0) {
 			toolState(tool.card_name, battleFieldState);
 			battleFieldState.toolDetail.push(
@@ -280,13 +282,54 @@ io.on('connection', (socket) => {
 			);
 			room.player[userState.yourId].hand.splice(index, 1);
 		} else if (userState.whichField === 1) {
-			toolState(tool.card_name, benchState);
-			benchState.toolDetail.push(
+			toolState(tool.card_name, benchState[benchIndex]);
+			benchState[benchIndex].toolDetail.push(
 				room.player[userState.yourId].hand[index]
 			);
 			room.player[userState.yourId].hand.splice(index, 1);
 		} else {
 			console.log('error: giveTool');
+		}
+		updateYourField(userState.yourId);
+	});
+
+	socket.on('energySwitch', (userState) => {
+		const room = getRoom(userState.yourId);
+		const battleFieldState = room.player[userState.yourId].battleField;
+		const benchState = room.player[userState.yourId].bench; 
+		const bfEi = getIndex(battleFieldState.energyDetail, userState.getCards);
+		const benchI = getIndex(benchState, userState.ingameId);
+		const benchEi = getIndex(benchState[benchI].energyDetail, userState.getCards);
+		if (userState.whichField === 0) {
+			energyState(battleFieldState.energyDetail[bfEi].card_name, battleFieldState, -1);
+			room.player[userState.yourId].depot.push(battleFieldState.energyDetail[bfEi]);
+			battleFieldState.energyDetail.splice(bfEi, 1);
+		} else {
+			energyState(bench[benchEi].energyDetail[benchEi].card_name, benchState, -1);
+			room.player[userState.yourId].depot.push(bench[benchEi].energyDetail[benchEi]);
+			bench[benchEi].energyDetail.splice(benchEi, 1);
+		}
+		updateYourField(userState.yourId);
+	});
+
+	socket.on('energySwitchCaseTwo', (userState) => {
+		const room = getRoom(userState.yourId);
+		const energy = room.player[userState.yourId].depot[0];
+		const battleFieldState = room.player[userState.yourId].battleField;
+		const benchState = room.player[userState.yourId].bench;
+		const benchIndex = getIndex(benchState, userState.getCards);
+		if (userState.whichField === 0) {
+			energyState(energy.card_name, battleFieldState, 1);
+			battleFieldState.energyDetail.push(
+				room.player[userState.yourId].depot.pop()
+			);
+		} else if (userState.whichField === 1) {
+			energyState(energy.card_name, benchState[benchIndex], 1);
+			benchState[benchIndex].energyDetail.push(
+				room.player[userState.yourId].depot.pop()
+			);
+		} else {
+			console.log('error: giveEnergy');
 		}
 		updateYourField(userState.yourId);
 	});
@@ -300,46 +343,46 @@ io.on('connection', (socket) => {
 		}
 	}
 
-	const energyState = (card_name, bfBench) => {
+	const energyState = (card_name, bfBench, number) => {
 		switch (card_name) {
 			case '基本悪エネルギー':
-				bfBench.energyCnt.darkness += 1;
+				bfBench.energyCnt.darkness += number;
 				break;
 			case '基本フェアリーエネルギー':
-				bfBench.energyCnt.fairy += 1;
+				bfBench.energyCnt.fairy += number;
 				break;
 			case '基本闘エネルギー':
-				bfBench.energyCnt.fighting += 1;
+				bfBench.energyCnt.fighting += number;
 				break;
 			case '基本炎エネルギー':
-				bfBench.energyCnt.fire += 1;	
+				bfBench.energyCnt.fire += number;	
 				break;
 			case '基本草エネルギー':
-				bfBench.energyCnt.grass += 1;
+				bfBench.energyCnt.grass += number;
 				break;
 			case '基本雷エネルギー':
-				bfBench.energyCnt.lightning += 1;
+				bfBench.energyCnt.lightning += number;
 				break;
 			case '基本闘エネルギー':
-				bfBench.energyCnt.metal += 1;
+				bfBench.energyCnt.metal += number;
 				break;
 			case '基本超エネルギー':
-				bfBench.energyCnt.psychic += 1;
+				bfBench.energyCnt.psychic += number;
 				break;
 			case '基本水エネルギー':
-				bfBench.energyCnt.water += 1;
+				bfBench.energyCnt.water += number;
 				break;
 			case 'れんげきエネルギー':
-				bfBench.energyCnt.rapidStrikeEnergy += 1;
+				bfBench.energyCnt.rapidStrikeEnergy += number;
 				break;
 			case 'いちげきエネルギー':
-				bfBench.energyCnt.singleStrikeEnergy += 1;
+				bfBench.energyCnt.singleStrikeEnergy += number;
 				break;
 			case 'ハイド悪エネルギー':
-				bfBench.energyCnt.darkness += 1;
+				bfBench.energyCnt.darkness += number;
 				break;
 			case 'ウィークガードエネルギー':
-				bfBench.energyCnt.colorless += 1;
+				bfBench.energyCnt.colorless += number;
 				break;
 		}
 	}
@@ -594,7 +637,6 @@ io.on('connection', (socket) => {
 					room.player[userState.yourId].hand[index]
 				); 
 				room.player[userState.yourId].hand.splice(index, 1);
-				room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
 				break;
 			case 'ポケモン通信':
 				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);
@@ -602,7 +644,6 @@ io.on('connection', (socket) => {
 					room.player[userState.yourId].hand[index]
 				);
 				room.player[userState.yourId].hand.splice(index, 1);
-				room.player[userState.yourId].deck = deckUtil.shuffle(newDeck);
 				break;
 			case 'ポケモンいれかえ':
 				index = getIndex(room.player[userState.yourId].hand, userState.ingameId);

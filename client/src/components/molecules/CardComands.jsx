@@ -16,6 +16,7 @@ import ingameIdState from '../State/ingameIdState';
 import benchState from '../State/benchState';
 import oppBenchState from '../State/oppBenchState';
 import displayGiveToolState from '../State/displayGiveToolState';
+import energySwitchState from '../State/energySwitchState';
 
 const CardComands = (props) => {
     const [superTypeButtonText, setSuperTypeButtonText] = useState('');
@@ -34,6 +35,7 @@ const CardComands = (props) => {
     const setIngameId = useSetRecoilState(ingameIdState);
     const bench = useRecoilValue(benchState);
     const oppBench = useRecoilValue(oppBenchState);
+    const setEnergySwitch = useSetRecoilState(energySwitchState);
     
     const cardComandsFunc = useCallback(() => {
         let newHands = [...hands];
@@ -127,6 +129,12 @@ const CardComands = (props) => {
                     setRequireCost(true);
                     setCardName(props.cardName);
                     break;
+                case 'エネルギーつけかえ':
+                    setContentText('エネルギーつけかえ: エネルギーを持っているポケモンを選んでください');
+                    setHowMany(1);
+                    setIngameId(ingameId);
+                    setCardName(props.cardName);
+                    setEnergySwitch(true);
                 default :
                     window.socket.emit('useSpellCard', {
                         yourId: userName.yourId,
@@ -138,6 +146,7 @@ const CardComands = (props) => {
         }
     
         const useEnergyCard = (ingameId) => {
+            setContentText('エネルギーをつけるポケモンを選んで下さい');
             setHowMany(1);
             setIngameId(ingameId);
             setDisplayGiveEnergy(true);
@@ -145,6 +154,7 @@ const CardComands = (props) => {
         }
 
         const useToolCard = (ingameId) => {
+            setContentText('どうぐをつけるポケモンを選んでください');
             setHowMany(1);
             setIngameId(ingameId);
             setDisplayGiveTool(true);

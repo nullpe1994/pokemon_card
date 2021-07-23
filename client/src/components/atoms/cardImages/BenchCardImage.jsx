@@ -110,7 +110,7 @@ const BenchCardImage = (props) => {
                     </Typography>
                 </span>
                 <span className={classes.iconEnergy}>
-                    <EnergyBadge card ={bench}/>
+                    <EnergyBadge card={bench}/>
                 </span>
             </ButtonBase>
         </Tooltip>
