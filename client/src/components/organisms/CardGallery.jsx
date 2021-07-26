@@ -21,7 +21,6 @@ import howManyState from '../State/howManyState';
 
 const CardGallery = (props) => {
 	const [open, setOpen] = React.useState(true);
-	const [scroll, setScroll] = React.useState('paper');
 	const contentText = useRecoilValue(contentTextState);
 	const [choosenCards, setChoosenCards] = useRecoilState(choosenCardsState);
 	const [gallery, setGallery] = useRecoilState(galleryState);
@@ -110,6 +109,7 @@ const CardGallery = (props) => {
 					console.log(choosenCards[0]);
 					setOpen(false);
 					setDisplayGallery(false);
+					break;
 				default:
 					if (howMany === count) {
 						window.socket.emit('searchCardsFromDeck', {
@@ -145,12 +145,12 @@ const CardGallery = (props) => {
 			fullWidth={true}
 			maxWidth={'md'}
 			onClose={handleClose}
-			scroll={scroll}
+			scroll={'paper'}
 			aria-labelledby="scroll-dialog-title"
 			aria-describedby="scroll-dialog-description"
 		>
 		<DialogTitle id="scroll-dialog-title">{props.title}</DialogTitle>
-		<DialogContent dividers={scroll === 'paper'}>
+		<DialogContent>
 			<DialogContentText> {contentText} </DialogContentText>
 			{!requireCost && (
 				Object.keys(gallery).map(key => 

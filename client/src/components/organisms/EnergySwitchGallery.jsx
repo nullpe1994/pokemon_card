@@ -1,50 +1,46 @@
 import React, { useContext, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import Button from '@material-ui/core/Button';
-import AcceptButton from '../atoms/AcceptButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import galleryState from '../State/galleryState';
-import contentTextState from '../State/contentTextState';
 import choosenCardsState from '../State/choosenCardsState';
 import UserNameContext from '../Context/UserNameContext';
 import ingameIdState from '../State/ingameIdState';
 import howManyState from '../State/howManyState';
 import battleFieldState from '../State/battleFieldState';
 import benchState from '../State/benchState';
-import displayGiveEnergyState from '../State/displayGiveEnergyState';
 import PokemonGalleryImage from '../atoms/cardImages/PokemonGaleryImage';
 import countState from '../State/countState';
 
-const EnergySwitchGallery = (props) => {
+const EnergySwitchGallery = () => {
     const battleField = useRecoilValue(battleFieldState);
     const bench = useRecoilValue(benchState);
 	const [open, setOpen] = React.useState(true);
-	const [scroll, setScroll] = React.useState('paper');
-	const setContentText = useSetRecoilState(contentTextState);
 	const [choosenCards, setChoosenCards] = useRecoilState(choosenCardsState);
-    const setDisplayGiveEnergy = useSetRecoilState(displayGiveEnergyState);
 	const [gallery, setGallery] = useRecoilState(galleryState);
 	const userName = useContext(UserNameContext);
 	const [countPhase, setCountPhase] = useState(0);
-    const [count, setCount] = useRecoilState(countState);
+    const setCount = useSetRecoilState(countState);
 	const [ingameId, setIngameId] = useRecoilState(ingameIdState);
     const setHowMany = useSetRecoilState(howManyState);
     const [title, setTitle] = useState('エネルギーつけかえ: つけかえるエネルギーを持つポケモンを選んで下さい');
 
-	const handleClose = () => {
-		setOpen(false);
-        setCount(0);
-        setChoosenCards([]);
-	};
+	// const handleClose = () => {
+	// 	setOpen(false);
+    //     setCount(0);
+    //     setChoosenCards([]);
+	// };
 
 	const requestSearch = () => {
         let whichField = 0;
+        let spellIngameId = '';
         switch (countPhase) {
             case 0:
+                spellIngameId = ingameId;
                 if (battleField.ingame_id === choosenCards[0]) whichField = 0;
                 else whichField = 1;
                 if (whichField === 0) {
@@ -74,7 +70,7 @@ const EnergySwitchGallery = (props) => {
                     oppId: userName.oppId,
                     ingameId: ingameId,
                     getCards: choosenCards[0],
-                    whichField: whichField,
+                    whichField: whichField
                 });
                 setChoosenCards([]);
                 setTitle('エネルギーつけかえ: エネルギーをつけるポケモンを選んで下さい');
@@ -92,8 +88,12 @@ const EnergySwitchGallery = (props) => {
                     ingameId: ingameId,
                     getCards: choosenCards[0],
                     whichField: whichField,
+                    spellIngameId: spellIngameId,
                 });
-		    setOpen(false);
+		        setOpen(false);
+                break;
+            default:
+                console.log('nothing');
         }
 	}
 
@@ -112,13 +112,13 @@ const EnergySwitchGallery = (props) => {
             open={open}
             fullWidth={true}
             maxWidth={'md'}
-            scroll={scroll}
+            scroll={'paper'}
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
         >
         <DialogTitle id="scroll-dialog-title">{title}</DialogTitle>
             {(countPhase === 0 || countPhase === 2) && (
-                <DialogContent dividers={scroll === 'paper'}>
+                <DialogContent>
                     <DialogContentText> {'バトル場'} </DialogContentText>
                         <PokemonGalleryImage card={battleField} ingameId={battleField.ingame_id}/>
                     <DialogContentText> {'ベンチ'} </DialogContentText>
@@ -128,7 +128,7 @@ const EnergySwitchGallery = (props) => {
                 </DialogContent>
             )}
             {countPhase === 1 && (
-                <DialogContent dividers={scroll === 'paper'}>
+                <DialogContent>
                         {Object.keys(gallery).map(key => 
                             <PokemonGalleryImage key={gallery[key].ingame_id} card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
                         )}

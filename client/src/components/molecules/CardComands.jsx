@@ -182,7 +182,8 @@ const CardComands = (props) => {
         props, setHowMany, setDisplayGiveEnergy,
         setRequireCost, setCardName, setSearchSort,
         userName.oppId, userName.yourId, hands,
-        setIngameId, bench, oppBench
+        setIngameId, bench, oppBench,
+        setDisplayGiveTool, setEnergySwitch
     ]);
 
     useEffect(() => {

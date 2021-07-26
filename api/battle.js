@@ -318,6 +318,7 @@ io.on('connection', (socket) => {
 		const battleFieldState = room.player[userState.yourId].battleField;
 		const benchState = room.player[userState.yourId].bench;
 		const benchIndex = getIndex(benchState, userState.getCards);
+		const spellCardIndex = getIndex(room.player[userState.yourId].hand, userState.spellIngameId);
 		if (userState.whichField === 0) {
 			energyState(energy.card_name, battleFieldState, 1);
 			battleFieldState.energyDetail.push(
@@ -331,6 +332,10 @@ io.on('connection', (socket) => {
 		} else {
 			console.log('error: giveEnergy');
 		}
+		room.player[userState.yourId].trash.push(
+			room.player[userState.yourId].hand[spellCardIndex]
+		);
+		room.player[userState.yourId].hand.splice(spellCardIndex, 1);
 		updateYourField(userState.yourId);
 	});
 
