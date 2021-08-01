@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import Button from '@material-ui/core/Button';
-import AcceptButton from '../atoms/AcceptButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,7 +21,6 @@ import howManyState from '../State/howManyState';
 
 const CardGallery = (props) => {
 	const [open, setOpen] = React.useState(true);
-	const [scroll, setScroll] = React.useState('paper');
 	const contentText = useRecoilValue(contentTextState);
 	const [choosenCards, setChoosenCards] = useRecoilState(choosenCardsState);
 	const [gallery, setGallery] = useRecoilState(galleryState);
@@ -33,12 +31,7 @@ const CardGallery = (props) => {
 	const cardName = useRecoilValue(cardNameState);
 	const ingameId = useRecoilValue(ingameIdState);
     const howMany = useRecoilValue(howManyState);
-
-	const handleClickOpen = (scrollType) => () => {
-		setOpen(true);
-		setScroll(scrollType);
-	};
-
+	
 	const handleClose = () => {
 		setOpen(false);
         setChoosenCards([]);
@@ -48,32 +41,87 @@ const CardGallery = (props) => {
 
 	const requestSearch = () => {
 		if (requireCost) {
-			if (choosenCards.length > 0) {
-				window.socket.emit('requireCost', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					cardName: cardName,
-					ingameId: choosenCards[0]
-				});
-				// costをPayした後に使用するカードのIDをゲームへ送る
-				window.socket.emit('useSpellCard', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					ingameId: ingameId
-				});
+			switch (cardName) {
+				case 'ポケモンいれかえ':
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: ingameId,
+							choosenCards: choosenCards[0]
+						});
+					}
+					break;
+				case 'ボスの指令（フラダリ）':
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: ingameId,
+							choosenCards: choosenCards[0],
+						});
+					}
+					break;
+				default: 
+					if (choosenCards.length > 0) {
+						window.socket.emit('requireCost', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							cardName: cardName,
+							ingameId: choosenCards[0]
+						});
+						// costをPayした後に使用するカードのIDをゲームへ送る
+						window.socket.emit('useSpellCard', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							ingameId: ingameId
+						});
+					} 
 			}
 			setRequireCost(false);
 		} else {
-			if (howMany === count) {
-				window.socket.emit('searchCardsFromDeck', {
-					yourId: userName.yourId,
-					oppId: userName.oppId,
-					getCards: choosenCards,
-				});
-				setOpen(false);
-				setDisplayGallery(false);
-			} else {
-				console.log('カードを選択してください');
+			switch (cardName) {
+				case 'ふつうのつりざお':
+					
+					break;
+				case 'やまびこホーン':
+					if (howMany === count) {
+						window.socket.emit('yamabikoHorn', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							getCards: choosenCards[0],
+						});
+						console.log(choosenCards[0]);
+						setOpen(false);
+						setDisplayGallery(false);
+					} else {
+						console.log('カードを選択してください');
+					}
+					break;
+				case '活力の壺':
+					window.socket.emit('katuryokuNoTsubo', {
+						yourId: userName.yourId,
+						oppId: userName.oppId,
+						getCards: choosenCards,
+					});
+					console.log(choosenCards[0]);
+					setOpen(false);
+					setDisplayGallery(false);
+					break;
+				default:
+					if (howMany === count) {
+						window.socket.emit('searchCardsFromDeck', {
+							yourId: userName.yourId,
+							oppId: userName.oppId,
+							getCards: choosenCards,
+						});
+						setOpen(false);
+						setDisplayGallery(false);
+					} else {
+						console.log('カードを選択してください');
+					}
 			}
 		}
 		setGallery([]);
@@ -92,48 +140,40 @@ const CardGallery = (props) => {
 	}, [open]);
 
 	return (
-		<div>
+		<Dialog
+			open={open}
+			fullWidth={true}
+			maxWidth={'md'}
+			onClose={handleClose}
+			scroll={'paper'}
+			aria-labelledby="scroll-dialog-title"
+			aria-describedby="scroll-dialog-description"
+		>
+		<DialogTitle id="scroll-dialog-title">{props.title}</DialogTitle>
+		<DialogContent>
+			<DialogContentText> {contentText} </DialogContentText>
 			{!requireCost && (
-				<AcceptButton 
-					isCorrect={handleClickOpen('paper')}
-					name={'デッキ'}
-				/>
+				Object.keys(gallery).map(key => 
+					<CardGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
+				)
 			)}
-			<Dialog
-				open={open}
-				fullWidth={true}
-				maxWidth={'md'}
-				onClose={handleClose}
-				scroll={scroll}
-				aria-labelledby="scroll-dialog-title"
-				aria-describedby="scroll-dialog-description"
-			>
-			<DialogTitle id="scroll-dialog-title">{props.title}</DialogTitle>
-			<DialogContent dividers={scroll === 'paper'}>
-				<DialogContentText> {contentText} </DialogContentText>
-				{!requireCost && (
-					Object.keys(gallery).map(key => 
-						<CardGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
-					)
-				)}
-				{requireCost && (
-					Object.keys(gallery).map(key => 
-						<HandGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
-					)
-				)}
-			</DialogContent>
-			<DialogActions>
-			{!requireCost && (
-				<Button onClick={handleClose} color="secondary">
-					フィールドを見る
-				</Button>
+			{requireCost && (
+				Object.keys(gallery).map(key => 
+					<HandGalleryImage card={gallery[key]} ingameId={gallery[key].ingame_id}/>	
+				)
 			)}
-				<Button onClick={requestSearch} color="secondary">
-					確定
-				</Button>
-			</DialogActions>
-			</Dialog>
-		</div>
+		</DialogContent>
+		<DialogActions>
+		{!requireCost && (
+			<Button onClick={handleClose} color="secondary">
+				フィールドを見る
+			</Button>
+		)}
+			<Button onClick={requestSearch} color="secondary">
+				確定
+			</Button>
+		</DialogActions>
+		</Dialog>
 	);
 }
 

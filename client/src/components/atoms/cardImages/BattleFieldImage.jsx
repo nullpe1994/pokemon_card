@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import { useRecoilValue } from 'recoil';
 import battleFieldState from '../../State/battleFieldState';
 import EnergyBadge from '../../molecules/EnergyBadge';
-import energyAndToolState from '../../State/energyAndToolState';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
@@ -84,14 +83,18 @@ const useStyles = makeStyles((theme) => ({
 const BattleFieldImage = () => {
     const classes = useStyles();
     const battlePokemon = useRecoilValue(battleFieldState);
-    const energyAndTool = useRecoilValue(energyAndToolState);
-    const cardDetail = energyAndTool[`${battlePokemon.ingame_id}`];
+    console.log(battlePokemon);
 
     return (
         <Tooltip title={
-            <span style={{whiteSpace: 'pre-line'}}>
-                {cardDetail !== undefined && (cardDetail.energyDetail.map(energy => "エナジーカード: " + `${energy.card_name} \n`))}
-            </span>}
+            <span>
+                <span style={{whiteSpace: 'pre-line'}}>
+                    {battlePokemon.energyDetail !== undefined && (battlePokemon.energyDetail.map(energy => `エナジーカード: ${energy.card_name} \n`))}
+                </span>
+                <span style={{whiteSpace: 'pre-line'}}>
+                    {battlePokemon.toolDetail !== undefined && (battlePokemon.toolDetail.map(tool => `ポケモンのどうぐ: ${tool.card_name} \n`))}
+                </span>    
+             </span>}      
         >
             <ButtonBase
                 focusRipple
@@ -123,7 +126,7 @@ const BattleFieldImage = () => {
                     </Typography>
                 </span>
                 <span className={classes.iconEnergy}>
-                    <EnergyBadge ingameId={battlePokemon.ingame_id}/>
+                    <EnergyBadge card={battlePokemon}/>
                 </span>
             </ButtonBase>
         </Tooltip>

@@ -135,7 +135,7 @@ INSERT INTO pokemon_card (
     pokemon_card_id, pokemon_card_name, supertype, subtypes, 
     img_url, isDelete
 ) VALUES (
-    'SD102', '‘å‚«‚È‚¨‚Ü‚à‚è', '2', '{6}', 
+    'SD102', '‘å‚«‚È‚¨‚Ü‚à‚è', '2', '{6, 10}', 
     'https://www.pokemon-card.com/assets/images/card_images/large/SD/038374_T_OOKINAOMAMORI.jpg', '0'
 );
 

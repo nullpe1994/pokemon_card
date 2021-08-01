@@ -79,9 +79,9 @@ const useStyles = makeStyles((theme) => ({
 const TrashImage = () => {
     const classes = useStyles();
     const trash = useRecoilValue(trashState);
+    let trashImg = trash[trash.length-1];
 
     const image = {
-        url: trash[trash.length-1],
         width: 130,
         height: 180
     }
@@ -97,12 +97,14 @@ const TrashImage = () => {
                     height: image.height
                 }}
             >
-                <span
-                    className={classes.imageSrc}
-                    style={{
-                        backgroundImage: `url(${image.url})`,
-                    }}
-                />
+                {trashImg !== undefined && (
+                    <span
+                        className={classes.imageSrc}
+                        style={{
+                            backgroundImage: `url(${trashImg.img_url})`,
+                        }}
+                    />
+                )}
                 <span className={classes.imageBackdrop} />
                 <span className={classes.imageButton}>
                     <Typography

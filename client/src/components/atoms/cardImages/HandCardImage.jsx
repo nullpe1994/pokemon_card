@@ -107,6 +107,7 @@ const HandCardImage = (props) => {
                 </span>
             </ButtonBase>
             <CardComands 
+                subtypes = {props.handCard.subtypes}
                 supertype={props.handCard.supertype} 
                 cardName={props.handCard.card_name}
                 ingameId={props.handCard.ingame_id} 

@@ -1,10 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilValue } from 'recoil';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import EnergyBadge from '../../molecules/EnergyBadge';
 import Typography from '@material-ui/core/Typography';
-import energyAndToolState from '../../State/energyAndToolState';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
@@ -69,8 +67,6 @@ const useStyles = makeStyles((theme) => ({
 const BenchCardImage = (props) => {
     const classes = useStyles();
     const bench = props.benchCard;
-    const energyAndTool = useRecoilValue(energyAndToolState);
-    const cardDetail = energyAndTool[`${bench.ingame_id}`];
     const image = {
         url: bench.img_url,
         width: 130,
@@ -79,9 +75,14 @@ const BenchCardImage = (props) => {
 
     return (
         <Tooltip title={
-            <span style={{whiteSpace: 'pre-line'}}>
-                {cardDetail !== undefined && (cardDetail.energyDetail.map(energy => "エナジーカード: " + `${energy.card_name} \n`))}
-            </span>}
+            <span>
+                <span style={{whiteSpace: 'pre-line'}}>
+                    {bench.energyDetail !== undefined && (bench.energyDetail.map(energy => `エナジーカード: ${energy.card_name} \n`))}
+                </span>
+                <span style={{whiteSpace: 'pre-line'}}>
+                    {bench.toolDetail !== undefined && (bench.toolDetail.map(tool => `ポケモンのどうぐ: ${tool.card_name} \n`))}
+                </span>    
+             </span>}   
         >
             <ButtonBase
                 focusRipple
@@ -109,7 +110,7 @@ const BenchCardImage = (props) => {
                     </Typography>
                 </span>
                 <span className={classes.iconEnergy}>
-                    <EnergyBadge ingameId={bench.ingame_id}/>
+                    <EnergyBadge card={bench}/>
                 </span>
             </ButtonBase>
         </Tooltip>
